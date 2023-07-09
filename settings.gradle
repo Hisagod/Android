@@ -17,9 +17,10 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Android"
-include ':architecture:mvi'
-include ':architecture:flow'
-include ':architecture:surfaceview'
-include ':jetpack:compose'
-include ':ndk:libwebp'
-include ':service:aidl'
+include ':examples:architecture:mvi'
+include ':examples:architecture:flow'
+include ':examples:architecture:surfaceview'
+include ':examples:jetpack:compose'
+include ':examples:ndk:libwebp'
+include ':examples:service:aidl'
+include ':samples:p2p'
