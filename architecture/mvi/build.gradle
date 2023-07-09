@@ -1,0 +1,8 @@
+apply from: "${rootDir}/module.gradle"
+
+android {
+    namespace 'com.example.mvi'
+    defaultConfig {
+        applicationId "com.example.mvi"
+    }
+}

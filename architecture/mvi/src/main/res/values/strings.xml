@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Mvi</string>
+    <string name="title_activity_compose">ComposeActivity</string>
+</resources>
