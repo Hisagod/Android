@@ -33,8 +33,6 @@ object RemoteServiceBinder {
     private val con = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             try {
-                isBind = true
-
                 //使用asInterface方法取得AIDL对应的操作接口
                 iSender = ISender.Stub.asInterface(service)
                 //设置Binder死亡监听
@@ -50,10 +48,6 @@ object RemoteServiceBinder {
 
         override fun onServiceDisconnected(name: ComponentName) {
             try {
-                isBind = false
-
-                iSender?.unRegisterCallback(callback)
-
                 LogUtils.e("Service：onServiceDisconnected")
             } catch (e: Exception) {
                 Log.e("HLP", e.message ?: "")
@@ -92,8 +86,14 @@ object RemoteServiceBinder {
     }
 
     private fun unBindService(ctx: Context) {
-        if (isBind) {
-            ctx.unbindService(con)
+        try {
+            if (isBind) {
+                ctx.unbindService(con)
+            }
+        } catch (e: Exception) {
+            LogUtils.e(e.message ?: "")
+        } finally {
+            isBind = false
         }
     }
 
@@ -101,7 +101,19 @@ object RemoteServiceBinder {
         ctx.stopService(Intent(ctx, RemoteService::class.java))
     }
 
+    private fun unRegisterCallback() {
+        try {
+            if (iSender?.asBinder()?.isBinderAlive == true) {
+                iSender?.unRegisterCallback(callback)
+            }
+        } catch (e: Exception) {
+            LogUtils.e(e.message ?: "")
+        }
+    }
+
     fun closeService(ctx: Context) {
+        unRegisterCallback()
+
         unBindService(ctx)
         stopService(ctx)
     }

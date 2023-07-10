@@ -63,6 +63,8 @@ class RemoteService : Service() {
 
         //关闭服务
         finishService()
+
+        LogUtils.e(this.javaClass.simpleName + ":onDestroy")
     }
 
     private fun createNotification() {
