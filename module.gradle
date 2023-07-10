@@ -115,4 +115,8 @@ dependencies {
 
     //https://github.com/greenrobot/EventBus
     implementation("org.greenrobot:eventbus:3.3.1")
+
+    //https://developer.android.google.cn/jetpack/compose/navigation?hl=zh-cn#groovy
+    def nav_version = "2.5.3"
+    implementation "androidx.navigation:navigation-compose:$nav_version"
 }
