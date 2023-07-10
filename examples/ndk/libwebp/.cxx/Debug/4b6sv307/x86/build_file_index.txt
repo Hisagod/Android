@@ -1,1 +1,0 @@
-C:\Users\HLP\StudioProjects\Android\ndk\libwebp\src\main\cpp\CMakeLists.txt

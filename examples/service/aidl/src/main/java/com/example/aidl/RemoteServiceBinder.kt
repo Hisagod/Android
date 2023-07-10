@@ -22,6 +22,8 @@ object RemoteServiceBinder {
             try {
                 //解除Binder死亡监听
                 iSender?.asBinder()?.unlinkToDeath(this, 0)
+                //重置
+                iSender = null
                 //重新绑定服务
                 EventBus.getDefault().postSticky(ServiceDeadEvent())
             } catch (e: Exception) {

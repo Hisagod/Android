@@ -1,3 +1,0 @@
-C:/Users/HLP/StudioProjects/Android/ndk/libwebp/.cxx/Debug/4b6sv307/x86/CMakeFiles/jni.dir
-C:/Users/HLP/StudioProjects/Android/ndk/libwebp/.cxx/Debug/4b6sv307/x86/CMakeFiles/edit_cache.dir
-C:/Users/HLP/StudioProjects/Android/ndk/libwebp/.cxx/Debug/4b6sv307/x86/CMakeFiles/rebuild_cache.dir
