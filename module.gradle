@@ -112,4 +112,7 @@ dependencies {
 
     //https://github.com/zhihu/Matisse
     implementation 'com.zhihu.android:matisse:0.5.3-beta3'
+
+    //https://github.com/greenrobot/EventBus
+    implementation("org.greenrobot:eventbus:3.3.1")
 }

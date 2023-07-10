@@ -1,0 +1,15 @@
+apply from: "${rootDir}/module.gradle"
+apply plugin: 'org.jetbrains.kotlin.android'
+
+android {
+    namespace 'com.example.eventbus'
+    defaultConfig {
+        applicationId "com.example.eventbus"
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+}
