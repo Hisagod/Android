@@ -127,7 +127,11 @@ object RemoteServiceBinder {
     //服务端数据传递至绑定的本Activity
     private val callback = object : IReceiver.Stub() {
         override fun showLog(msg: String) {
-            EventBus.getDefault().postSticky(msg)
+            try {
+                EventBus.getDefault().postSticky(msg)
+            } catch (e: Exception) {
+                LogUtils.e(e.message)
+            }
         }
     }
 }
