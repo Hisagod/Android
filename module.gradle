@@ -1,12 +1,4 @@
-//plugins {
-//    id 'com.android.application'
-//    id 'org.jetbrains.kotlin.android'
-//    id 'com.google.dagger.hilt.android'
-//    id 'kotlin-kapt'
-//    id 'kotlin-android'
-//}
-
-apply plugin: 'com.android.application'
+//apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'com.google.dagger.hilt.android'
 apply plugin: 'kotlin-kapt'
@@ -23,6 +15,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
         vectorDrawables {
             useSupportLibrary true
         }
@@ -113,10 +106,17 @@ dependencies {
     //https://github.com/zhihu/Matisse
     implementation 'com.zhihu.android:matisse:0.5.3-beta3'
 
+    //https://github.com/square/retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
     //https://github.com/greenrobot/EventBus
     implementation("org.greenrobot:eventbus:3.3.1")
 
     //https://developer.android.google.cn/jetpack/compose/navigation?hl=zh-cn#groovy
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-compose:$nav_version"
+
+    //https://github.com/coil-kt/coil
+    implementation("io.coil-kt:coil:2.4.0")
 }

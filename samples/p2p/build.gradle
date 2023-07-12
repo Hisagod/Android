@@ -149,6 +149,7 @@
 //    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.0-rc02")
 //}
 
+apply plugin: 'com.android.application'
 apply from: "${rootDir}/module.gradle"
 
 android {

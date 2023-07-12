@@ -26,3 +26,5 @@ include ':examples:service:aidl'
 include ':samples:p2p'
 include ':examples:open:eventbus'
 include ':examples:jetpack:navigation'
+
+include ':samples:player:app'

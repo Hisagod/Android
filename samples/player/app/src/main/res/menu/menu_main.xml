@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/btn_local_video"
+        android:icon="@drawable/rb_video_drawable_selector"
+        android:title="本地视频" />
+    <item
+        android:id="@+id/btn_local_audio"
+        android:icon="@drawable/rb_audio_drawable_selector"
+        android:title="本地视频" />
+</menu>

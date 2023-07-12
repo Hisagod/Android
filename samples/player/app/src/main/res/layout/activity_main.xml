@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--标题栏-->
+        <include layout="@layout/titlebar" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/vp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bnv_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#11000000"
+            app:elevation="0dp"
+            app:itemTextAppearanceActive="@style/bottom_selected_text"
+            app:itemTextAppearanceInactive="@style/bottom_unselect_text"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/menu_main" />
+    </LinearLayout>
+</layout>

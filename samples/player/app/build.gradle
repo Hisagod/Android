@@ -1,0 +1,22 @@
+apply plugin: 'com.android.application'
+apply from: "${rootDir}/module.gradle"
+
+android {
+    namespace "com.atguigu.mobileplayer2"
+
+    defaultConfig {
+        applicationId "com.atguigu.mobileplayer2"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation files('libs/glide-3.7.0.jar')
+    implementation files('libs/picasso-2.5.2.jar')
+    implementation files('libs/Sunflower.jar')
+    implementation files('libs/Msc.jar')
+    implementation 'cn.jzvd:jiaozivideoplayer:7.7.0'
+    implementation files('libs/classes.jar')
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+    implementation 'org.xutils:xutils:3.9.0'
+}
