@@ -152,7 +152,7 @@ public class VideoPager extends Fragment {
                         MediaStore.Video.Media.ARTIST,//歌曲的演唱者
 
                 };
-                Cursor cursor = resolver.query(uri, null, null, null, null);
+                Cursor cursor = resolver.query(uri, objs, null, null, null);
                 while (cursor.moveToNext()) {
 
                     MediaItem mediaItem = new MediaItem();

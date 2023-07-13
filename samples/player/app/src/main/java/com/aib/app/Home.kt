@@ -4,16 +4,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -21,12 +17,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Jump() {
+fun Home(route: String) {
     val tab = mutableListOf(BottomTab.VideoTab, BottomTab.AudioTab)
 
     val control = rememberNavController()
@@ -63,9 +57,6 @@ fun Jump() {
             startDestination = RouterConstant.SPLASH,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(RouterConstant.SPLASH) {
-                Splash()
-            }
             composable(RouterConstant.TAB_AUDIO) {
 
             }
