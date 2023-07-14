@@ -8,12 +8,13 @@ import androidx.navigation.compose.composable
 @Composable
 fun Jump() {
     val control = rememberNavController()
-    NavHost(navController = control, startDestination = "") {
-        composable("first") {
-
+    NavHost(navController = control, startDestination = RouterConstant.FIRST_PAGE) {
+        composable(RouterConstant.FIRST_PAGE) {
+            PageOne(control)
         }
-        composable("second") {
 
+        composable(RouterConstant.SECOND_PAGE) {
+            PageTwo(control)
         }
     }
 }
