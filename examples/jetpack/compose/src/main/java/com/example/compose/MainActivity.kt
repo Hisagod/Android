@@ -28,6 +28,7 @@ class MainActivity : ComponentActivity() {
                     Column(modifier = Modifier.verticalScroll(ScrollState(1))) {
                         TextView()
                         EditText()
+                        ImageView()
                     }
                 }
             }

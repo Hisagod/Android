@@ -36,7 +36,7 @@ class SplashActivity : ComponentActivity() {
     private fun startMainActivity() {
         if (!isStartMain) {
             isStartMain = true
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
             //关闭当前页面
             finish()

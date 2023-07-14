@@ -78,9 +78,10 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
-    //依赖注入
+    //hilt
     implementation 'com.google.dagger:hilt-android:2.46.1'
     kapt 'com.google.dagger:hilt-compiler:2.46.1'
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     //协程+ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
@@ -120,4 +121,5 @@ dependencies {
 
     //https://github.com/coil-kt/coil
     implementation("io.coil-kt:coil:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
 }

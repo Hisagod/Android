@@ -15,7 +15,7 @@ import com.atguigu.mobileplayer2.pager.AudioPager
 import com.atguigu.mobileplayer2.pager.VideoPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
     /**
      * 页面的集合
      */
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             } else if (!isExit) {
                 isExit = true
-                Toast.makeText(this@MainActivity, "再按一次推出", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@HomeActivity, "再按一次推出", Toast.LENGTH_SHORT).show()
                 Handler().postDelayed({ isExit = false }, 2000)
                 return true
             }
