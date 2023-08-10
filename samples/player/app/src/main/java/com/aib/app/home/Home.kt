@@ -1,4 +1,4 @@
-package com.aib.app
+package com.aib.app.home
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
@@ -13,15 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.aib.app.RouterConstant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(route: String) {
-    val tab = mutableListOf(BottomTab.VideoTab, BottomTab.AudioTab)
+fun Home() {
+    val tab = mutableListOf(BottomTab.AudioTab, BottomTab.VideoTab)
 
     val control = rememberNavController()
 
@@ -54,15 +56,15 @@ fun Home(route: String) {
     }) { innerPadding ->
         NavHost(
             navController = control,
-            startDestination = RouterConstant.SPLASH,
+            startDestination = RouterConstant.TAB_AUDIO,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(RouterConstant.TAB_AUDIO) {
-
+                Audio(control)
             }
 
-            composable(RouterConstant.TAB_AUDIO) {
-
+            composable(RouterConstant.TAB_VIDEO) {
+                Video(control)
             }
         }
     }

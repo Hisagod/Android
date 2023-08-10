@@ -1,6 +1,7 @@
-package com.aib.app
+package com.aib.app.home
 
 import androidx.annotation.DrawableRes
+import com.aib.app.RouterConstant
 import com.atguigu.mobileplayer2.R
 
 
