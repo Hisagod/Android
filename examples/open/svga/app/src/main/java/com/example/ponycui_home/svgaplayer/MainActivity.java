@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         this.items.add(new SampleItem("Animation From Fragment", new Intent(this, AnimationFromFragmentActivity.class)));
         this.items.add(new SampleItem("Animation From Lazy Fragment", new Intent(this, AnimationFromLazyFragmentActivity.class)));
         this.items.add(new SampleItem("Animation Gif", new Intent(this, AnimationGifActivity.class)));
+        this.items.add(new SampleItem("Png", new Intent(this, PngActivity.class)));
     }
 
     void setupListView() {

@@ -2,38 +2,23 @@ package com.example.ponycui_home.svgaplayer
 
 import android.app.Activity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import coil.load
+import com.example.ponycui_home.svgaplayer.databinding.ActivityFromNetworkBinding
 import com.opensource.svgaplayer.SVGAImageView
+import com.opensource.svgaplayer.SVGATarget
 
-class AnimationFromNetworkActivity : Activity() {
+class AnimationFromNetworkActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityFromNetworkBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_from_network)
-        //        animationView = new SVGAImageView(this);
-//        animationView.setBackgroundColor(Color.GRAY);
-//        setContentView(animationView);
-//        loadAnimation();
-    }
+        binding = ActivityFromNetworkBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    private fun loadAnimation() {
-        try { // new URL needs try catch.
-//            SVGAParser svgaParser = SVGAParser.Companion.shareParser();
-//            svgaParser.setFrameSize(100,100);
-//            svgaParser.decodeFromURL(new URL("https://github.com/yyued/SVGA-Samples/blob/master/posche.svga?raw=true"), new SVGAParser.ParseCompletion() {
-//                @Override
-//                public void onComplete(@NotNull SVGAVideoEntity videoItem) {
-//                    Log.d("##","## FromNetworkActivity load onComplete");
-//                    animationView.setVideoItem(videoItem);
-//                    animationView.startAnimation();
-//                }
-//                @Override
-//                public void onError() {
-//
-//                }
-//
-//
-//            },null);
-        } catch (e: Exception) {
-            e.printStackTrace()
+        binding.svg.load("https://res.naadi.microparty.com/user/1684826637456.svga") {
+            target(SVGATarget(binding.svg) {
+                it.startAnimation()
+            })
         }
     }
 }

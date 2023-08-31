@@ -10,6 +10,7 @@ import coil.imageLoader
 import coil.request.ImageRequest
 import com.blankj.utilcode.constant.MemoryConstants
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.ImageUtils
 import com.blankj.utilcode.util.LogUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -75,8 +76,12 @@ class SVGAVideoEntity {
                 return@forEach
             }
 
-
-            val bitmap = createBitmap(byteArray)
+            val opt = BitmapFactory.Options()
+            opt.inBitmap = null
+            opt.inMutable = true
+            opt.inSampleSize = 2
+            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, opt)
+//            val bitmap = createBitmap(byteArray)
             imageMap[entry.key] = bitmap
         }
     }

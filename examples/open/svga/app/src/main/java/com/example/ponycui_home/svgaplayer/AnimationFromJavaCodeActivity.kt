@@ -29,7 +29,7 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
             "user"
         )
 
-        svg.load("file:///android_asset/huolong.svga") {
+        svg.load("file:///android_asset/test7.svga") {
             target(SVGATarget(svg) {
                 it.startAnimation()
             })

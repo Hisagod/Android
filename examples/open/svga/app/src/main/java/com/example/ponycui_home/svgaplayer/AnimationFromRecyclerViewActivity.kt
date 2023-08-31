@@ -38,9 +38,9 @@ class AnimationFromRecyclerViewActivity : AppCompatActivity() {
             val svg = holder.itemView.findViewById<SVGAImageView>(R.id.svg)
 //            Glide.with(svg).load("file:///android_asset/test6.webp").into(svg)
             svg.load("file:///android_asset/huolong.svga") {
-//                target(SVGATarget(svg) {
-//                    it.startAnimation()
-//                })
+                target(SVGATarget(svg) {
+                    it.startAnimation()
+                })
             }
         }
     }
