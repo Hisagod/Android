@@ -1,0 +1,65 @@
+//apply plugin: 'com.android.library'
+//apply plugin: 'kotlin-android'
+//
+//android {
+//    namespace 'com.opensource.svgaplayer'
+//
+//    compileSdk 33
+//
+//    defaultConfig {
+//        minSdkVersion 21
+//        targetSdkVersion 33
+//    }
+//    compileOptions {
+//        kotlinOptions.freeCompilerArgs += ['-module-name', "com.opensource.svgaplayer"]
+//    }
+//    buildTypes {
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
+//    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+//    packagingOptions {
+//        exclude 'META-INF/ASL2.0'
+//        exclude 'META-INF/LICENSE'
+//        exclude 'META-INF/NOTICE'
+//        exclude 'META-INF/NOTICE.txt'
+//        exclude 'META-INF/LICENSE.txt'
+//        exclude 'META-INF/MANIFEST.MF'
+//    }
+//}
+//
+//dependencies {
+//    implementation 'com.squareup.wire:wire-runtime:4.8.0'
+//    compileOnly 'com.github.bumptech.glide:glide:4.15.1'
+//    compileOnly 'androidx.appcompat:appcompat:1.6.1'
+////    compileOnly 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+////    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+//
+//    compileOnly("io.coil-kt:coil:2.4.0")
+//
+//    compileOnly 'com.blankj:utilcodex:1.31.1'
+//
+//    def fragment_version = "1.5.7"
+//    // Java language implementation
+//    compileOnly "androidx.fragment:fragment:$fragment_version"
+//    // Kotlin
+//    compileOnly "androidx.fragment:fragment-ktx:$fragment_version"
+//
+//}
+
+apply plugin: 'com.android.library'
+apply from: "${rootDir}/module.gradle"
+
+android {
+    namespace 'com.opensource.svgaplayer'
+}
+
+dependencies {
+    implementation 'com.squareup.wire:wire-runtime:4.8.0'
+    compileOnly 'com.github.bumptech.glide:glide:4.15.1'
+}

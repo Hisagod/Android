@@ -28,3 +28,6 @@ include ':examples:open:eventbus'
 include ':examples:jetpack:navigation'
 
 include ':samples:player:app'
+
+include ':examples:open:svga:app'
+include ':examples:open:svga:library'

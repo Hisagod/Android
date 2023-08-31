@@ -1,0 +1,32 @@
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/show"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="显示" />
+
+        <com.opensource.svgaplayer.SVGAImageView
+            android:id="@+id/svg"
+            loadSVGA="@{`huolong.svga`}"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@android:color/black"
+            android:visibility="gone" />
+
+        <!--        <com.opensource.svgaplayer.SVGAImageView-->
+        <!--            android:id="@+id/svg"-->
+        <!--            loadSVGA="@{`huolong.svga`}"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:background="@android:color/black"-->
+        <!--            android:visibility="gone" />-->
+
+    </LinearLayout>
+
+</layout>
