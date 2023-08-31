@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         binding.send.setOnClickListener {
             RemoteServiceBinder.request("我来自Client")
         }
+
+        binding.sendObj.setOnClickListener {
+            RemoteServiceBinder.request(SenderConstant.SENDER_CUSTOM_OBJ, UserBean("客户端"))
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)

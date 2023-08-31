@@ -38,6 +38,14 @@ class RemoteService : Service() {
                             it.showLog("我来自Service")
                         }
                     }
+
+                    SenderConstant.SENDER_CUSTOM_OBJ -> {
+                        val user = bean.data as? UserBean
+                        val userName = user?.name ?: ""
+                        runCallbackOnMain {
+                            it.showLog(userName)
+                        }
+                    }
                 }
             }
         }

@@ -18,4 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="发送数据" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/send_obj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="发送自定义数据" />
 </LinearLayout>

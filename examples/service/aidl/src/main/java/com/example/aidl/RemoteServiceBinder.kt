@@ -124,6 +124,10 @@ object RemoteServiceBinder {
         iSender?.onClientRequest(SenderBean(SenderConstant.TEXT, s))
     }
 
+    fun <D> request(action: String, params: D) {
+        iSender?.onClientRequest(SenderBean(action, params))
+    }
+
     //服务端数据传递至绑定的本Activity
     private val callback = object : IReceiver.Stub() {
         override fun showLog(msg: String) {
