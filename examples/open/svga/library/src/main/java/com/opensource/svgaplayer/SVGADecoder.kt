@@ -44,5 +44,9 @@ class SVGADecoder(private val array: ByteArray) : Decoder {
                 null
             }
         }
+
+        override fun equals(other: Any?) = other is Factory
+
+        override fun hashCode() = javaClass.hashCode()
     }
 }
