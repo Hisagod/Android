@@ -45,6 +45,9 @@ class SVGAImageView constructor(
     private var mStartFrame = 0
     private var mEndFrame = 0
 
+    //是否翻转
+    private var flip = false
+
     private var onStart: (() -> Unit)? = null
     private var onEnd: (() -> Unit)? = null
     private var onCancel: (() -> Unit)? = null
@@ -61,7 +64,7 @@ class SVGAImageView constructor(
         }
         attrs?.let { loadAttrs(it) }
 
-        if (ViewUtils.isLayoutRtl()) {
+        if (ViewUtils.isLayoutRtl() && flip) {
             scaleX = -1f
         }
     }
@@ -71,6 +74,7 @@ class SVGAImageView constructor(
             context.theme.obtainStyledAttributes(attrs, R.styleable.SVGAImageView, 0, 0)
         loops = typedArray.getInt(R.styleable.SVGAImageView_loopCount, 0)
         TAG = typedArray.getString(R.styleable.SVGAImageView_svg_tag) ?: javaClass.simpleName
+        flip = typedArray.getBoolean(R.styleable.SVGAImageView_svg_flip, false)
         typedArray.getString(R.styleable.SVGAImageView_fillMode)?.let {
             when (it) {
                 "0" -> {
@@ -171,6 +175,7 @@ class SVGAImageView constructor(
         val drawable = getSVGADrawable() ?: return
         drawable.cleared = false
         drawable.scaleType = scaleType
+        drawable.flip = flip
     }
 
     private fun getSVGADrawable(): SVGADrawable? {

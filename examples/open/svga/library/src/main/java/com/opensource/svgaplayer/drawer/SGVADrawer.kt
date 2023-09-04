@@ -18,7 +18,11 @@ open internal class SGVADrawer(val videoItem: SVGAVideoEntity) {
 
     private val spritePool = Pools.SimplePool<SVGADrawerSprite>(max(1, videoItem.spriteList.size))
 
-    inner class SVGADrawerSprite(var _matteKey: String? = null, var _imageKey: String? = null, var _frameEntity: SVGAVideoSpriteFrameEntity? = null) {
+    inner class SVGADrawerSprite(
+        var _matteKey: String? = null,
+        var _imageKey: String? = null,
+        var _frameEntity: SVGAVideoSpriteFrameEntity? = null
+    ) {
         val matteKey get() = _matteKey
         val imageKey get() = _imageKey
         val frameEntity get() = _frameEntity!!
@@ -46,8 +50,19 @@ open internal class SGVADrawer(val videoItem: SVGAVideoEntity) {
         sprites.forEach { spritePool.release(it) }
     }
 
-    open fun drawFrame(canvas : Canvas, frameIndex: Int, scaleType: ImageView.ScaleType) {
-        scaleInfo.performScaleType(canvas.width.toFloat(),canvas.height.toFloat(), videoItem.videoSize.width.toFloat(), videoItem.videoSize.height.toFloat(), scaleType)
+    open fun drawFrame(
+        canvas: Canvas,
+        frameIndex: Int,
+        scaleType: ImageView.ScaleType,
+        flip: Boolean
+    ) {
+        scaleInfo.performScaleType(
+            canvas.width.toFloat(),
+            canvas.height.toFloat(),
+            videoItem.videoSize.width.toFloat(),
+            videoItem.videoSize.height.toFloat(),
+            scaleType
+        )
     }
 
 }

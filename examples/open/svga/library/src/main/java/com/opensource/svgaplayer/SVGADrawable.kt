@@ -29,6 +29,7 @@ class SVGADrawable(val videoItem: SVGAVideoEntity) : Drawable() {
         }
 
     var scaleType: ImageView.ScaleType = ImageView.ScaleType.MATRIX
+    var flip = false
 
     private var drawer: SVGACanvasDrawer? = null
 
@@ -36,7 +37,7 @@ class SVGADrawable(val videoItem: SVGAVideoEntity) : Drawable() {
         if (cleared) {
             return
         }
-        drawer?.drawFrame(canvas, currentFrame, scaleType)
+        drawer?.drawFrame(canvas, currentFrame, scaleType, flip)
     }
 
     override fun setAlpha(alpha: Int) {

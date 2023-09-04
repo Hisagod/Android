@@ -16,6 +16,7 @@ import android.text.StaticLayout
 import android.text.TextUtils
 import android.widget.ImageView
 import androidx.core.graphics.scale
+import com.blankj.utilcode.util.LogUtils
 import com.bumptech.glide.Glide
 import com.opensource.svgaplayer.SVGA
 import com.opensource.svgaplayer.SVGADynamicEntity
@@ -44,21 +45,17 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity, val dynamicItem: SVG
 
     private var beginIndexList: Array<Boolean>? = null
     private var endIndexList: Array<Boolean>? = null
+    private var flip = false
 
-    /**
-     * bitmap镜像翻转
-     */
-    private fun mirrorBitmap(bitmap: Bitmap) = runBlocking(Dispatchers.IO) {
-        Glide.with(SVGA.app)
-            .asBitmap()
-            .load(bitmap)
-//            .transform(MirrorTransform())
-            .submit().get()
-    }
-
-    override fun drawFrame(canvas: Canvas, frameIndex: Int, scaleType: ImageView.ScaleType) {
-        super.drawFrame(canvas, frameIndex, scaleType)
+    override fun drawFrame(
+        canvas: Canvas,
+        frameIndex: Int,
+        scaleType: ImageView.ScaleType,
+        flip: Boolean
+    ) {
+        super.drawFrame(canvas, frameIndex, scaleType, flip)
         playAudio(frameIndex)
+        this.flip = flip
         this.pathCache.onSizeChanged(canvas)
         val sprites = requestFrameSprites(frameIndex)
         // Filter null sprites
@@ -325,11 +322,7 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity, val dynamicItem: SVG
                             baseLineY,
                             drawingTextPaint
                         )
-                        if (ViewUtils.isLayoutRtl()) {
-                            drawTextCache.put(imageKey, mirrorBitmap(it))
-                        } else {
-                            drawTextCache.put(imageKey, textBitmap as Bitmap)
-                        }
+                        drawTextCache.put(imageKey, textBitmap as Bitmap)
                     }
                 }
             }
@@ -419,20 +412,20 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity, val dynamicItem: SVG
                 canvas.restore()
             } else {
                 paint.isFilterBitmap = videoItem.antiAlias
-                if (ViewUtils.isLayoutRtl()) {
+                if (ViewUtils.isLayoutRtl() && flip) {
                     val matrix = Matrix()
                     matrix.postScale(-1f, 1f)
-//                    val mirrorBitmap =
-//                        Bitmap.createBitmap(
-//                            textBitmap,
-//                            0,
-//                            0,
-//                            textBitmap.width,
-//                            textBitmap.height,
-//                            matrix,
-//                            true
-//                        )
-                    canvas.drawBitmap(textBitmap, frameMatrix, paint)
+                    val mirrorBitmap =
+                        Bitmap.createBitmap(
+                            textBitmap,
+                            0,
+                            0,
+                            textBitmap.width,
+                            textBitmap.height,
+                            matrix,
+                            true
+                        )
+                    canvas.drawBitmap(mirrorBitmap, frameMatrix, paint)
                 } else {
                     canvas.drawBitmap(textBitmap, frameMatrix, paint)
                 }

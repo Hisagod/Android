@@ -3,6 +3,7 @@
     <declare-styleable name="SVGAImageView">
         <attr name="loopCount" format="integer" />
         <attr name="svg_tag" format="string" />
+        <attr name="svg_flip" format="boolean" />
         <attr name="fillMode" format="enum">
             <enum name="Backward" value="0" />
             <enum name="Forward" value="1" />
