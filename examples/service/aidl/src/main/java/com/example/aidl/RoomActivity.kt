@@ -1,23 +1,20 @@
 package com.example.aidl
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.LogUtils
 import com.example.aidl.databinding.ActivityMainBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.aidl.databinding.ActivityRoomBinding
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+class RoomActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRoomBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         RemoteServiceBinder.openService(this)
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityRoomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.receive.setOnClickListener {
@@ -25,20 +22,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.send.setOnClickListener {
-            //耗时10S
-            RemoteServiceBinder.request(SenderConstant.TEXT, "我先执行")
-            LogUtils.e("C端：请求先")
-            //耗时10S
-            RemoteServiceBinder.request(SenderConstant.SENDER_CUSTOM_OBJ, "我后执行")
-            LogUtils.e("C端：请求后")
-        }
-
-        binding.sendObj.setOnClickListener {
-            RemoteServiceBinder.request(SenderConstant.SENDER_CUSTOM_OBJ, UserBean("客户端"))
-        }
-
-        binding.btn.setOnClickListener {
-            startActivity(Intent(this, RoomActivity::class.java))
+            RemoteServiceBinder.request("我来自Client")
         }
     }
 

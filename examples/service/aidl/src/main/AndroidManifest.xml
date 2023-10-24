@@ -27,6 +27,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".RoomActivity"
+            android:process=":room" />
+
         <service
             android:name=".RemoteService"
             android:process=":remoteService" />

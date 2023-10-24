@@ -30,20 +30,21 @@ class RemoteService : Service() {
         }
 
         override fun onClientRequest(bean: SenderBean<*>?) {
-            LogUtils.e(bean)
+//            LogUtils.e(bean)
             bean?.let {
                 when (it.request) {
                     SenderConstant.TEXT -> {
+                        Thread.sleep(10 * 1000)
+
                         runCallbackOnMain {
-                            it.showLog("我来自Service")
+                            it.showLog("S端Text：${bean.data}")
                         }
                     }
 
                     SenderConstant.SENDER_CUSTOM_OBJ -> {
-                        val user = bean.data as? UserBean
-                        val userName = user?.name ?: ""
+
                         runCallbackOnMain {
-                            it.showLog(userName)
+                            it.showLog("S端Obj：${bean.data}")
                         }
                     }
                 }

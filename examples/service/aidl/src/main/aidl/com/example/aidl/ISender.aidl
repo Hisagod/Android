@@ -8,5 +8,5 @@ interface ISender {
     void unRegisterCallback(IReceiver cb);
 
     //处理Client请求
-    void onClientRequest(in SenderBean bean);
+   void onClientRequest(in SenderBean bean);
 }

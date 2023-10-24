@@ -9,6 +9,9 @@ import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import com.blankj.utilcode.util.LogUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 
 object RemoteServiceBinder {
@@ -121,11 +124,23 @@ object RemoteServiceBinder {
     }
 
     fun request(s: String) {
-        iSender?.onClientRequest(SenderBean(SenderConstant.TEXT, s))
+        MainScope().launch(Dispatchers.Default) {
+            try {
+                iSender?.onClientRequest(SenderBean(SenderConstant.TEXT, s))
+            } catch (e: Exception) {
+                LogUtils.e(e.message)
+            }
+        }
     }
 
     fun <D> request(action: String, params: D) {
-        iSender?.onClientRequest(SenderBean(action, params))
+        MainScope().launch(Dispatchers.Default) {
+            try {
+                iSender?.onClientRequest(SenderBean(action, params))
+            } catch (e: Exception) {
+                LogUtils.e(e.message)
+            }
+        }
     }
 
     //服务端数据传递至绑定的本Activity

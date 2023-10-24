@@ -1,5 +1,5 @@
 package com.example.aidl;
 
 interface IReceiver {
-    void showLog(String msg);
+   void showLog(String msg);
 }
