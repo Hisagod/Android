@@ -23,6 +23,7 @@ import com.opensource.svgaplayer.SVGADynamicEntity
 import com.opensource.svgaplayer.SVGASoundManager
 import com.opensource.svgaplayer.SVGAVideoEntity
 import com.opensource.svgaplayer.entities.SVGAVideoShapeEntity
+import com.opensource.svgaplayer.ext.contentFormat
 import com.opensource.svgaplayer.transform.MirrorTransform
 import com.opensource.svgaplayer.utils.ViewUtils
 import kotlinx.coroutines.CoroutineScope
@@ -363,14 +364,20 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity, val dynamicItem: SVG
                         Int.MAX_VALUE
                     }
                     StaticLayout.Builder
-                        .obtain(it.text, 0, it.text.length, it.paint, drawingBitmap.width)
+                        .obtain(
+                            it.text.contentFormat(),
+                            0,
+                            it.text.length,
+                            it.paint,
+                            drawingBitmap.width
+                        )
                         .setAlignment(it.alignment)
                         .setMaxLines(lineMax)
                         .setEllipsize(TextUtils.TruncateAt.END)
                         .build()
                 } else {
                     StaticLayout(
-                        it.text,
+                        it.text.contentFormat(),
                         0,
                         it.text.length,
                         it.paint,

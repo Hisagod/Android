@@ -32,16 +32,35 @@ class AnimationFromRecyclerViewActivity : AppCompatActivity() {
             return MyViewHolder(view)
         }
 
-        override fun getItemCount(): Int = 1000
+        override fun onViewAttachedToWindow(holder: MyViewHolder) {
+            super.onViewAttachedToWindow(holder)
 
-        override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             val svg = holder.itemView.findViewById<SVGAImageView>(R.id.svg)
-            svg.load("file:///android_asset/huolong.svga") {
+            svg.load("file:///android_asset/test7.svga") {
                 target(SVGATarget(svg) {
                     it.startAnimation()
                 })
             }
-//            svg.load("file:///android_asset/test4.gif")
+        }
+
+        override fun onViewDetachedFromWindow(holder: MyViewHolder) {
+            super.onViewDetachedFromWindow(holder)
+            val svg = holder.itemView.findViewById<SVGAImageView>(R.id.svg)
+        }
+
+        override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+            super.onAttachedToRecyclerView(recyclerView)
+
+        }
+
+        override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+            super.onDetachedFromRecyclerView(recyclerView)
+        }
+
+        override fun getItemCount(): Int = 1000
+
+        override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
         }
     }
 }

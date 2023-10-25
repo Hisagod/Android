@@ -9,20 +9,21 @@ import org.json.JSONObject
 /**
  * Created by cuiminghui on 2016/10/17.
  */
-internal class SVGAVideoSpriteFrameEntity {
+class SVGAVideoSpriteFrameEntity {
 
     var alpha: Double
-    var layout = SVGARect(0.0, 0.0, 0.0, 0.0)
+    var layout = SVGARect(0.0, 0.0)
     var transform = Matrix()
     var maskPath: SVGAPathEntity? = null
-    var shapes: List<SVGAVideoShapeEntity> = listOf()
+    var shapes: MutableList<SVGAVideoShapeEntity> = mutableListOf()
 
     constructor(obj: FrameEntity) {
         this.alpha = (obj.alpha ?: 0.0f).toDouble()
         obj.layout?.let {
-            this.layout = SVGARect((it.x ?: 0.0f).toDouble(), (it.y
-                    ?: 0.0f).toDouble(), (it.width ?: 0.0f).toDouble(), (it.height
-                    ?: 0.0f).toDouble())
+            this.layout = SVGARect(
+                (it.width ?: 0.0f).toDouble(),
+                (it.height ?: 0.0f).toDouble()
+            )
         }
         obj.transform?.let {
             val arr = FloatArray(9)
@@ -48,7 +49,14 @@ internal class SVGAVideoSpriteFrameEntity {
         }
         this.shapes = obj.shapes.map {
             return@map SVGAVideoShapeEntity(it)
-        }
+        }.toMutableList()
     }
 
+    fun clear() {
+        shapes.forEach {
+            it.clear()
+        }
+        shapes.clear()
+        shapes= mutableListOf()
+    }
 }

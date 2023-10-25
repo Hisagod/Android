@@ -3,7 +3,6 @@ package com.opensource.svgaplayer.drawer
 import android.graphics.Canvas
 import android.widget.ImageView
 import com.opensource.svgaplayer.SVGAVideoEntity
-import com.opensource.svgaplayer.entities.SVGAVideoSpriteFrameEntity
 import com.opensource.svgaplayer.utils.Pools
 import com.opensource.svgaplayer.utils.SVGAScaleInfo
 import kotlin.math.max
@@ -17,16 +16,6 @@ open internal class SGVADrawer(val videoItem: SVGAVideoEntity) {
     val scaleInfo = SVGAScaleInfo()
 
     private val spritePool = Pools.SimplePool<SVGADrawerSprite>(max(1, videoItem.spriteList.size))
-
-    inner class SVGADrawerSprite(
-        var _matteKey: String? = null,
-        var _imageKey: String? = null,
-        var _frameEntity: SVGAVideoSpriteFrameEntity? = null
-    ) {
-        val matteKey get() = _matteKey
-        val imageKey get() = _imageKey
-        val frameEntity get() = _frameEntity!!
-    }
 
     internal fun requestFrameSprites(frameIndex: Int): List<SVGADrawerSprite> {
         return videoItem.spriteList.mapNotNull {

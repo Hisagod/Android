@@ -1,5 +1,6 @@
 package com.opensource.svgaplayer.entities
 
+import com.blankj.utilcode.util.LogUtils
 import com.opensource.svgaplayer.proto.SpriteEntity
 import org.json.JSONObject
 
@@ -12,7 +13,7 @@ internal class SVGAVideoSpriteEntity {
 
     val matteKey: String?
 
-    val frames: List<SVGAVideoSpriteFrameEntity>
+    var frames: MutableList<SVGAVideoSpriteFrameEntity>
 
     constructor(obj: SpriteEntity) {
         this.imageKey = obj.imageKey
@@ -31,8 +32,14 @@ internal class SVGAVideoSpriteEntity {
             }
             lastFrame = frameItem
             return@map frameItem
-        } ?: listOf()
-
+        }?.toMutableList() ?: mutableListOf()
     }
 
+    fun clear() {
+        frames.forEach {
+            it.clear()
+        }
+        frames.clear()
+        frames= mutableListOf()
+    }
 }

@@ -3,6 +3,7 @@ package com.opensource.svgaplayer
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.collection.ArrayMap
+import androidx.collection.arrayMapOf
 import androidx.core.graphics.drawable.toBitmap
 import coil.ImageLoader
 import coil.executeBlocking
@@ -36,7 +37,7 @@ class SVGAVideoEntity {
     var antiAlias = true
     var movieItem: MovieEntity? = null
 
-    var videoSize = SVGARect(0.0, 0.0, 0.0, 0.0)
+    var videoSize = SVGARect(0.0, 0.0)
         private set
 
     var FPS = 15
@@ -52,16 +53,24 @@ class SVGAVideoEntity {
 
     constructor(entity: MovieEntity) {
         this.movieItem = entity
-        entity.params?.let(this::setupByMovie)
+        setupByMovie(entity)
         parserImages(entity)
         resetSprites(entity)
     }
 
-    private fun setupByMovie(movieParams: MovieParams) {
+    private fun setupByMovie(entity: MovieEntity) {
+        val movieParams = entity.params
+
+        //画布宽度
         val width = (movieParams.viewBoxWidth ?: 0.0f).toDouble()
+        //画布高度
         val height = (movieParams.viewBoxHeight ?: 0.0f).toDouble()
-        videoSize = SVGARect(0.0, 0.0, width, height)
-        FPS = movieParams.fps ?: 20
+
+        videoSize = SVGARect(width, height)
+
+        //动画每秒帧数
+        FPS = movieParams.fps ?: 15
+        //动画总帧数
         frames = movieParams.frames ?: 0
     }
 
@@ -76,23 +85,9 @@ class SVGAVideoEntity {
                 return@forEach
             }
 
-            val opt = BitmapFactory.Options()
-            opt.inBitmap = null
-            opt.inMutable = true
-            opt.inSampleSize = 2
-            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, opt)
-//            val bitmap = createBitmap(byteArray)
+            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
             imageMap[entry.key] = bitmap
         }
-    }
-
-    private fun createBitmap(byteArray: ByteArray): Bitmap {
-        return Glide.with(SVGA.app)
-            .asBitmap()
-            .load(byteArray)
-//            .override((videoSize.width*0.5).toInt(), (videoSize.height*0.5).toInt())
-            .submit()
-            .get()
     }
 
     private fun resetSprites(entity: MovieEntity) {
@@ -219,12 +214,21 @@ class SVGAVideoEntity {
             it.soundID?.let { id -> SVGASoundManager.unload(id) }
         }
         SVGASoundManager.release()
+
         audioList.clear()
+        audioList= mutableListOf()
+
+        spriteList.forEach {
+            it.clear()
+        }
         spriteList.clear()
+        spriteList = mutableListOf()
+
         imageMap.forEach {
             it.value.recycle()
         }
         imageMap.clear()
+        imageMap= arrayMapOf()
     }
 }
 

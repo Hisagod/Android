@@ -20,6 +20,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.opensource.svgaplayer.utils.SVGARange
 import com.opensource.svgaplayer.utils.ViewUtils
 import com.opensource.svgaplayer.utils.log.LogUtils
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Created by PonyCui on 2017/3/29.
@@ -47,6 +48,10 @@ class SVGAImageView constructor(
 
     //是否翻转
     private var flip = false
+
+    //是否停止动画
+    @Volatile
+    private var isStop = false
 
     private var onStart: (() -> Unit)? = null
     private var onEnd: (() -> Unit)? = null
@@ -99,7 +104,6 @@ class SVGAImageView constructor(
     }
 
     fun startAnimation(range: SVGARange?, reverse: Boolean = false) {
-//        stopAnim()
         play(range, reverse)
     }
 
@@ -123,6 +127,7 @@ class SVGAImageView constructor(
 //            LogUtils.error(TAG, "当前帧数-》" + (it.animatedValue as Int).toString())
         }
         animator.addListener(onStart = {
+            isStop = false
             onStart?.invoke()
             LogUtils.error(TAG, "SVGA动画--》onStart")
         }, onEnd = {
@@ -333,6 +338,11 @@ class SVGAImageView constructor(
     }
 
     fun stopAnim() {
+        if (isStop) {
+            return
+        }
+        isStop = true
+
         mAnimator?.cancel()
         mAnimator?.removeAllListeners()
         mAnimator?.removeAllUpdateListeners()
@@ -340,6 +350,8 @@ class SVGAImageView constructor(
         getSVGADrawable()?.cleared = true
 
         clear()
+
+        LogUtils.error(TAG, "SVGA动画--》执行销毁")
     }
 
     fun setSVGATag(tag: String) {

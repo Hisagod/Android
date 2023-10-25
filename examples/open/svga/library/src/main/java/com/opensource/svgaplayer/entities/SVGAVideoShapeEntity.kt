@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Path
 import android.graphics.RectF
+import androidx.collection.ArrayMap
 import com.opensource.svgaplayer.proto.ShapeEntity
 import org.json.JSONArray
 import org.json.JSONObject
@@ -14,7 +15,7 @@ import org.json.JSONObject
 
 val sharedPath = Path()
 
-internal class SVGAVideoShapeEntity {
+class SVGAVideoShapeEntity {
 
     enum class Type {
         shape,
@@ -51,7 +52,7 @@ internal class SVGAVideoShapeEntity {
     var type = Type.shape
         private set
 
-    var args: Map<String, Any>? = null
+    var args: ArrayMap<String, Any>? = null
         private set
 
     var styles: Styles? = null
@@ -85,7 +86,7 @@ internal class SVGAVideoShapeEntity {
     }
 
     private fun parseArgs(obj: ShapeEntity) {
-        val args = HashMap<String, Any>()
+        val args = ArrayMap<String, Any>()
         obj.shape?.let {
             it.d?.let { args.put("d", it) }
         }
@@ -241,4 +242,9 @@ internal class SVGAVideoShapeEntity {
         this.shapePath?.set(sharedPath)
     }
 
+
+    fun clear() {
+        args?.clear()
+        args = null
+    }
 }
