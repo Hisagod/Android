@@ -3,7 +3,6 @@ package com.opensource.svgaplayer
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.PixelFormat
-import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.opensource.svgaplayer.drawer.SVGACanvasDrawer
@@ -84,9 +83,12 @@ class SVGADrawable(val videoItem: SVGAVideoEntity) : Drawable() {
             }
             audio.playID = null
         }
-        videoItem.clear()
+
+        drawer?.onClear()
 
         getDynamicItem().clearDynamicObjects()
+
+        videoItem.clear()
     }
 
     fun setDynamicItem(dynamicItem: SVGADynamicEntity) {

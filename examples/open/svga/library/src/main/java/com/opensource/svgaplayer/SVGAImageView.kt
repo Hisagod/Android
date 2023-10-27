@@ -8,19 +8,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.addListener
 import androidx.core.animation.addPauseListener
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.findFragment
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import com.opensource.svgaplayer.utils.SVGARange
 import com.opensource.svgaplayer.utils.ViewUtils
 import com.opensource.svgaplayer.utils.log.LogUtils
-import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Created by PonyCui on 2017/3/29.
@@ -30,28 +22,30 @@ class SVGAImageView constructor(
     attrs: AttributeSet?
 ) : ImageView(context, attrs) {
 
-    private var TAG = "SVGAImageView"
+    private var tag = javaClass.simpleName
 
-    enum class FillMode {
-        Backward,
-        Forward,
-        Clear,
-    }
 
     var loops = 0
-    var fillMode: FillMode = FillMode.Forward
+
+    /**
+     *  结束动画后展示
+     *  0   endFrame
+     *  1   startFrame
+     *  2   clear
+     */
+    var endAnimShow: Int = 1
 
     private var mAnimator: ValueAnimator? = null
     private var mItemClickAreaListener: SVGAClickAreaListener? = null
+
+    //首帧
     private var mStartFrame = 0
+
+    //尾帧
     private var mEndFrame = 0
 
     //是否翻转
     private var flip = false
-
-    //是否停止动画
-    @Volatile
-    private var isStop = false
 
     private var onStart: (() -> Unit)? = null
     private var onEnd: (() -> Unit)? = null
@@ -69,35 +63,18 @@ class SVGAImageView constructor(
         }
         attrs?.let { loadAttrs(it) }
 
-        if (ViewUtils.isLayoutRtl() && flip) {
-            scaleX = -1f
-        }
+        flipView()
     }
 
     private fun loadAttrs(attrs: AttributeSet) {
         val typedArray =
             context.theme.obtainStyledAttributes(attrs, R.styleable.SVGAImageView, 0, 0)
         loops = typedArray.getInt(R.styleable.SVGAImageView_loopCount, 0)
-        TAG = typedArray.getString(R.styleable.SVGAImageView_svg_tag) ?: javaClass.simpleName
+        tag = typedArray.getString(R.styleable.SVGAImageView_svg_tag) ?: javaClass.simpleName
         flip = typedArray.getBoolean(R.styleable.SVGAImageView_svg_flip, false)
-        typedArray.getString(R.styleable.SVGAImageView_fillMode)?.let {
-            when (it) {
-                "0" -> {
-                    fillMode = FillMode.Backward
-                }
-
-                "1" -> {
-                    fillMode = FillMode.Forward
-                }
-
-                "2" -> {
-                    fillMode = FillMode.Clear
-                }
-            }
-        }
+        endAnimShow = typedArray.getInteger(R.styleable.SVGAImageView_endAnimShow, 1)
         typedArray.recycle()
     }
-
 
     fun startAnimation() {
         startAnimation(null, false)
@@ -108,15 +85,24 @@ class SVGAImageView constructor(
     }
 
     private fun play(range: SVGARange?, reverse: Boolean) {
-        LogUtils.info(TAG, "================ start animation ================")
         val drawable = getSVGADrawable() ?: return
         setupDrawable()
+
+        //获取首帧
         mStartFrame = Math.max(0, range?.location ?: 0)
         val videoItem = drawable.videoItem
+
+        //获取尾帧
         mEndFrame = Math.min(
             videoItem.frames - 1,
             ((range?.location ?: 0) + (range?.length ?: Int.MAX_VALUE) - 1)
         )
+
+        //开启动画监听前清理一遍
+        mAnimator?.cancel()
+        mAnimator?.removeAllListeners()
+        mAnimator?.removeAllUpdateListeners()
+
         val animator = ValueAnimator.ofInt(mStartFrame, mEndFrame)
         animator.interpolator = LinearInterpolator()
         animator.duration =
@@ -127,43 +113,40 @@ class SVGAImageView constructor(
 //            LogUtils.error(TAG, "当前帧数-》" + (it.animatedValue as Int).toString())
         }
         animator.addListener(onStart = {
-            isStop = false
             onStart?.invoke()
-            LogUtils.error(TAG, "SVGA动画--》onStart")
+            LogUtils.error(tag, "SVGA动画--》onStart")
         }, onEnd = {
-            stopAnim()
-            val drawable = getSVGADrawable()
-            drawable?.let {
-                when (fillMode) {
-                    FillMode.Backward -> {
-                        drawable.currentFrame = mStartFrame
-                    }
-
-                    FillMode.Forward -> {
+            getSVGADrawable()?.let {
+                when (endAnimShow) {
+                    0 -> {
                         drawable.currentFrame = mEndFrame
                     }
 
-                    FillMode.Clear -> {
+                    1 -> {
+                        drawable.currentFrame = mStartFrame
+                    }
+
+                    2 -> {
                         drawable.cleared = true
                     }
                 }
             }
             onEnd?.invoke()
             stopAnim()
-            LogUtils.error(TAG, "SVGA动画--》onEnd")
+            LogUtils.error(tag, "SVGA动画--》onEnd")
         }, onCancel = {
             onCancel?.invoke()
-            LogUtils.error(TAG, "SVGA动画--》onCancel")
+            LogUtils.error(tag, "SVGA动画--》onCancel")
         }, onRepeat = {
             onRepeat?.invoke()
-            LogUtils.error(TAG, "SVGA动画--》onRepeat")
+            LogUtils.error(tag, "SVGA动画--》onRepeat")
         })
         animator.addPauseListener(onPause = {
             onPause?.invoke()
-            LogUtils.error(TAG, "SVGA动画--》onPause")
+            LogUtils.error(tag, "SVGA动画--》onPause")
         }, onResume = {
             onResume?.invoke()
-            LogUtils.error(TAG, "SVGA动画--》onResume")
+            LogUtils.error(tag, "SVGA动画--》onResume")
         })
         if (reverse) {
             animator.reverse()
@@ -200,11 +183,6 @@ class SVGAImageView constructor(
                 setMethod.isAccessible = true
                 setMethod.invoke(animatorClass, 1.0f)
                 scale = 1.0
-                LogUtils.info(
-                    TAG,
-                    "The animation duration scale has been reset to" +
-                            " 1.0x, because you closed it on developer options."
-                )
             }
         } catch (ignore: Exception) {
             ignore.printStackTrace()
@@ -221,15 +199,40 @@ class SVGAImageView constructor(
     }
 
     fun clear() {
+        mAnimator?.cancel()
+        mAnimator?.removeAllListeners()
+        mAnimator?.removeAllUpdateListeners()
+
+        mItemClickAreaListener = null
+
         getSVGADrawable()?.cleared = true
         getSVGADrawable()?.clear()
         setImageDrawable(null)
+
+        LogUtils.error(tag, "SVGA动画--》执行销毁")
     }
 
     fun stepToFrame(frame: Int, andPlay: Boolean) {
         pauseAnim()
         val drawable = getSVGADrawable() ?: return
         drawable.currentFrame = frame
+        if (andPlay) {
+            startAnimation()
+            mAnimator?.let {
+                it.currentPlayTime = (Math.max(
+                    0.0f,
+                    Math.min(1.0f, (frame.toFloat() / drawable.videoItem.frames.toFloat()))
+                ) * it.duration).toLong()
+            }
+        }
+    }
+
+    fun stepToFrame(frame: Int, andPlay: Boolean, dynamicEntity: SVGADynamicEntity) {
+        pauseAnim()
+        val drawable = getSVGADrawable() ?: return
+        drawable.currentFrame = frame
+        drawable.setDynamicItem(dynamicEntity)
+
         if (andPlay) {
             startAnimation()
             mAnimator?.let {
@@ -271,15 +274,14 @@ class SVGAImageView constructor(
         return super.onTouchEvent(event)
     }
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        LogUtils.error(TAG, "onDetachedFromWindow")
-        stopAnim()
-    }
-
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        LogUtils.error(TAG, "onAttachedToWindow")
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        stopAnim()
+        clear()
     }
 
     override fun onWindowVisibilityChanged(visibility: Int) {
@@ -338,24 +340,9 @@ class SVGAImageView constructor(
     }
 
     fun stopAnim() {
-        if (isStop) {
-            return
-        }
-        isStop = true
-
-        mAnimator?.cancel()
-        mAnimator?.removeAllListeners()
-        mAnimator?.removeAllUpdateListeners()
         getSVGADrawable()?.stop()
-        getSVGADrawable()?.cleared = true
 
-        clear()
-
-        LogUtils.error(TAG, "SVGA动画--》执行销毁")
-    }
-
-    fun setSVGATag(tag: String) {
-        TAG = tag
+        LogUtils.error(tag, "SVGA动画--》执行停止")
     }
 
     private fun visibilityChanged(visibility: Int) {
@@ -366,5 +353,25 @@ class SVGAImageView constructor(
             //不可见
             pauseAnim()
         }
+    }
+
+    private fun flipView() {
+        if (ViewUtils.isLayoutRtl() && flip) {
+            scaleX = -1f
+        }
+    }
+
+    fun setSvgTag(tag: String): SVGAImageView {
+        this.tag = tag
+        return this
+    }
+
+    /**
+     * 设置是否支持水平翻转
+     */
+    fun setSvgFlip(flip: Boolean): SVGAImageView {
+        this.flip = flip
+        flipView()
+        return this
     }
 }

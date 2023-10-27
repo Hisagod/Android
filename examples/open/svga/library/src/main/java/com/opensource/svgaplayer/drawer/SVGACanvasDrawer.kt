@@ -15,23 +15,14 @@ import android.os.Build
 import android.text.StaticLayout
 import android.text.TextUtils
 import android.widget.ImageView
-import androidx.core.graphics.scale
-import com.blankj.utilcode.util.LogUtils
-import com.bumptech.glide.Glide
-import com.opensource.svgaplayer.SVGA
+import androidx.collection.ArrayMap
+import androidx.collection.arrayMapOf
 import com.opensource.svgaplayer.SVGADynamicEntity
 import com.opensource.svgaplayer.SVGASoundManager
 import com.opensource.svgaplayer.SVGAVideoEntity
 import com.opensource.svgaplayer.entities.SVGAVideoShapeEntity
 import com.opensource.svgaplayer.ext.contentFormat
-import com.opensource.svgaplayer.transform.MirrorTransform
 import com.opensource.svgaplayer.utils.ViewUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 /**
  * Created by cuiminghui on 2017/3/29.
@@ -41,7 +32,7 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity, val dynamicItem: SVG
     SGVADrawer(videoItem) {
 
     private val sharedValues = ShareValues()
-    private val drawTextCache: HashMap<String, Bitmap> = hashMapOf()
+    private val drawTextCache: ArrayMap<String, Bitmap> = arrayMapOf()
     private val pathCache = PathCache()
 
     private var beginIndexList: Array<Boolean>? = null
@@ -294,7 +285,9 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity, val dynamicItem: SVG
         frameMatrix: Matrix
     ) {
         if (dynamicItem.isTextDirty) {
-            this.drawTextCache.clear()
+            this.drawTextCache.onEach {
+                it.value.recycle()
+            }.clear()
             dynamicItem.isTextDirty = false
         }
         val imageKey = sprite.imageKey ?: return
@@ -589,91 +582,14 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity, val dynamicItem: SVG
         }
     }
 
-    class ShareValues {
+    fun onClear() {
+        sharedValues.onClear()
 
-        private val sharedPaint = Paint()
-        private val sharedPath = Path()
-        private val sharedPath2 = Path()
-        private val sharedMatrix = Matrix()
-        private val sharedMatrix2 = Matrix()
+        drawTextCache.onEach {
+            it.value.recycle()
+        }.clear()
 
-        private val shareMattePaint = Paint()
-        private var shareMatteCanvas: Canvas? = null
-        private var sharedMatteBitmap: Bitmap? = null
-
-        fun sharedPaint(): Paint {
-            sharedPaint.reset()
-            return sharedPaint
-        }
-
-        fun sharedPath(): Path {
-            sharedPath.reset()
-            return sharedPath
-        }
-
-        fun sharedPath2(): Path {
-            sharedPath2.reset()
-            return sharedPath2
-        }
-
-        fun sharedMatrix(): Matrix {
-            sharedMatrix.reset()
-            return sharedMatrix
-        }
-
-        fun sharedMatrix2(): Matrix {
-            sharedMatrix2.reset()
-            return sharedMatrix2
-        }
-
-        fun shareMattePaint(): Paint {
-            shareMattePaint.setXfermode(PorterDuffXfermode(PorterDuff.Mode.DST_IN))
-            return shareMattePaint
-        }
-
-        fun sharedMatteBitmap(): Bitmap {
-            return sharedMatteBitmap as Bitmap
-        }
-
-        fun shareMatteCanvas(width: Int, height: Int): Canvas {
-            if (shareMatteCanvas == null) {
-                sharedMatteBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ALPHA_8)
-//                shareMatteCanvas = Canvas(sharedMatteBitmap)
-            }
-//            val matteCanvas = shareMatteCanvas as Canvas
-//            matteCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-//            return matteCanvas
-            return sharedMatteBitmap?.let {
-                Canvas(it)
-            } ?: Canvas()
-        }
+        beginIndexList = null
+        endIndexList = null
     }
-
-    class PathCache {
-
-        private var canvasWidth: Int = 0
-        private var canvasHeight: Int = 0
-        private val cache = HashMap<SVGAVideoShapeEntity, Path>()
-
-        fun onSizeChanged(canvas: Canvas) {
-            if (this.canvasWidth != canvas.width || this.canvasHeight != canvas.height) {
-                this.cache.clear()
-            }
-            this.canvasWidth = canvas.width
-            this.canvasHeight = canvas.height
-        }
-
-        fun buildPath(shape: SVGAVideoShapeEntity): Path {
-            if (!this.cache.containsKey(shape)) {
-                val path = Path()
-                shape.shapePath?.let {
-                    path.set(it)
-                }
-                this.cache[shape] = path
-            }
-            return this.cache[shape]!!
-        }
-
-    }
-
 }

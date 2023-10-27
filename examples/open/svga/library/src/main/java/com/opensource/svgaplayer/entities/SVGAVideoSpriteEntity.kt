@@ -1,8 +1,6 @@
 package com.opensource.svgaplayer.entities
 
-import com.blankj.utilcode.util.LogUtils
 import com.opensource.svgaplayer.proto.SpriteEntity
-import org.json.JSONObject
 
 /**
  * Created by cuiminghui on 2016/10/17.

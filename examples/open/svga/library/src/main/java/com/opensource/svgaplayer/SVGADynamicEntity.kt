@@ -1,7 +1,6 @@
 package com.opensource.svgaplayer
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.text.BoringLayout
 import android.text.StaticLayout
@@ -12,8 +11,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.net.HttpURLConnection
-import java.net.URL
 
 /**
  * Created by cuiminghui on 2017/3/30.
@@ -53,6 +50,7 @@ class SVGADynamicEntity {
         this.dynamicImage.put(forKey, bitmap)
     }
 
+    @Deprecated("废弃，不使用，解决协程资源浪费，只接收Bitmap进来，不在本库开启新协程")
     fun setDynamicImage(url: String, forKey: String) {
         CoroutineScope(Dispatchers.Default).launch(Dispatchers.IO) {
             try {

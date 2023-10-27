@@ -6,8 +6,6 @@ import android.graphics.Path
 import android.graphics.RectF
 import androidx.collection.ArrayMap
 import com.opensource.svgaplayer.proto.ShapeEntity
-import org.json.JSONArray
-import org.json.JSONObject
 
 /**
  * Created by cuiminghui on 2017/2/22.

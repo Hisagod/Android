@@ -1,24 +1,15 @@
 package com.opensource.svgaplayer
 
 import coil.ImageLoader
-import coil.decode.BitmapFactoryDecoder
 import coil.decode.DecodeResult
 import coil.decode.DecodeUtils
 import coil.decode.Decoder
-import coil.decode.ImageDecoderDecoder
-import coil.decode.isAnimatedHeif
-import coil.decode.isAnimatedWebP
-import coil.decode.isGif
-import coil.decode.isHeif
-import coil.decode.isSvg
-import coil.decode.isWebP
 import coil.fetch.SourceResult
 import coil.request.Options
 import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.inflate
 import com.opensource.svgaplayer.utils.isSVGA
 import com.opensource.svgaplayer.utils.log.LogUtils
-import okio.ByteString.Companion.encodeUtf8
 
 class SVGADecoder(private val array: ByteArray) : Decoder {
     override suspend fun decode(): DecodeResult {

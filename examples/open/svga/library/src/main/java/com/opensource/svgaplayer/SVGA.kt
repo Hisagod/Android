@@ -1,8 +1,6 @@
 package com.opensource.svgaplayer
 
 import android.app.Application
-import androidx.collection.ArrayMap
-import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.PathUtils
 import com.opensource.svgaplayer.utils.log.SVGALogger.setLogEnabled
 

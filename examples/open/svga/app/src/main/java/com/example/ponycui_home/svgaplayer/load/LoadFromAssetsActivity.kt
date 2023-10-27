@@ -1,22 +1,15 @@
-package com.example.ponycui_home.svgaplayer
+package com.example.ponycui_home.svgaplayer.load
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextPaint
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.lifecycle.Lifecycle
 import coil.load
-import coil.request.CachePolicy
-import com.example.ponycui_home.svgaplayer.databinding.ActivityAssetsBinding
 import com.example.ponycui_home.svgaplayer.databinding.ActivityFromAssetsBinding
 import com.opensource.svgaplayer.SVGADynamicEntity
-import com.opensource.svgaplayer.SVGAImageView
 import com.opensource.svgaplayer.SVGATarget
 
-class AnimationFromAssetsActivity : AppCompatActivity() {
+class LoadFromAssetsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFromAssetsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

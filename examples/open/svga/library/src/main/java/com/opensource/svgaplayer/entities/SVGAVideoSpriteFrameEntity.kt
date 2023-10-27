@@ -4,8 +4,6 @@ import android.graphics.Matrix
 import com.opensource.svgaplayer.proto.FrameEntity
 import com.opensource.svgaplayer.utils.SVGARect
 
-import org.json.JSONObject
-
 /**
  * Created by cuiminghui on 2016/10/17.
  */

@@ -41,7 +41,6 @@ class AnimationFromFragmentActivity : AppCompatActivity() {
             super.onViewCreated(view, savedInstanceState)
 //            val binding = FragmentABinding.inflate(requireActivity().layoutInflater)
             val svg = view.findViewById<SVGAImageView>(R.id.svg)
-            svg.setSVGATag(position.toString())
             svg.load("file:///android_asset/angel.svga") {
 //                target(SVGATarget(svg) {
 //                    it.startAnimation()

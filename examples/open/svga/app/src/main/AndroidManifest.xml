@@ -18,13 +18,13 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
-        <activity android:name=".AnimationFromAssetsActivity" />
+        <activity android:name=".load.LoadFromAssetsActivity" />
         <activity android:name=".AnimationFromJavaCodeActivity" />
         <activity android:name=".AnimationFromNetworkActivity" />
         <activity android:name=".AnimationWithDynamicImageActivity" />
@@ -35,5 +35,19 @@
         <activity android:name=".AnimationFromLazyFragmentActivity" />
         <activity android:name=".AnimationGifActivity" />
         <activity android:name=".PngActivity" />
+        <activity
+            android:name=".add.AddJavaActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".use.UseQueueActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
