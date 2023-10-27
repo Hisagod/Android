@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.iterator
 import coil.load
 import com.example.ponycui_home.svgaplayer.databinding.ActivityAddJavaBinding
-import com.opensource.svgaplayer.SVGAImageView
 import com.opensource.svgaplayer.SVGATarget
 
 /**

@@ -1,11 +1,9 @@
 package com.example.ponycui_home.svgaplayer
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.example.ponycui_home.svgaplayer.databinding.ActivityFromNetworkBinding
-import com.opensource.svgaplayer.SVGAImageView
 import com.opensource.svgaplayer.SVGATarget
 
 class AnimationFromNetworkActivity : AppCompatActivity() {

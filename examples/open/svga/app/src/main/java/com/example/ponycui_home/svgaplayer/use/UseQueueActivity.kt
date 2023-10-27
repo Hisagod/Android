@@ -11,19 +11,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.blankj.utilcode.util.LogUtils
-import com.example.ponycui_home.svgaplayer.databinding.ActivityAddJavaBinding
 import com.example.ponycui_home.svgaplayer.databinding.ActivityUseQueueBinding
-import com.opensource.svgaplayer.SVGAImageView
 import com.opensource.svgaplayer.SVGATarget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.coroutines.resume
 

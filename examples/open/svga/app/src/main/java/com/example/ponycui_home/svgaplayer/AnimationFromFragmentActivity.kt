@@ -10,8 +10,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import coil.load
 import com.example.ponycui_home.svgaplayer.databinding.ActivityFromFragmentBinding
 import com.example.ponycui_home.svgaplayer.databinding.FragmentABinding
-import com.opensource.svgaplayer.SVGAImageView
-import com.opensource.svgaplayer.SVGATarget
 
 class AnimationFromFragmentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFromFragmentBinding

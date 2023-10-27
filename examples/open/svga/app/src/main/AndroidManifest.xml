@@ -25,7 +25,15 @@
             <!--            </intent-filter>-->
         </activity>
         <activity android:name=".load.LoadFromAssetsActivity" />
-        <activity android:name=".AnimationFromJavaCodeActivity" />
+        <activity
+            android:name=".AnimationFromJavaCodeActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".AnimationFromNetworkActivity" />
         <activity android:name=".AnimationWithDynamicImageActivity" />
         <activity android:name=".AnimationFromLayoutActivity" />
@@ -43,11 +51,7 @@
         <activity
             android:name=".use.UseQueueActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 </manifest>

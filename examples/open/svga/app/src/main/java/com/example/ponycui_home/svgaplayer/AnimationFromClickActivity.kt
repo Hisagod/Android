@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.opensource.svgaplayer.SVGAClickAreaListener
 import com.opensource.svgaplayer.SVGADynamicEntity
-import com.opensource.svgaplayer.SVGAImageView
-import com.opensource.svgaplayer.SVGATarget
 
 /**
  * Created by miaojun on 2019/6/21.

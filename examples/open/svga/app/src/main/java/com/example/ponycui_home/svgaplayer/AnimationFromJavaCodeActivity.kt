@@ -7,8 +7,6 @@ import android.text.TextPaint
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.opensource.svgaplayer.SVGADynamicEntity
-import com.opensource.svgaplayer.SVGAImageView
-import com.opensource.svgaplayer.SVGATarget
 
 class AnimationFromJavaCodeActivity : AppCompatActivity() {
 
@@ -30,9 +28,9 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
         )
 
         svg.load("file:///android_asset/test7.svga") {
-            target(SVGATarget(svg) {
-                it.startAnimation()
-            })
+//            target(SVGATarget(svg) {
+//                it.startAnimation()
+//            })
         }
     }
 }

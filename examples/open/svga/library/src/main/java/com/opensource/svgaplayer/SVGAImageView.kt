@@ -217,12 +217,14 @@ class SVGAImageView constructor(
         val drawable = getSVGADrawable() ?: return
         drawable.currentFrame = frame
         if (andPlay) {
-            startAnimation()
             mAnimator?.let {
+                resumeAnim()
                 it.currentPlayTime = (Math.max(
                     0.0f,
                     Math.min(1.0f, (frame.toFloat() / drawable.videoItem.frames.toFloat()))
                 ) * it.duration).toLong()
+            } ?: run {
+                startAnimation()
             }
         }
     }
@@ -234,12 +236,14 @@ class SVGAImageView constructor(
         drawable.setDynamicItem(dynamicEntity)
 
         if (andPlay) {
-            startAnimation()
             mAnimator?.let {
+                resumeAnim()
                 it.currentPlayTime = (Math.max(
                     0.0f,
                     Math.min(1.0f, (frame.toFloat() / drawable.videoItem.frames.toFloat()))
                 ) * it.duration).toLong()
+            } ?: run {
+                startAnimation()
             }
         }
     }
