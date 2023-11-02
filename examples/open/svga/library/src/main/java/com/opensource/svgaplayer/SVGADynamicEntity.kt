@@ -137,9 +137,9 @@ class SVGADynamicEntity {
         this.isTextDirty = true
         this.dynamicHidden.clear()
 
-        this.dynamicImage.forEach {
-            it.value.recycle()
-        }
+//        this.dynamicImage.forEach {
+//            it.value.recycle()
+//        }
         this.dynamicImage.clear()
 
         this.dynamicText.clear()

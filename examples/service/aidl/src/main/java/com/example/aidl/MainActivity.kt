@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -56,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

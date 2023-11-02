@@ -1,13 +1,16 @@
 package com.example.aidl
 
+import android.app.ActivityManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.os.Process
 import android.os.RemoteCallbackList
 import android.os.RemoteException
 import android.util.Log
@@ -15,6 +18,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ProcessUtils
+import kotlin.system.exitProcess
 
 class RemoteService : Service() {
 
@@ -62,7 +67,16 @@ class RemoteService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         createNotification()
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        LogUtils.e(this.javaClass.simpleName + ":onTaskRemoved")
+
+        val activityManager = App.instance.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
+        val pids = activityManager?.runningAppProcesses?.map { it.pid } ?: emptyList()
+        pids.forEach { Process.killProcess(it) }
     }
 
     override fun onDestroy() {

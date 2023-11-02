@@ -1,5 +1,6 @@
 package com.example.aidl
 
+import android.app.ActivityManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -7,12 +8,15 @@ import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.os.Process
 import android.util.Log
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
+import kotlin.system.exitProcess
 
 object RemoteServiceBinder {
     private var iSender: ISender? = null
@@ -106,19 +110,10 @@ object RemoteServiceBinder {
         ctx.stopService(Intent(ctx, RemoteService::class.java))
     }
 
-    private fun unRegisterCallback() {
-        try {
-            if (iSender?.asBinder()?.isBinderAlive == true) {
-                iSender?.unRegisterCallback(callback)
-            }
-        } catch (e: Exception) {
-            LogUtils.e(e.message ?: "")
-        }
-    }
-
     fun closeService(ctx: Context) {
-        unRegisterCallback()
-
+//        if (iSender?.asBinder()?.isBinderAlive == true) {
+//            iSender?.unRegisterCallback(callback)
+//        }
         unBindService(ctx)
         stopService(ctx)
     }
