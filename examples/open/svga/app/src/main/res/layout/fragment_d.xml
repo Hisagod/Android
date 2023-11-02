@@ -7,12 +7,12 @@
         android:layout_height="match_parent"
         android:background="@android:color/black">
 
-        <com.opensource.svgaplayer.SVGAImageView
-            android:id="@+id/svg"
-            loadSVGA="@{`angel.svga`}"
-            android:visibility="gone"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:loopCount="0" />
+<!--        <com.opensource.svgaplayer.SVGAImageView-->
+<!--            android:id="@+id/svg"-->
+<!--            loadSVGA="@{`angel.svga`}"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            app:loopCount="0" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
