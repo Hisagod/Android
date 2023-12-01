@@ -21,7 +21,9 @@ class PngActivity : AppCompatActivity() {
     }
 
     fun local(view: View) {
-        binding.iv.load("file:///android_asset/test3.png")
+        binding.iv.load("file:///android_asset/test3.png") {
+            target(ImageTarget(binding.iv))
+        }
     }
 
     fun net(view: View) {

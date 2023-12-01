@@ -142,6 +142,7 @@ object RemoteServiceBinder {
     private val callback = object : IReceiver.Stub() {
         override fun showLog(msg: String) {
             try {
+                Thread.sleep(3000)
                 EventBus.getDefault().postSticky(msg)
             } catch (e: Exception) {
                 LogUtils.e(e.message)

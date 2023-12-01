@@ -16,13 +16,18 @@ import android.os.RemoteException
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.ProcessUtils
-import kotlin.system.exitProcess
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.concurrent.locks.ReentrantLock
 
-class RemoteService : Service() {
 
+class RemoteService : LifecycleService() {
+
+    private val lock = ReentrantLock()
     private val mCallBacks = RemoteCallbackList<IReceiver>()
 
     private val iService = object : ISender.Stub() {
@@ -39,10 +44,10 @@ class RemoteService : Service() {
             bean?.let {
                 when (it.request) {
                     SenderConstant.TEXT -> {
-                        Thread.sleep(10 * 1000)
-
-                        runCallbackOnMain {
-                            it.showLog("S端Text：${bean.data}")
+                        repeat(1000 * 1000) {
+                            runCallbackOnMain {
+                                it.showLog("S端Text：${bean.data}")
+                            }
                         }
                     }
 
@@ -57,7 +62,8 @@ class RemoteService : Service() {
         }
     }
 
-    override fun onBind(p0: Intent?): IBinder {
+    override fun onBind(p0: Intent): IBinder {
+        super.onBind(p0)
         return iService
     }
 
@@ -66,6 +72,7 @@ class RemoteService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
         createNotification()
         return START_STICKY
     }
@@ -74,7 +81,8 @@ class RemoteService : Service() {
         super.onTaskRemoved(rootIntent)
         LogUtils.e(this.javaClass.simpleName + ":onTaskRemoved")
 
-        val activityManager = App.instance.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
+        val activityManager =
+            App.instance.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
         val pids = activityManager?.runningAppProcesses?.map { it.pid } ?: emptyList()
         pids.forEach { Process.killProcess(it) }
     }
@@ -120,19 +128,21 @@ class RemoteService : Service() {
      * 保证回调都在主线程执行
      */
     private fun runCallbackOnMain(onItem: (obj: IReceiver) -> Unit) {
-        Handler(Looper.getMainLooper()).post {
-            try {
-                for (item in 0 until mCallBacks.beginBroadcast()) {
-                    try {
-                        onItem.invoke(mCallBacks.getBroadcastItem(item))
-                    } catch (e: RemoteException) {
-                        e.printStackTrace()
-                    }
+        lock.lock()
+        try {
+            for (item in 0 until mCallBacks.beginBroadcast()) {
+                try {
+                    onItem.invoke(mCallBacks.getBroadcastItem(item))
+                } catch (e: RemoteException) {
+                    e.printStackTrace()
                 }
-                mCallBacks.finishBroadcast()
-            } catch (e: Exception) {
-                Log.e("HLP", e.message ?: "")
             }
+            mCallBacks.finishBroadcast()
+        } catch (e: Exception) {
+            Log.e("HLP", e.message ?: "")
+        } finally {
+
         }
+        lock.unlock()
     }
 }

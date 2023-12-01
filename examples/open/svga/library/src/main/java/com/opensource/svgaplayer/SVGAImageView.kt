@@ -7,9 +7,10 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
-import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.animation.addListener
 import androidx.core.animation.addPauseListener
+import androidx.core.animation.doOnEnd
 import com.opensource.svgaplayer.utils.SVGARange
 import com.opensource.svgaplayer.utils.ViewUtils
 import com.opensource.svgaplayer.utils.log.LogUtils
@@ -20,7 +21,7 @@ import com.opensource.svgaplayer.utils.log.LogUtils
 class SVGAImageView constructor(
     context: Context,
     attrs: AttributeSet?
-) : ImageView(context, attrs) {
+) : AppCompatImageView(context, attrs) {
 
     private var tag = javaClass.simpleName
 
@@ -344,7 +345,7 @@ class SVGAImageView constructor(
     }
 
     fun stopAnim() {
-        getSVGADrawable()?.stop()
+        getSVGADrawable()?.stopAudio()
 
         LogUtils.error(tag, "SVGA动画--》执行停止")
     }

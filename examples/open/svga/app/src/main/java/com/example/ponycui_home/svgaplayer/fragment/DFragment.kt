@@ -9,6 +9,6 @@ class DFragment : BaseLazyFragment<FragmentDBinding>() {
     override fun getLayoutId(): Int = R.layout.fragment_d
 
     override fun initData() {
-        binding.svg.visibility = View.VISIBLE
+//        binding.svg.visibility = View.VISIBLE
     }
 }

@@ -22,7 +22,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnStick.setOnClickListener {
-            EventBus.getDefault().postSticky(UserBean())
+            val bean = UserBean()
+            val has = EventBus.getDefault().hasSubscriberForEvent(UserBean::class.java)
+            LogUtils.e(has)
+            EventBus.getDefault().postSticky(bean)
         }
     }
 
@@ -41,5 +44,4 @@ class MainActivity : AppCompatActivity() {
         LogUtils.e(this.javaClass.simpleName)
         EventBus.getDefault().removeStickyEvent(event)
     }
-
 }

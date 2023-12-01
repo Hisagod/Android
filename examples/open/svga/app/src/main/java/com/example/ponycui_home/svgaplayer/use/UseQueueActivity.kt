@@ -12,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.blankj.utilcode.util.LogUtils
 import com.example.ponycui_home.svgaplayer.databinding.ActivityUseQueueBinding
+import com.opensource.svgaplayer.SVGAImageView
 import com.opensource.svgaplayer.SVGATarget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

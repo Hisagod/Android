@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.ponycui_home.svgaplayer.databinding.ActivityFromRecyclerviewBinding
+import com.opensource.svgaplayer.SVGAImageView
 import com.opensource.svgaplayer.SVGATarget
 
 class AnimationFromRecyclerViewActivity : AppCompatActivity() {

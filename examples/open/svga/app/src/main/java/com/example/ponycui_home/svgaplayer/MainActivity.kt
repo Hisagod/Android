@@ -5,6 +5,7 @@ import android.database.DataSetObserver
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -12,6 +13,10 @@ import android.widget.ListAdapter
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.RecyclerView.inflate
 import com.example.ponycui_home.svgaplayer.add.AddJavaActivity
 import com.example.ponycui_home.svgaplayer.bean.SampleItem
 import com.example.ponycui_home.svgaplayer.databinding.ActivityAddJavaBinding
@@ -21,13 +26,18 @@ import com.example.ponycui_home.svgaplayer.load.LoadFromAssetsActivity
 class MainActivity : AppCompatActivity() {
     private val items: ArrayList<SampleItem> = ArrayList()
     private lateinit var binding: ActivityMainBinding
+    private val adapter by lazy { MyAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupData()
-        setupListView()
+        initRv()
+    }
+
+    private fun initRv() {
+        binding.rv.adapter = adapter
     }
 
     private fun setupData() {
@@ -91,67 +101,25 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun setupListView() {
-        binding.listView.adapter = object : ListAdapter {
-            override fun areAllItemsEnabled(): Boolean {
-                return false
-            }
+    inner class MyAdapter : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+            val view =
+                LayoutInflater.from(parent.context).inflate(R.layout.item_main, parent, false)
+            return MyViewHolder(view)
+        }
 
-            override fun isEnabled(i: Int): Boolean {
-                return false
-            }
+        override fun getItemCount(): Int = items.size
 
-            override fun registerDataSetObserver(dataSetObserver: DataSetObserver) {}
-            override fun unregisterDataSetObserver(dataSetObserver: DataSetObserver) {}
-            override fun getCount(): Int {
-                return items.size
-            }
+        override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-            override fun getItem(i: Int): Any {
-                return Unit
-            }
-
-            override fun getItemId(i: Int): Long {
-                return i.toLong()
-            }
-
-            override fun hasStableIds(): Boolean {
-                return false
-            }
-
-            override fun getView(i: Int, view: View, viewGroup: ViewGroup): View {
-                val linearLayout = LinearLayout(this@MainActivity)
-                val textView = TextView(this@MainActivity)
-                textView.setOnClickListener {
-                    this@MainActivity.startActivity(
-                        items[i]!!.intent
-                    )
-                }
-                textView.text = items[i]!!.title
-                textView.textSize = 24f
-                textView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
-                linearLayout.addView(
-                    textView,
-                    ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        (55 * resources.displayMetrics.density).toInt()
-                    )
-                )
-                return linearLayout
-            }
-
-            override fun getItemViewType(i: Int): Int {
-                return 1
-            }
-
-            override fun getViewTypeCount(): Int {
-                return 1
-            }
-
-            override fun isEmpty(): Boolean {
-                return false
+            holder.itemView.findViewById<AppCompatTextView>(R.id.tv).apply {
+                text = items[position].title
+            }.setOnClickListener {
+                startActivity(items[position].intent)
             }
         }
-        binding.listView.setBackgroundColor(Color.WHITE)
+
+
+        inner class MyViewHolder(view: View) : ViewHolder(view)
     }
 }
