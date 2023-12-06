@@ -20,8 +20,11 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.locks.ReentrantLock
 
 
@@ -29,6 +32,7 @@ class RemoteService : LifecycleService() {
 
     private val lock = ReentrantLock()
     private val mCallBacks = RemoteCallbackList<IReceiver>()
+    private var threadCount = 0
 
     private val iService = object : ISender.Stub() {
         override fun registerCallback(cb: IReceiver) {
@@ -40,25 +44,36 @@ class RemoteService : LifecycleService() {
         }
 
         override fun onClientRequest(bean: SenderBean<*>?) {
+            LogUtils.e("onClientRequest所在线程：${Thread.currentThread().name}")
 //            LogUtils.e(bean)
             bean?.let {
                 when (it.request) {
                     SenderConstant.TEXT -> {
-                        repeat(1000 * 1000) {
-                            runCallbackOnMain {
-                                it.showLog("S端Text：${bean.data}")
-                            }
+                        runCallbackOnMain {
+                            it.showLog("S端Text：${bean.data}")
                         }
                     }
 
                     SenderConstant.SENDER_CUSTOM_OBJ -> {
-
                         runCallbackOnMain {
                             it.showLog("S端Obj：${bean.data}")
                         }
                     }
                 }
             }
+        }
+
+        override fun testReturn(): Int {
+            threadCount += 1
+            LogUtils.e("testReturn所在线程：${Thread.currentThread().name}")
+            LogUtils.e("当前第${threadCount}个开启线程")
+            lifecycleScope.launch {
+                LogUtils.e("协程内部：${Thread.currentThread().name}")
+                while (true) {
+                    delay(1000)
+                }
+            }
+            return 200
         }
     }
 

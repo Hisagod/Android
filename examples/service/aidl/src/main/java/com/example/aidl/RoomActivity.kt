@@ -24,6 +24,10 @@ class RoomActivity : AppCompatActivity() {
         binding.send.setOnClickListener {
             RemoteServiceBinder.request("我来自Client")
         }
+
+        binding.testReturn.setOnClickListener {
+            RemoteServiceBinder.testReturn()
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)

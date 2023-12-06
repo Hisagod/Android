@@ -9,4 +9,6 @@ interface ISender {
 
     //处理Client请求
    void onClientRequest(in SenderBean bean);
+
+   int testReturn();
 }

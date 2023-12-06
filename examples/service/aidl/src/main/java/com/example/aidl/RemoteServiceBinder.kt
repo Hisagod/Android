@@ -138,11 +138,21 @@ object RemoteServiceBinder {
         }
     }
 
+    fun testReturn() {
+        MainScope().launch(Dispatchers.Default) {
+            try {
+                val result = iSender?.testReturn()
+                LogUtils.e(result)
+            } catch (e: Exception) {
+                LogUtils.e(e.message)
+            }
+        }
+    }
+
     //服务端数据传递至绑定的本Activity
     private val callback = object : IReceiver.Stub() {
         override fun showLog(msg: String) {
             try {
-                Thread.sleep(3000)
                 EventBus.getDefault().postSticky(msg)
             } catch (e: Exception) {
                 LogUtils.e(e.message)

@@ -27,13 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.send.setOnClickListener {
             //耗时10S
-            repeat(20){
-                RemoteServiceBinder.request(SenderConstant.TEXT, "我先执行")
-            }
-//            LogUtils.e("C端：请求先")
-//            //耗时10S
-//            RemoteServiceBinder.request(SenderConstant.SENDER_CUSTOM_OBJ, "我后执行")
-//            LogUtils.e("C端：请求后")
+            RemoteServiceBinder.request(SenderConstant.TEXT, "我先执行")
         }
 
         binding.sendObj.setOnClickListener {
