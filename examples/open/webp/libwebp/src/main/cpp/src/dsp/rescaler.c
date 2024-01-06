@@ -197,7 +197,6 @@ WebPRescalerImportRowFunc WebPRescalerImportRowShrink;
 WebPRescalerExportRowFunc WebPRescalerExportRowExpand;
 WebPRescalerExportRowFunc WebPRescalerExportRowShrink;
 
-extern VP8CPUInfo VP8GetCPUInfo;
 extern void WebPRescalerDspInitSSE2(void);
 extern void WebPRescalerDspInitMIPS32(void);
 extern void WebPRescalerDspInitMIPSdspR2(void);
