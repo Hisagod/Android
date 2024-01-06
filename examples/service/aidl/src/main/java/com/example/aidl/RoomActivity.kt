@@ -3,7 +3,6 @@ package com.example.aidl
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.blankj.utilcode.util.LogUtils
-import com.example.aidl.databinding.ActivityMainBinding
 import com.example.aidl.databinding.ActivityRoomBinding
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -11,6 +10,8 @@ import org.greenrobot.eventbus.ThreadMode
 
 class RoomActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRoomBinding
+    private val testBean = TestBean("1")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         RemoteServiceBinder.openService(this)
         super.onCreate(savedInstanceState)
@@ -26,7 +27,9 @@ class RoomActivity : AppCompatActivity() {
         }
 
         binding.testReturn.setOnClickListener {
-            RemoteServiceBinder.testReturn()
+            RemoteServiceBinder.testReturn(testBean) {
+                LogUtils.e(testBean.toString())
+            }
         }
     }
 

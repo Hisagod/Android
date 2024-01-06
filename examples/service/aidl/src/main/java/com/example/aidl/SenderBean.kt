@@ -5,4 +5,4 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
 @Parcelize
-data class SenderBean<D>(val request: String, val data: @RawValue D) : Parcelable
+data class SenderBean<D>(val request: String, val data: @RawValue D?) : Parcelable

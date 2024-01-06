@@ -31,49 +31,32 @@ import java.util.concurrent.locks.ReentrantLock
 class RemoteService : LifecycleService() {
 
     private val lock = ReentrantLock()
-    private val mCallBacks = RemoteCallbackList<IReceiver>()
-    private var threadCount = 0
+    private val mCallBacks = RemoteCallbackList<ICallback>()
 
     private val iService = object : ISender.Stub() {
-        override fun registerCallback(cb: IReceiver) {
+        override fun registerCallback(cb: ICallback) {
             mCallBacks.register(cb)
         }
 
-        override fun unRegisterCallback(cb: IReceiver) {
+        override fun unRegisterCallback(cb: ICallback) {
             mCallBacks.unregister(cb)
         }
 
         override fun onClientRequest(bean: SenderBean<*>?) {
-            LogUtils.e("onClientRequest所在线程：${Thread.currentThread().name}")
-//            LogUtils.e(bean)
             bean?.let {
                 when (it.request) {
-                    SenderConstant.TEXT -> {
+                    SenderConstant.ACTION_ASYNC_RETURN -> {
+                        LogUtils.e("S端收到")
                         runCallbackOnMain {
-                            it.showLog("S端Text：${bean.data}")
-                        }
-                    }
-
-                    SenderConstant.SENDER_CUSTOM_OBJ -> {
-                        runCallbackOnMain {
-                            it.showLog("S端Obj：${bean.data}")
+                            it.showLog("异步，回调")
                         }
                     }
                 }
             }
         }
 
-        override fun testReturn(): Int {
-            threadCount += 1
-            LogUtils.e("testReturn所在线程：${Thread.currentThread().name}")
-            LogUtils.e("当前第${threadCount}个开启线程")
-            lifecycleScope.launch {
-                LogUtils.e("协程内部：${Thread.currentThread().name}")
-                while (true) {
-                    delay(1000)
-                }
-            }
-            return 200
+        override fun test(bean: TestBean) {
+            bean.str = "9999"
         }
     }
 
@@ -138,11 +121,10 @@ class RemoteService : LifecycleService() {
         stopSelf()
     }
 
-
     /**
-     * 保证回调都在主线程执行
+     * 使用同步锁保证正常执行
      */
-    private fun runCallbackOnMain(onItem: (obj: IReceiver) -> Unit) {
+    private fun runCallbackOnMain(onItem: (obj: ICallback) -> Unit) {
         lock.lock()
         try {
             for (item in 0 until mCallBacks.beginBroadcast()) {

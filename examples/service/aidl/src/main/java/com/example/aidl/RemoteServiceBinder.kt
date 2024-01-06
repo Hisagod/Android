@@ -14,6 +14,7 @@ import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.LogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import kotlin.system.exitProcess
@@ -118,10 +119,31 @@ object RemoteServiceBinder {
         stopService(ctx)
     }
 
+    private fun isBinderAlive(): Boolean {
+        if (iSender?.asBinder()?.isBinderAlive == true) {
+            return true
+        }
+
+        //重连操作
+        unBindService(App.instance)
+
+        return false
+    }
+
+    fun onClientRequest(action: String) {
+        MainScope().launch {
+            try {
+                iSender?.onClientRequest(SenderBean(SenderConstant.ACTION_ASYNC_RETURN, null))
+            } catch (e: Exception) {
+                LogUtils.e(e.message)
+            }
+        }
+    }
+
     fun request(s: String) {
         MainScope().launch(Dispatchers.Default) {
             try {
-                iSender?.onClientRequest(SenderBean(SenderConstant.TEXT, s))
+//                iSender?.onClientRequest(SenderBean(SenderConstant.TEXT, s))
             } catch (e: Exception) {
                 LogUtils.e(e.message)
             }
@@ -138,11 +160,12 @@ object RemoteServiceBinder {
         }
     }
 
-    fun testReturn() {
+    fun testReturn(bean: TestBean, onSuccess: () -> Unit) {
         MainScope().launch(Dispatchers.Default) {
             try {
-                val result = iSender?.testReturn()
-                LogUtils.e(result)
+                val result = iSender?.test(bean)
+
+                onSuccess.invoke()
             } catch (e: Exception) {
                 LogUtils.e(e.message)
             }
@@ -150,13 +173,19 @@ object RemoteServiceBinder {
     }
 
     //服务端数据传递至绑定的本Activity
-    private val callback = object : IReceiver.Stub() {
+    private val callback = object : ICallback.Stub() {
         override fun showLog(msg: String) {
-            try {
-                EventBus.getDefault().postSticky(msg)
-            } catch (e: Exception) {
-                LogUtils.e(e.message)
+            MainScope().launch(Dispatchers.Default) {
+                try {
+                    EventBus.getDefault().postSticky(msg)
+                    delay(20 * 1000)
+                    LogUtils.e("结束睡眠")
+                } catch (e: Exception) {
+                    LogUtils.e(e.message)
+                }
             }
+
+            LogUtils.e("当前线程数：${Thread.activeCount()}")
         }
     }
 }

@@ -7,27 +7,33 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/receive"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/result"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="接收数据" />
+        android:layout_height="100dp"
+        android:gravity="center" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/send"
+        android:id="@+id/async_return"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="发送数据" />
+        android:text="同步请求S端，带返回值" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/send_obj"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="发送自定义数据" />
+    <!--    <com.google.android.material.button.MaterialButton-->
+    <!--        android:id="@+id/send"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="发送数据" />-->
 
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="进入Room" />
+    <!--    <com.google.android.material.button.MaterialButton-->
+    <!--        android:id="@+id/send_obj"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="发送自定义数据" />-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btn"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="进入Room" />-->
 </LinearLayout>

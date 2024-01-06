@@ -21,22 +21,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.receive.setOnClickListener {
-
+        binding.asyncReturn.setOnClickListener {
+            RemoteServiceBinder.onClientRequest(SenderConstant.ACTION_ASYNC_RETURN)
         }
 
-        binding.send.setOnClickListener {
-            //耗时10S
-            RemoteServiceBinder.request(SenderConstant.TEXT, "我先执行")
-        }
+//        binding.send.setOnClickListener {
+//            RemoteServiceBinder.request(SenderConstant.TEXT, "我先执行")
+//        }
+//
+//        binding.sendObj.setOnClickListener {
+//            RemoteServiceBinder.request(SenderConstant.SENDER_CUSTOM_OBJ, UserBean("客户端"))
+//        }
 
-        binding.sendObj.setOnClickListener {
-            RemoteServiceBinder.request(SenderConstant.SENDER_CUSTOM_OBJ, UserBean("客户端"))
-        }
-
-        binding.btn.setOnClickListener {
-            startActivity(Intent(this, RoomActivity::class.java))
-        }
+//        binding.btn.setOnClickListener {
+//            startActivity(Intent(this, RoomActivity::class.java))
+//        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
