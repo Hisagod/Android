@@ -8,7 +8,7 @@
 using namespace std;
 
 extern "C" JNIEXPORT jlong JNICALL
-Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_createDecoder(
+Java_com_example_webp_lib_LibWebPAnimatedDecoder_createDecoder(
         JNIEnv *env,
         jclass clazz,
         jobject byte_buffer,
@@ -28,7 +28,7 @@ Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_createDecoder(
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_deleteDecoder(
+Java_com_example_webp_lib_LibWebPAnimatedDecoder_deleteDecoder(
         JNIEnv *env,
         jclass clazz,
         jlong decoder_ptr) {
@@ -38,7 +38,7 @@ Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_deleteDecoder(
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_getMetadata(
+Java_com_example_webp_lib_LibWebPAnimatedDecoder_getMetadata(
         JNIEnv *env,
         jclass clazz,
         jlong decoder_ptr) {
@@ -49,7 +49,7 @@ Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_getMetadata(
     WebPAnimDecoderGetInfo(decoder, &anim_info);
 
     jclass metadataClass = env->FindClass(
-            "com/github/skgmn/webpdecoder/libwebp/LibWebPAnimatedDecoder$Metadata");
+            "com/example/webp/lib/LibWebPAnimatedDecoder$Metadata");
     jmethodID metadataCtor = env->GetMethodID(metadataClass, "<init>", "(IIII)V");
     jobject metadata = env->NewObject(
             metadataClass, metadataCtor,
@@ -63,7 +63,7 @@ Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_getMetadata(
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_decodeNextFrame(
+Java_com_example_webp_lib_LibWebPAnimatedDecoder_decodeNextFrame(
         JNIEnv *env,
         jclass clazz,
         jlong decoder_ptr,
@@ -98,7 +98,7 @@ Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_decodeNextFrame
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_reset(
+Java_com_example_webp_lib_LibWebPAnimatedDecoder_reset(
         JNIEnv *env,
         jclass clazz,
         jlong decoder_ptr) {
@@ -109,7 +109,7 @@ Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_reset(
 
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_com_github_skgmn_webpdecoder_libwebp_LibWebPAnimatedDecoder_hasNextFrame(
+Java_com_example_webp_lib_LibWebPAnimatedDecoder_hasNextFrame(
         JNIEnv *env,
         jclass clazz,
         jlong decoder_ptr) {

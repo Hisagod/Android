@@ -1,4 +1,4 @@
-package com.github.skgmn.webpdecoder.libwebp
+package com.example.webp
 
 import coil.intercept.Interceptor
 import coil.request.ImageRequest

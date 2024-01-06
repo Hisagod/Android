@@ -1,4 +1,4 @@
-package com.github.skgmn.webpdecoder
+package com.example.webp.lib
 
 import android.util.Log
 import coil.ImageLoader
@@ -6,7 +6,6 @@ import coil.decode.DecodeResult
 import coil.decode.Decoder
 import coil.fetch.SourceResult
 import coil.request.Options
-import com.github.skgmn.webpdecoder.libwebp.LibWebPAnimatedDecoder
 import java.nio.ByteBuffer
 
 class AnimatedWebPDecoder(

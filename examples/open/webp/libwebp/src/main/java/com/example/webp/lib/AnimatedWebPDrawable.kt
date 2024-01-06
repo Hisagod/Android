@@ -1,14 +1,10 @@
-package com.github.skgmn.webpdecoder
+package com.example.webp.lib
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.os.SystemClock
-import android.util.Log
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import coil.ImageLoader
-import coil.fetch.SourceResult
-import coil.memory.MemoryCache
-import com.github.skgmn.webpdecoder.libwebp.LibWebPAnimatedDecoder
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ClosedReceiveChannelException

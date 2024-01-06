@@ -1,4 +1,4 @@
-package com.github.skgmn.webpdecoder.libwebp
+package com.example.webp.lib
 
 import android.graphics.Bitmap
 import android.os.Build

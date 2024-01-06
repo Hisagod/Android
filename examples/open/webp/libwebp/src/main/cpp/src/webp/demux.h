@@ -317,12 +317,12 @@ WEBP_EXTERN int WebPAnimDecoderGetInfo(const WebPAnimDecoder* dec,
 // Parameters:
 //   dec - (in/out) decoder instance from which the next frame is to be fetched.
 //   buf - (out) decoded frame.
-//   duration_ptr - (out) duration_ptr of the frame in milliseconds.
+//   timestamp - (out) timestamp of the frame in milliseconds.
 // Returns:
 //   False if any of the arguments are NULL, or if there is a parsing or
 //   decoding error, or if there are no more frames. Otherwise, returns true.
 WEBP_EXTERN int WebPAnimDecoderGetNext(WebPAnimDecoder* dec,
-                                       uint8_t** buf, int* duration_ptr);
+                                       uint8_t** buf, int* timestamp);
 
 // Check if there are more frames left to decode.
 // Parameters:

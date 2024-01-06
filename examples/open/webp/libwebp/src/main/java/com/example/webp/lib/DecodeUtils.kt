@@ -1,4 +1,4 @@
-package com.github.skgmn.webpdecoder
+package com.example.webp.lib
 
 import okio.BufferedSource
 import okio.ByteString.Companion.encodeUtf8

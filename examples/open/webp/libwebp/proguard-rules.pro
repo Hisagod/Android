@@ -20,11 +20,11 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.github.skgmn.webpdecoder.libwebp.LibWebPAnimatedDecoder {
+-keep class com.example.webp.lib.LibWebPAnimatedDecoder {
     java.nio.ByteBuffer byteBuffer;
     native <methods>;
 }
 
--keep class com.github.skgmn.webpdecoder.libwebp.LibWebPAnimatedDecoder$Metadata {
+-keep class com.example.webp.lib.LibWebPAnimatedDecoder$Metadata {
     *;
 }

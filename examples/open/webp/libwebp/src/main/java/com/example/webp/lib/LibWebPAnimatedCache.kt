@@ -1,4 +1,4 @@
-package com.github.skgmn.webpdecoder.libwebp
+package com.example.webp.lib
 
 import java.util.concurrent.ConcurrentHashMap
 
