@@ -15,6 +15,10 @@ class AnimatedWebPDrawable(
     private val name: String,
     private val imageLoader: ImageLoader
 ) : Drawable(), Animatable2Compat {
+    private val TAG = javaClass.simpleName
+
+    private val superScope by lazy { imageLoader.defaults.decoderDispatcher }
+
     private val paint by lazy(LazyThreadSafetyMode.NONE) { Paint(Paint.FILTER_BITMAP_FLAG) }
     private val decodeChannel by lazy { Channel<LibWebPAnimatedDecoder.DecodeFrameResult>() }
     private var decodeJob: Job? = null
@@ -52,9 +56,11 @@ class AnimatedWebPDrawable(
         }
 
         nextFrame = false
+
         val decodeFrameResult = pendingDecodeResult?.also {
             pendingDecodeResult = null
         } ?: channel.tryReceive().getOrNull()
+
         if (decodeFrameResult == null) {
             currentDecodingResult?.bitmap?.let {
                 canvas.drawBitmap(it, null, bounds, paint)
@@ -62,18 +68,19 @@ class AnimatedWebPDrawable(
             if (decodeJob?.isActive != true && channel.isEmpty) {
                 stop()
             } else if (frameWaitingJob?.isActive != true) {
-                frameWaitingJob = GlobalScope.launch(Dispatchers.Main.immediate) {
-                    try {
-                        pendingDecodeResult = channel.receive()
-                        nextFrame = true
-                        queueTime = SystemClock.uptimeMillis()
-                        invalidateSelf()
-                    } catch (e: ClosedReceiveChannelException) {
-                        // failed to receive next frame
-                    } finally {
-                        frameWaitingJob = null
+                frameWaitingJob =
+                    CoroutineScope(superScope).launch(Dispatchers.Main.immediate) {
+                        try {
+                            pendingDecodeResult = channel.receive()
+                            nextFrame = true
+                            queueTime = SystemClock.uptimeMillis()
+                            invalidateSelf()
+                        } catch (e: ClosedReceiveChannelException) {
+                            // failed to receive next frame
+                        } finally {
+                            frameWaitingJob = null
+                        }
                     }
-                }
             }
         } else {
             canvas.drawBitmap(decodeFrameResult.bitmap, null, bounds, paint)
@@ -110,41 +117,47 @@ class AnimatedWebPDrawable(
     }
 
     override fun start() {
+        Logger.e(TAG, "动画开始")
         if (isRunning) return
         isRunning = true
 
         callbacks.forEach { it.onAnimationStart(this) }
         nextFrame = true
         invalidateSelf()
-        decodeJob = GlobalScope.launch(Dispatchers.Default) {
-            val loopCount = decoder.loopCount
-            var i = 0
-            while (isActive && (loopCount == 0 || i < loopCount)) {
-                decoder.reset()
-                for (frame in 0 until decoder.frameCount) {
-                    val result = decoder.decodeNextFrame(frame, name, imageLoader)
 
-                    if (!isActive) {
-                        break
-                    }
+        decodeJob =
+            CoroutineScope(superScope).launch(Dispatchers.Default) {
+                val loopCount = decoder.loopCount
+                var i = 0
+                while (isActive && (loopCount == 0 || i < loopCount)) {
+                    decoder.reset()
+                    for (frame in 0 until decoder.frameCount) {
+                        val result = decoder.decodeNextFrame(frame, name, imageLoader)
 
-                    if (result == null) {
-                        continue
-                    }
+                        if (!isActive) {
+                            break
+                        }
 
-                    try {
-                        decodeChannel.send(result)
-//                        Log.e("HLP", "发出得到的图片")
-                    } catch (e: ClosedSendChannelException) {
-                        break
+                        if (result == null) {
+                            continue
+                        }
+
+                        try {
+                            decodeChannel.send(result)
+                        } catch (e: ClosedSendChannelException) {
+                            break
+                        }
                     }
+                    ++i
                 }
-                ++i
             }
-        }
     }
 
+    /**
+     * 单次播放动画结束回调
+     */
     override fun stop() {
+        Logger.e(TAG, "动画停止")
         if (!isRunning) return
         isRunning = false
 

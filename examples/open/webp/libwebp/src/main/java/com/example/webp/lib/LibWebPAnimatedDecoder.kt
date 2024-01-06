@@ -7,7 +7,9 @@ import coil.memory.MemoryCache
 import java.nio.ByteBuffer
 
 class LibWebPAnimatedDecoder private constructor(
-    @Suppress("unused") private val byteBuffer: ByteBuffer, // to keep in memory
+    // to keep in memory
+    @Suppress("unused")
+    private val byteBuffer: ByteBuffer,
     private val decoder: Long,
     private val premultipliedAlpha: Boolean
 ) {
