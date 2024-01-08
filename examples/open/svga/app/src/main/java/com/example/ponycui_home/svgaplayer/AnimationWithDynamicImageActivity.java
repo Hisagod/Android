@@ -6,11 +6,10 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.opensource.svgaplayer.SVGAImageView;
 
 public class AnimationWithDynamicImageActivity extends Activity {
 
-    SVGAImageView animationView = null;
+//    SVGAImageView animationView = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

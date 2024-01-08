@@ -2,13 +2,9 @@ package com.example.ponycui_home.svgaplayer
 
 import android.graphics.drawable.Drawable
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import coil.drawable.CrossfadeDrawable
 import coil.target.ImageViewTarget
 import com.blankj.utilcode.util.LogUtils
-import com.opensource.svgaplayer.SVGADrawable
-import com.opensource.svgaplayer.SVGAImageView
 
 class ImageTarget(view: AppCompatImageView) : ImageViewTarget(view) {
 

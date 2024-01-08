@@ -12,8 +12,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.blankj.utilcode.util.LogUtils
 import com.example.ponycui_home.svgaplayer.databinding.ActivityUseQueueBinding
-import com.opensource.svgaplayer.SVGAImageView
-import com.opensource.svgaplayer.SVGATarget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -79,30 +77,30 @@ class UseQueueActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     suspendCancellableCoroutine<Unit> {
-                        val svga = SVGAImageView(this@UseQueueActivity)
-                        svga.loops = 1
-                        svga.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                        svga.onAnimEnd {
-                            runOnUiThread {
-                                val iterator = binding.ll.iterator()
-                                while (iterator.hasNext()) {
-                                    val next = iterator.next()
-                                    if (next is SVGAImageView) {
-                                        iterator.remove()
-                                    }
-                                }
-
-                                if (it.isActive) {
-                                    it.resume(Unit)
-                                }
-                            }
-                        }
-                        svga.load("file:///android_asset/test7.svga") {
-                            target(SVGATarget(svga) {
-                                it.startAnimation()
-                            })
-                        }
-                        binding.ll.addView(svga)
+//                        val svga = SVGAImageView(this@UseQueueActivity)
+//                        svga.loops = 1
+//                        svga.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+//                        svga.onAnimEnd {
+//                            runOnUiThread {
+//                                val iterator = binding.ll.iterator()
+//                                while (iterator.hasNext()) {
+//                                    val next = iterator.next()
+//                                    if (next is SVGAImageView) {
+//                                        iterator.remove()
+//                                    }
+//                                }
+//
+//                                if (it.isActive) {
+//                                    it.resume(Unit)
+//                                }
+//                            }
+//                        }
+//                        svga.load("file:///android_asset/test7.svga") {
+//                            target(SVGATarget(svga) {
+//                                it.startAnimation()
+//                            })
+//                        }
+//                        binding.ll.addView(svga)
                     }
                 }
             }

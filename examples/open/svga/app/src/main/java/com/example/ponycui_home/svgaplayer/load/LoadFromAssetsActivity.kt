@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.example.ponycui_home.svgaplayer.databinding.ActivityFromAssetsBinding
 import com.opensource.svgaplayer.SVGADynamicEntity
-import com.opensource.svgaplayer.SVGATarget
 
 class LoadFromAssetsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFromAssetsBinding
@@ -27,10 +26,10 @@ class LoadFromAssetsActivity : AppCompatActivity() {
             "user"
         )
 
-        binding.svg.load("file:///android_asset/test2_text_user.svga") {
-            target(SVGATarget(binding.svg, dynamic) {
-                it.startAnimation()
-            })
-        }
+//        binding.svg.load("file:///android_asset/test2_text_user.svga") {
+//            target(SVGATarget(binding.svg, dynamic) {
+//                it.startAnimation()
+//            })
+//        }
     }
 }
