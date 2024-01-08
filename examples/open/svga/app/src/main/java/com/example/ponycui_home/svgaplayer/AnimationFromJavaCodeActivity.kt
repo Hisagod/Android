@@ -23,9 +23,5 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
         svg.load("file:///android_asset/test7.svga") {
             target(ImageTarget(svg))
         }
-
-        svg.setOnClickListener {
-            startActivity(Intent(this, PngActivity::class.java))
-        }
     }
 }

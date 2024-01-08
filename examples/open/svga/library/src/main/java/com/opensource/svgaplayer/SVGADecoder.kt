@@ -7,15 +7,28 @@ import coil.decode.Decoder
 import coil.fetch.SourceResult
 import coil.request.Options
 import com.opensource.svgaplayer.proto.MovieEntity
+import com.opensource.svgaplayer.proto.MovieEntityFactory
 import com.opensource.svgaplayer.utils.inflate
 import com.opensource.svgaplayer.utils.isSVGA
 import com.opensource.svgaplayer.utils.log.LogUtils
 
 class SVGADecoder(private val array: ByteArray) : Decoder {
+    private val TAG = javaClass.simpleName
+
     override suspend fun decode(): DecodeResult {
         LogUtils.error("SVGADecoder", "SVGA解析成功")
-        val mEntity = MovieEntity.ADAPTER.decode(array)
-        val entity = SVGAVideoEntity(mEntity)
+
+        val hashCode = array.contentHashCode().toString()
+        LogUtils.error(TAG, "byteArray的hashCode：${hashCode}")
+
+//        val cacheEntity = MovieEntityFactory.get(hashCode)
+//        val movieEntity = cacheEntity?.let {
+//            it
+//        } ?: run {
+//            MovieEntity.ADAPTER.decode(array)
+//        }
+        val movieEntity = MovieEntity.ADAPTER.decode(array)
+        val entity = SVGAVideoEntity(movieEntity)
         return DecodeResult(SVGADrawable(entity), false)
     }
 

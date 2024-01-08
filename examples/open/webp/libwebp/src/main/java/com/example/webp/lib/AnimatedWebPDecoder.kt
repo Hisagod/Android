@@ -31,11 +31,15 @@ class AnimatedWebPDecoder(
     }
 
     class Factory : Decoder.Factory {
+
+        private val TAG = javaClass.simpleName
+
         override fun create(
             result: SourceResult,
             options: Options,
             imageLoader: ImageLoader
         ): Decoder? {
+            Logger.e(TAG, "创建低版本Webp解码器")
             //如果不是webp动图就返回null
             if (!DecodeUtils.isAnimatedWebP(result.source.source())) {
                 return null
