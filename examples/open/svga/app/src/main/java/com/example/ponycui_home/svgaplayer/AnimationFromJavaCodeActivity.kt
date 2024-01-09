@@ -7,6 +7,9 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import coil.load
+import coil.request.onAnimationEnd
+import coil.request.onAnimationStart
+import com.blankj.utilcode.util.LogUtils
 
 class AnimationFromJavaCodeActivity : AppCompatActivity() {
 
@@ -20,7 +23,12 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
 
         //加载SVGA
         svg.load("file:///android_asset/test7.svga") {
-            target(ImageTarget(svg))
+            onAnimationStart {
+                LogUtils.e("开始动画")
+            }
+            onAnimationEnd {
+                LogUtils.e("停止动画")
+            }
         }
 
         //加载gif

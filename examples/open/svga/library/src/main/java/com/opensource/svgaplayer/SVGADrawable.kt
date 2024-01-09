@@ -12,23 +12,25 @@ import android.widget.ImageView
 import androidx.core.animation.addListener
 import androidx.core.animation.addPauseListener
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
+import coil.ImageLoader
+import coil.request.Options
+import coil.request.animationStartCallback
 import com.opensource.svgaplayer.drawer.SVGACanvasDrawer
 import com.opensource.svgaplayer.utils.SVGAUtils
 import com.opensource.svgaplayer.utils.log.LogUtils
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
-class SVGADrawable(private val videoItem: SVGAVideoEntity) : Drawable(), Animatable2Compat {
+class SVGADrawable(
+    private val videoItem: SVGAVideoEntity,
+    private val options: Options,
+    private val imageLoader: ImageLoader
+) : Drawable(), Animatable2Compat {
     private val TAG = javaClass.simpleName
 
     private val callbacks = mutableListOf<Animatable2Compat.AnimationCallback>()
 
     private var currentFrame = 0
-        set(value) {
-            if (field == value) {
-                return
-            }
-            field = value
-            invalidateSelf()
-        }
 
     //控制动画的位置
     private val scaleType: ImageView.ScaleType = ImageView.ScaleType.CENTER
@@ -38,13 +40,6 @@ class SVGADrawable(private val videoItem: SVGAVideoEntity) : Drawable(), Animata
 
     private var drawer: SVGACanvasDrawer? = null
 
-    //属性动画前值
-    private var mStartFrame = 0
-
-    //属性动画后值
-    private var mEndFrame = 0
-
-    private var mAnimator: ValueAnimator? = null
 
     private var onStart: (() -> Unit)? = null
     private var onEnd: (() -> Unit)? = null
@@ -53,17 +48,48 @@ class SVGADrawable(private val videoItem: SVGAVideoEntity) : Drawable(), Animata
     private var onPause: (() -> Unit)? = null
     private var onResume: (() -> Unit)? = null
     private var onFrame: ((frame: Int, percentage: Double) -> Unit)? = null
-    var loops = 0
+
+    //每帧时长
+    private var frameTime: Long = 0
+
+    //记录需要播放次数 0无限次 1播放单次
+    private var loop = 1
+
+    //记录播放几次
+    private var loopCount = 0
+
+    @Volatile
+    private var isAnimation = false
 
     private val nextFrame = {
+//        LogUtils.error(TAG, "nextFrame")
 
+        //取出下一帧位
+        currentFrame += 1
+        if (currentFrame > videoItem.frames) {
+            currentFrame = 0
+            loopCount += 1
+        }
+
+        invalidateSelf()
     }
 
     override fun draw(canvas: Canvas) {
-//        drawer?.drawFrame(canvas, currentFrame, scaleType, flip)
 //        LogUtils.error(TAG, "canvas")
+        val time = SystemClock.uptimeMillis()
+        drawer?.drawFrame(canvas, currentFrame, scaleType, flip)
 
-        scheduleSelf(nextFrame, 10000)
+        if (loop != 0) {
+            //不是无限播放，有播放次数限制
+            if (loopCount == loop) {
+                unscheduleSelf(nextFrame)
+                isAnimation = false
+                stop()
+                return
+            }
+        }
+
+        scheduleSelf(nextFrame, time + frameTime)
     }
 
 
@@ -94,7 +120,6 @@ class SVGADrawable(private val videoItem: SVGAVideoEntity) : Drawable(), Animata
             }
         }
     }
-
 
     fun stopAudio() {
         videoItem.audioList.forEach { audio ->
@@ -129,8 +154,16 @@ class SVGADrawable(private val videoItem: SVGAVideoEntity) : Drawable(), Animata
 
     override fun start() {
         LogUtils.error(TAG, "动画start")
+        if (isAnimation) return
+        isAnimation = true
 
         callbacks.forEach { it.onAnimationStart(this) }
+
+        val frame = videoItem.frames.toFloat()
+        val fps = videoItem.FPS.toFloat()
+        val duration = frame.div(fps) * 1000
+        frameTime = (duration / frame).toLong()
+        LogUtils.error(TAG, "总时长：${duration}")
 
 //        invalidateSelf()
 
@@ -186,21 +219,21 @@ class SVGADrawable(private val videoItem: SVGAVideoEntity) : Drawable(), Animata
 //            )
 //        })
 //
-//        drawer = SVGACanvasDrawer(videoItem, SVGADynamicEntity())
+        drawer = SVGACanvasDrawer(videoItem, SVGADynamicEntity())
 //        animator.start()
 //        mAnimator = animator
     }
 
     override fun stop() {
         LogUtils.error(TAG, "动画stop")
-        mAnimator?.pause()
-
+        isAnimation = false
         callbacks.forEach { it.onAnimationEnd(this) }
+        unscheduleSelf(nextFrame)
     }
 
     override fun isRunning(): Boolean {
         LogUtils.error(TAG, "动画isRunning")
-        return mAnimator?.isRunning ?: false
+        return isAnimation
     }
 
     override fun registerAnimationCallback(callback: Animatable2Compat.AnimationCallback) {

@@ -123,7 +123,6 @@ class AnimatedWebPDrawable(
 
         callbacks.forEach { it.onAnimationStart(this) }
         nextFrame = true
-        invalidateSelf()
 
         decodeJob =
             CoroutineScope(superScope).launch(Dispatchers.Default) {
