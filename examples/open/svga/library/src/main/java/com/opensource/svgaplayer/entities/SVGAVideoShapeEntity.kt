@@ -11,9 +11,9 @@ import com.opensource.svgaplayer.proto.ShapeEntity
  * Created by cuiminghui on 2017/2/22.
  */
 
-val sharedPath = Path()
 
 class SVGAVideoShapeEntity {
+    val sharedPath = Path()
 
     enum class Type {
         shape,

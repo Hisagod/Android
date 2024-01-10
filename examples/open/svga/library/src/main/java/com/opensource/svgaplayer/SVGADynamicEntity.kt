@@ -50,20 +50,6 @@ class SVGADynamicEntity {
         this.dynamicImage.put(forKey, bitmap)
     }
 
-    @Deprecated("废弃，不使用，解决协程资源浪费，只接收Bitmap进来，不在本库开启新协程")
-    fun setDynamicImage(url: String, forKey: String) {
-        CoroutineScope(Dispatchers.Default).launch(Dispatchers.IO) {
-            try {
-                val bitmap = Glide.with(SVGA.app).asBitmap().load(url).submit().get()
-                withContext(Dispatchers.Main) {
-                    setDynamicImage(bitmap, forKey)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
     fun setDynamicText(text: String, textPaint: TextPaint, forKey: String) {
         this.isTextDirty = true
         this.dynamicText.put(forKey, text)

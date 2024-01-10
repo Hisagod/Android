@@ -2,7 +2,6 @@ package com.opensource.svgaplayer.entities
 
 import android.graphics.Matrix
 import com.opensource.svgaplayer.proto.FrameEntity
-import com.opensource.svgaplayer.utils.SVGARect
 
 /**
  * Created by cuiminghui on 2016/10/17.

@@ -22,7 +22,7 @@ class PngActivity : AppCompatActivity() {
 
     fun local(view: View) {
         binding.iv.load("file:///android_asset/test3.png") {
-            target(ImageTarget(binding.iv))
+//            target(ImageTarget(binding.iv))
         }
     }
 

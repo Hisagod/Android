@@ -21,10 +21,10 @@ class LoadFromAssetsActivity : AppCompatActivity() {
         tp.textSize = 20f
         tp.color = Color.WHITE
         dynamic.setDynamicText("1536006", tp, "text")
-        dynamic.setDynamicImage(
-            "https://res.naadi.microparty.com/user/1673946183827.jpeg",
-            "user"
-        )
+//        dynamic.setDynamicImage(
+//            "https://res.naadi.microparty.com/user/1673946183827.jpeg",
+//            "user"
+//        )
 
 //        binding.svg.load("file:///android_asset/test2_text_user.svga") {
 //            target(SVGATarget(binding.svg, dynamic) {

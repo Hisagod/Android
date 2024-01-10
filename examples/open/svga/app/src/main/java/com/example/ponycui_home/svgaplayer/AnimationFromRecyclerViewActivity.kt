@@ -35,7 +35,7 @@ class AnimationFromRecyclerViewActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             val svg = holder.itemView.findViewById<AppCompatImageView>(R.id.svg)
             svg.load("file:///android_asset/test7.svga") {
-                target(ImageTarget(svg))
+//                target(ImageTarget(svg))
             }
         }
     }

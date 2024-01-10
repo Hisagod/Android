@@ -3,14 +3,16 @@ package com.example.ponycui_home.svgaplayer
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.widget.ImageView
+import android.text.TextPaint
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import coil.load
-import coil.request.onAnimationEnd
-import coil.request.onAnimationStart
-import coil.request.repeatCount
 import com.blankj.utilcode.util.LogUtils
+import com.opensource.svgaplayer.SVGADynamicEntity
+import com.opensource.svgaplayer.SVGATarget
+import com.opensource.svgaplayer.onSvgaAnimationEnd
+import com.opensource.svgaplayer.onSvgaAnimationFrame
+import com.opensource.svgaplayer.onSvgaAnimationStart
 
 class AnimationFromJavaCodeActivity : AppCompatActivity() {
 
@@ -23,19 +25,29 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
 //        svg.scaleType = ImageView.ScaleType.CENTER_INSIDE
 
         //加载SVGA
-//        svg.load("file:///android_asset/test7.svga") {
-        svg.load("file:///android_asset/heartbeat.svga") {
-            repeatCount(1)
-            onAnimationStart {
+        val de = SVGADynamicEntity()
+        de.setDynamicText("测试文本", TextPaint().apply {
+            color = Color.BLACK
+        }, "text")
+        svg.load("file:///android_asset/test2_text_user.svga") {
+//            svgaRepeatCount(1)
+            onSvgaAnimationStart {
                 LogUtils.e("开始动画")
             }
-            onAnimationEnd {
+            onSvgaAnimationEnd {
                 LogUtils.e("停止动画")
             }
+            onSvgaAnimationFrame {
+//                LogUtils.e("当前帧数：${it}")
+            }
+            target(SVGATarget(svg, de))
         }
 
-
         //加载gif
-//        svg.load("file:///android_asset/test4.gif")
+//        svg.load("file:///android_asset/test4.gif"){
+//            target {
+//                svg.setImageDrawable(it)
+//            }
+//        }
     }
 }

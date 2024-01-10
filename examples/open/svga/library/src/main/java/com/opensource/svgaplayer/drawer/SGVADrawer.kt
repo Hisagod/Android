@@ -4,7 +4,6 @@ import android.graphics.Canvas
 import android.widget.ImageView
 import com.opensource.svgaplayer.SVGAVideoEntity
 import com.opensource.svgaplayer.utils.Pools
-import com.opensource.svgaplayer.utils.SVGAScaleInfo
 import kotlin.math.max
 
 /**

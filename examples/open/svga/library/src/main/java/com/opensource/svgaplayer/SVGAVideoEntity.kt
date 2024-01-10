@@ -4,12 +4,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
+import coil.ImageLoader
+import coil.memory.MemoryCache
 import com.opensource.svgaplayer.entities.SVGAAudioEntity
+import com.opensource.svgaplayer.entities.SVGARect
 import com.opensource.svgaplayer.entities.SVGAVideoSpriteEntity
 import com.opensource.svgaplayer.proto.AudioEntity
 import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.PathUtils
-import com.opensource.svgaplayer.utils.SVGARect
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -17,12 +19,15 @@ import java.io.FileOutputStream
 /**
  * Created by PonyCui on 16/6/18.
  */
-class SVGAVideoEntity {
+class SVGAVideoEntity(
+    private val hashCode: String,
+    private val imageLoader: ImageLoader,
+    private val entity: MovieEntity
+) {
 
     private val TAG = "SVGAVideoEntity"
 
     var antiAlias = true
-    var movieItem: MovieEntity? = null
 
     var videoSize = SVGARect(0.0, 0.0)
         private set
@@ -42,8 +47,7 @@ class SVGAVideoEntity {
     //图片列表数据
     internal var imageMap = ArrayMap<String, Bitmap>()
 
-    constructor(entity: MovieEntity) {
-        this.movieItem = entity
+    init {
         setupByMovie(entity)
         parserImages(entity)
         parseAudio(entity)
@@ -77,8 +81,23 @@ class SVGAVideoEntity {
                 return@forEach
             }
 
+            val key = entry.key
+            //生成key
+            val memoryKey = hashCode + key
+            //从缓存拿
+            val value = imageLoader.memoryCache?.get(MemoryCache.Key(memoryKey))
+            val cacheBitmap = value?.bitmap
+            if (cacheBitmap != null) {
+                imageMap[key] = cacheBitmap
+                return@forEach
+            }
+
             val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-            imageMap[entry.key] = bitmap
+            imageMap[key] = bitmap
+            //存入内存缓存
+            imageLoader.memoryCache?.set(
+                MemoryCache.Key(memoryKey), MemoryCache.Value(bitmap)
+            )
         }
     }
 

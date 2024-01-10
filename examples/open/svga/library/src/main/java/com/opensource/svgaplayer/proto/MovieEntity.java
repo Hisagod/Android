@@ -2,8 +2,6 @@
 // Source file: svga.proto at 123:1
 package com.opensource.svgaplayer.proto;
 
-import com.opensource.svgaplayer.utils.ByteArrayUtil;
-import com.opensource.svgaplayer.utils.log.LogUtils;
 import com.squareup.wire.FieldEncoding;
 import com.squareup.wire.Message;
 import com.squareup.wire.ProtoAdapter;
@@ -13,8 +11,6 @@ import com.squareup.wire.WireField;
 import com.squareup.wire.internal.Internal;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

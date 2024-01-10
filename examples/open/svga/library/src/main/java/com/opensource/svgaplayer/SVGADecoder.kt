@@ -1,21 +1,18 @@
 package com.opensource.svgaplayer
 
-import android.graphics.drawable.Drawable
-import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import coil.ImageLoader
 import coil.decode.DecodeResult
 import coil.decode.DecodeUtils
 import coil.decode.Decoder
 import coil.fetch.SourceResult
 import coil.request.Options
-import coil.request.animatedTransformation
-import coil.request.animationEndCallback
-import coil.request.animationStartCallback
 import com.opensource.svgaplayer.proto.MovieEntity
-import com.opensource.svgaplayer.proto.MovieEntityFactory
+import com.opensource.svgaplayer.utils.getLifecycle
 import com.opensource.svgaplayer.utils.inflate
-import com.opensource.svgaplayer.utils.isSVGA
 import com.opensource.svgaplayer.utils.log.LogUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okio.BufferedSource
 
 class SVGADecoder(
     private val array: ByteArray,
@@ -38,24 +35,12 @@ class SVGADecoder(
 //        }
 
         val movieEntity = MovieEntity.ADAPTER.decode(array)
-        val entity = SVGAVideoEntity(movieEntity)
+        val entity = SVGAVideoEntity(hashCode, imageLoader, movieEntity)
         val drawable = SVGADrawable(entity, options, imageLoader)
-
-//        val onStart = options.parameters.animationStartCallback()
-//        val onEnd = options.parameters.animationEndCallback()
-//        if (onStart != null || onEnd != null) {
-//            drawable.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
-//                override fun onAnimationStart(drawable: Drawable?) {
-//                    super.onAnimationStart(drawable)
-//                    onStart?.invoke()
-//                }
-//
-//                override fun onAnimationEnd(drawable: Drawable?) {
-//                    super.onAnimationEnd(drawable)
-//                    onEnd?.invoke()
-//                }
-//            })
-//        }
+        withContext(Dispatchers.Main) {
+            val lifecycle = options.context.getLifecycle() ?: SVGALifecycle
+            lifecycle.addObserver(drawable)
+        }
         return DecodeResult(drawable, false)
     }
 
@@ -67,7 +52,7 @@ class SVGADecoder(
         ): Decoder? {
             LogUtils.error("SVGADecoder", "SVGA解码器解析文件类型：" + result.mimeType.toString())
             val source = result.source.source()
-            return if (DecodeUtils.isSVGA(source)) {
+            return if (isSVGA(source)) {
                 val byteArray = source.readByteArray()
                 val inflate = byteArray.inflate()
                 SVGADecoder(inflate, options, imageLoader)
@@ -79,5 +64,16 @@ class SVGADecoder(
         override fun equals(other: Any?) = other is Factory
 
         override fun hashCode() = javaClass.hashCode()
+
+        private fun isSVGA(source: BufferedSource): Boolean {
+            return source.buffer[0].toInt() == 120 && source.buffer[1].toInt() == -100
+        }
+    }
+
+    companion object {
+        const val REPEAT_COUNT_KEY = "svga#repeatCount"
+        const val ANIMATION_START_CALLBACK_KEY = "svga#animation_start_callback"
+        const val ANIMATION_END_CALLBACK_KEY = "svga#animation_end_callback"
+        const val ANIMATION_FRAME_CALLBACK_KEY = "svga#animation_frame_callback"
     }
 }

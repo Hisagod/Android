@@ -1,4 +1,4 @@
-package com.opensource.svgaplayer.utils
+package com.opensource.svgaplayer.drawer
 
 import android.widget.ImageView
 

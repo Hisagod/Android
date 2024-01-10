@@ -18,7 +18,7 @@ class AnimationGifActivity : AppCompatActivity() {
 
         iv.load("file:///android_asset/test4.gif") {
             lifecycle(this@AnimationGifActivity)
-            target(ImageTarget(iv))
+//            target(ImageTarget(iv))
         }
     }
 }
