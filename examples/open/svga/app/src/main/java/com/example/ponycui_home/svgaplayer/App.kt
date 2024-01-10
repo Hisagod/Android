@@ -6,6 +6,8 @@ import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import coil.util.DebugLogger
+import coil.util.Logger
 import com.opensource.svgaplayer.SVGA
 import com.opensource.svgaplayer.SVGADecoder
 
@@ -27,6 +29,7 @@ class App : Application(), ImageLoaderFactory {
                 }
                 add(SVGADecoder.Factory())
             }
+            .logger(DebugLogger())
             .build()
     }
 }

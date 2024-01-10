@@ -34,14 +34,19 @@ class SVGAVideoEntity {
         private set
 
     internal var spriteList: MutableList<SVGAVideoSpriteEntity> = mutableListOf()
+
+    //音频列表数据
     internal var audioList: MutableList<SVGAAudioEntity> = mutableListOf()
     private var soundCallback: SVGASoundManager.SVGASoundCallBack? = null
+
+    //图片列表数据
     internal var imageMap = ArrayMap<String, Bitmap>()
 
     constructor(entity: MovieEntity) {
         this.movieItem = entity
         setupByMovie(entity)
         parserImages(entity)
+        parseAudio(entity)
         resetSprites(entity)
     }
 
@@ -77,37 +82,25 @@ class SVGAVideoEntity {
         }
     }
 
+    /**
+     * 解析音频数据
+     */
+    private fun parseAudio(entity: MovieEntity) {
+        //以音频名为key，file为value包装成map
+        val audiosFileMap = generateAudioFileMap(entity)
+        //带音频效果SVGA
+        setupSoundPool(entity) {
+
+        }
+        audioList = entity.audios.map { audio ->
+            createSvgaAudioEntity(audio, audiosFileMap)
+        }.toMutableList()
+    }
+
     private fun resetSprites(entity: MovieEntity) {
         spriteList = entity.sprites.map {
             SVGAVideoSpriteEntity(it)
         }.toMutableList()
-    }
-
-    fun setupAudios(onComplete: () -> Unit) {
-        movieItem?.let { entity ->
-            //不带音频SVGA
-            if (entity.audios == null || entity.audios.isEmpty()) {
-                onComplete.invoke()
-                return
-            }
-
-            //以音频名为key，file为value包装成map
-            val audiosFileMap = generateAudioFileMap(entity)
-            //本地音频文件为空（可能用户会删除数据），也播放
-            if (audiosFileMap.size == 0) {
-                onComplete.invoke()
-                return
-            }
-
-            //带音频效果SVGA
-            setupSoundPool(entity) {
-                onComplete.invoke()
-            }
-
-            audioList = entity.audios.map { audio ->
-                createSvgaAudioEntity(audio, audiosFileMap)
-            }.toMutableList()
-        }
     }
 
     private fun createSvgaAudioEntity(
@@ -203,7 +196,7 @@ class SVGAVideoEntity {
         SVGASoundManager.release()
 
         audioList.clear()
-        audioList= mutableListOf()
+        audioList = mutableListOf()
 
         spriteList.forEach {
             it.clear()
@@ -215,7 +208,7 @@ class SVGAVideoEntity {
             it.value.recycle()
         }
         imageMap.clear()
-        imageMap= arrayMapOf()
+        imageMap = arrayMapOf()
     }
 }
 

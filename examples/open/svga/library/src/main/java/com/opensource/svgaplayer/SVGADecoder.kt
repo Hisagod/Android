@@ -41,21 +41,21 @@ class SVGADecoder(
         val entity = SVGAVideoEntity(movieEntity)
         val drawable = SVGADrawable(entity, options, imageLoader)
 
-        val onStart = options.parameters.animationStartCallback()
-        val onEnd = options.parameters.animationEndCallback()
-        if (onStart != null || onEnd != null) {
-            drawable.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
-                override fun onAnimationStart(drawable: Drawable?) {
-                    super.onAnimationStart(drawable)
-                    onStart?.invoke()
-                }
-
-                override fun onAnimationEnd(drawable: Drawable?) {
-                    super.onAnimationEnd(drawable)
-                    onEnd?.invoke()
-                }
-            })
-        }
+//        val onStart = options.parameters.animationStartCallback()
+//        val onEnd = options.parameters.animationEndCallback()
+//        if (onStart != null || onEnd != null) {
+//            drawable.registerAnimationCallback(object : Animatable2Compat.AnimationCallback() {
+//                override fun onAnimationStart(drawable: Drawable?) {
+//                    super.onAnimationStart(drawable)
+//                    onStart?.invoke()
+//                }
+//
+//                override fun onAnimationEnd(drawable: Drawable?) {
+//                    super.onAnimationEnd(drawable)
+//                    onEnd?.invoke()
+//                }
+//            })
+//        }
         return DecodeResult(drawable, false)
     }
 
