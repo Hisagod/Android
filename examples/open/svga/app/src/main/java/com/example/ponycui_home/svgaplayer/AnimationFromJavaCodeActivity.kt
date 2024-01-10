@@ -25,11 +25,11 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
 //        svg.scaleType = ImageView.ScaleType.CENTER_INSIDE
 
         //加载SVGA
-        val de = SVGADynamicEntity()
-        de.setDynamicText("测试文本", TextPaint().apply {
-            color = Color.BLACK
-        }, "text")
-        svg.load("file:///android_asset/test2_text_user.svga") {
+//        val de = SVGADynamicEntity()
+//        de.setDynamicText("测试文本", TextPaint().apply {
+//            color = Color.BLACK
+//        }, "text")
+        svg.load("file:///android_asset/test.svga") {
 //            svgaRepeatCount(1)
             onSvgaAnimationStart {
                 LogUtils.e("开始动画")
@@ -40,7 +40,7 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
             onSvgaAnimationFrame {
 //                LogUtils.e("当前帧数：${it}")
             }
-            target(SVGATarget(svg, de))
+//            target(SVGATarget(svg, de))
         }
 
         //加载gif

@@ -2,7 +2,6 @@ package com.opensource.svgaplayer
 
 import coil.ImageLoader
 import coil.decode.DecodeResult
-import coil.decode.DecodeUtils
 import coil.decode.Decoder
 import coil.fetch.SourceResult
 import coil.request.Options

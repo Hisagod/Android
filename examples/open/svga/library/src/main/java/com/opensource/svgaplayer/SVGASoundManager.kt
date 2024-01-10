@@ -11,7 +11,13 @@ import android.media.SoundPool
 import android.os.Build
 import androidx.collection.ArrayMap
 import com.opensource.svgaplayer.utils.log.LogUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.FileDescriptor
+import kotlin.coroutines.resume
 
 /**
  * Author : llk
@@ -145,9 +151,11 @@ object SVGASoundManager {
         length: Long,
         priority: Int
     ): Int {
-        if (!checkInit()) return -1
+        if (!checkInit()) {
+            return -1
+        }
 
-        val soundId = soundPool!!.load(fd, offset, length, priority)
+        val soundId = soundPool?.load(fd, offset, length, priority) ?: -1
 
         LogUtils.debug(TAG, "load soundId=$soundId callBack=$callBack")
 
@@ -162,7 +170,7 @@ object SVGASoundManager {
 
         LogUtils.debug(TAG, "unload soundId=$soundId")
 
-        soundPool!!.unload(soundId)
+        soundPool?.unload(soundId)
 
         soundCallBackMap.remove(soundId)
     }
@@ -171,27 +179,27 @@ object SVGASoundManager {
         if (!checkInit()) return -1
 
         LogUtils.debug(TAG, "play soundId=$soundId")
-        return soundPool!!.play(soundId, volume, volume, 1, 0, 1.0f)
+        return soundPool?.play(soundId, volume, volume, 1, 0, 1.0f) ?: -1
     }
 
     internal fun stop(soundId: Int) {
         if (!checkInit()) return
 
         LogUtils.debug(TAG, "stop soundId=$soundId")
-        soundPool!!.stop(soundId)
+        soundPool?.stop(soundId)
     }
 
     internal fun resume(soundId: Int) {
         if (!checkInit()) return
 
         LogUtils.debug(TAG, "stop soundId=$soundId")
-        soundPool!!.resume(soundId)
+        soundPool?.resume(soundId)
     }
 
     internal fun pause(soundId: Int) {
         if (!checkInit()) return
 
         LogUtils.debug(TAG, "pause soundId=$soundId")
-        soundPool!!.pause(soundId)
+        soundPool?.pause(soundId)
     }
 }

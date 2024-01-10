@@ -94,7 +94,7 @@ class SVGADrawable(
             return
         }
         val time = SystemClock.uptimeMillis()
-        drawer?.drawFrame(canvas, currentFrame, scaleType, flip)
+        drawer.drawFrame(canvas, currentFrame, scaleType, flip)
 //        LogUtils.error(TAG, currentFrame.toString())
         onFrame?.invoke(currentFrame)
 
@@ -159,11 +159,13 @@ class SVGADrawable(
 
     override fun start() {
         LogUtils.error(TAG, "动画start")
-        if (isAnimation) return
-        isAnimation = true
+        videoItem.onLoadAudioComplete {
+            isAnimation = true
+            onStart?.invoke()
+            callbacks.forEach { it.onAnimationStart(this) }
 
-        onStart?.invoke()
-        callbacks.forEach { it.onAnimationStart(this) }
+            invalidateSelf()
+        }
     }
 
     override fun stop() {
