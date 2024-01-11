@@ -10,8 +10,11 @@ import com.opensource.svgaplayer.utils.getLifecycle
 import com.opensource.svgaplayer.utils.convertSVGA
 import com.opensource.svgaplayer.utils.log.LogUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import okio.BufferedSource
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class SVGADecoder(
     private val array: ByteArray,
@@ -25,12 +28,20 @@ class SVGADecoder(
         LogUtils.error(TAG, "byteArray的hashCode：${hashCode}")
 
         val movieEntity = MovieEntity.ADAPTER.decode(array)
-        val entity = SVGAVideoEntity(hashCode, imageLoader, movieEntity)
-        val drawable = SVGADrawable(entity, options, imageLoader)
-        withContext(Dispatchers.Main) {
-            val lifecycle = options.context.getLifecycle() ?: SVGALifecycle
-            lifecycle.addObserver(drawable)
+        val entity = suspendCancellableCoroutine { cb ->
+            try {
+                SVGAVideoEntity(hashCode, imageLoader, movieEntity) {
+                    cb.resume(it)
+                }
+            } catch (e: Exception) {
+                cb.resumeWithException(e)
+            }
         }
+        val drawable = SVGADrawable(entity, options, imageLoader)
+//        withContext(Dispatchers.Main) {
+//            val lifecycle = options.context.getLifecycle() ?: SVGALifecycle
+//            lifecycle.addObserver(drawable)
+//        }
         return DecodeResult(drawable, false)
     }
 
@@ -51,10 +62,6 @@ class SVGADecoder(
         override fun equals(other: Any?) = other is Factory
 
         override fun hashCode() = javaClass.hashCode()
-
-        private fun isSVGA(source: BufferedSource): Boolean {
-            return source.buffer[0].toInt() == 120 && source.buffer[1].toInt() == -100
-        }
     }
 
     companion object {

@@ -30,7 +30,7 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
 //            color = Color.BLACK
 //        }, "text")
         svg.load("file:///android_asset/heartbeat.svga") {
-//        svg.load("file:///android_asset/750x80.svga") {
+//        svg.load("file:///android_asset/750x80.zip") {
 //            svgaRepeatCount(1)
             onSvgaAnimationStart {
                 LogUtils.e("开始动画")

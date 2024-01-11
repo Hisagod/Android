@@ -8,7 +8,7 @@
 
 <!--        <com.opensource.svgaplayer.SVGAImageView-->
 <!--            android:id="@+id/svg"-->
-<!--            loadSVGA="@{`angel.svga`}"-->
+<!--            loadSVGA="@{`angel.zip`}"-->
 <!--            android:visibility="gone"-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="match_parent" />-->

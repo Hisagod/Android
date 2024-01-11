@@ -20,7 +20,7 @@ class SVGADrawable(
     private val videoItem: SVGAVideoEntity,
     private val options: Options,
     private val imageLoader: ImageLoader
-) : Drawable(), Animatable2Compat, LifecycleObserver {
+) : Drawable(), Animatable2Compat/*, LifecycleObserver */ {
     private val TAG = javaClass.simpleName
 
     private val callbacks = mutableListOf<Animatable2Compat.AnimationCallback>()
@@ -144,13 +144,9 @@ class SVGADrawable(
 
     override fun start() {
         LogUtils.error(TAG, "动画start")
-        videoItem.onLoadAudioComplete {
-            isAnimation = true
-            onStart?.invoke()
-            callbacks.forEach { it.onAnimationStart(this) }
-
-            invalidateSelf()
-        }
+        isAnimation = true
+        onStart?.invoke()
+        callbacks.forEach { it.onAnimationStart(this) }
     }
 
     override fun stop() {
@@ -185,20 +181,19 @@ class SVGADrawable(
         callbacks.clear()
     }
 
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    private fun onResume(owner: LifecycleOwner) {
-        resumeAudio()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    private fun onStop(owner: LifecycleOwner) {
-        pauseAudio()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    private fun onDestroy(owner: LifecycleOwner) {
-        stopAudio()
-        SVGASoundManager.release()
-    }
+//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+//    private fun onResume(owner: LifecycleOwner) {
+//        resumeAudio()
+//    }
+//
+//    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+//    private fun onStop(owner: LifecycleOwner) {
+//        pauseAudio()
+//    }
+//
+//    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+//    private fun onDestroy(owner: LifecycleOwner) {
+//        stopAudio()
+//        SVGASoundManager.release()
+//    }
 }

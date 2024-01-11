@@ -8,14 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.ponycui_home.svgaplayer.databinding.ActivityFromRecyclerviewBinding
+import com.example.ponycui_home.svgaplayer.databinding.ActivityRecyclerviewBinding
 
-class AnimationFromRecyclerViewActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityFromRecyclerviewBinding
+class RecyclerViewActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityRecyclerviewBinding
     private val myAdapter by lazy { MyAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFromRecyclerviewBinding.inflate(layoutInflater)
+        binding = ActivityRecyclerviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.rv.adapter = myAdapter
@@ -30,13 +30,11 @@ class AnimationFromRecyclerViewActivity : AppCompatActivity() {
             return MyViewHolder(view)
         }
 
-        override fun getItemCount(): Int = 1
+        override fun getItemCount(): Int = 100
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             val svg = holder.itemView.findViewById<AppCompatImageView>(R.id.svg)
-            svg.load("file:///android_asset/test7.svga") {
-//                target(ImageTarget(svg))
-            }
+            svg.load("file:///android_asset/test.svga")
         }
     }
 }

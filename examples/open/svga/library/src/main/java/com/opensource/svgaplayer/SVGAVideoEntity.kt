@@ -3,7 +3,6 @@ package com.opensource.svgaplayer
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.collection.ArrayMap
-import androidx.collection.arrayMapOf
 import coil.ImageLoader
 import coil.memory.MemoryCache
 import com.opensource.svgaplayer.entities.SVGAAudioEntity
@@ -13,6 +12,7 @@ import com.opensource.svgaplayer.proto.AudioEntity
 import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.PathUtils
 import com.opensource.svgaplayer.utils.log.LogUtils
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -23,7 +23,8 @@ import java.io.FileOutputStream
 class SVGAVideoEntity(
     private val hashCode: String,
     private val imageLoader: ImageLoader,
-    private val entity: MovieEntity
+    private val entity: MovieEntity,
+    private val onComplete: (entity: SVGAVideoEntity) -> Unit
 ) {
 
     private val TAG = "SVGAVideoEntity"
@@ -46,8 +47,6 @@ class SVGAVideoEntity(
 
     //图片列表数据
     internal var imageMap = ArrayMap<String, Bitmap>()
-
-    private var onLoadAudioComplete: (() -> Unit)? = null
 
     init {
         setupByMovie(entity)
@@ -108,6 +107,10 @@ class SVGAVideoEntity(
      */
     private fun parseAudio(entity: MovieEntity) {
         val audiosFileMap = generateAudioFileMap(entity)
+        if (audiosFileMap.isEmpty()) {
+            onComplete.invoke(this)
+            return
+        }
         audioList = entity.audios.map { audio ->
             createSvgaAudioEntity(audio, audiosFileMap)
         }.toMutableList()
@@ -142,7 +145,7 @@ class SVGAVideoEntity(
 
                         override fun onComplete() {
                             LogUtils.error(TAG, "音频加载完成")
-                            onLoadAudioComplete?.invoke()
+                            onComplete.invoke(this@SVGAVideoEntity)
                         }
                     },
                     it.fd,
@@ -189,10 +192,6 @@ class SVGAVideoEntity(
             }
         }
         return audiosFileMap
-    }
-
-    fun onLoadAudioComplete(onLoadAudioComplete: (() -> Unit)?) {
-        this.onLoadAudioComplete = onLoadAudioComplete
     }
 }
 

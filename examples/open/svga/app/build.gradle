@@ -71,6 +71,7 @@
 
 apply plugin: 'com.android.application'
 apply from: "${rootDir}/module.gradle"
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     namespace 'com.example.ponycui_home.svgaplayer'
@@ -84,4 +85,7 @@ dependencies {
     implementation project(':examples:open:svga:library')
 
     implementation 'com.github.bumptech.glide:glide:4.15.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
