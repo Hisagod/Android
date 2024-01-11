@@ -7,12 +7,9 @@
         android:background="@android:color/black"
         android:orientation="vertical">
 
-        <Button
+        <ImageView
             android:id="@+id/remove"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:onClick="remove"
-            android:text="移除SVGA控件" />
+            android:layout_height="match_parent" />
     </FrameLayout>
 </layout>

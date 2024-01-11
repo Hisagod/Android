@@ -37,15 +37,9 @@ class SVGADrawable(
     private val scaleType: ImageView.ScaleType = ImageView.ScaleType.FIT_CENTER
 
     //控制阿语环境，动画水平反转
-    private var flip = false
+    private var flip = options.parameters.svgaFlip() ?: false
 
     private var drawer = SVGACanvasDrawer(videoItem)
-
-    private var onFrame = options.parameters.svgaAnimationFrameCallback()
-
-    private val onStart = options.parameters.svgaAnimationStartCallback()
-
-    private val onEnd = options.parameters.svgaAnimationEndCallback()
 
     //每帧时长
     private var frameTime: Long = 0
@@ -93,7 +87,7 @@ class SVGADrawable(
 
         soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
             isAnimation = true
-            onStart?.invoke()
+            options.parameters.svgaAnimationStartCallback()?.invoke()
             callbacks.forEach { it.onAnimationStart(this) }
 
             invalidateSelf()
@@ -121,7 +115,7 @@ class SVGADrawable(
         drawer.drawFrame(canvas, currentFrame, scaleType, flip)
         playAudio(currentFrame)
 //        LogUtils.error(TAG, currentFrame.toString())
-        onFrame?.invoke(currentFrame)
+        options.parameters.svgaAnimationFrameCallback()?.invoke(currentFrame)
 
         scheduleSelf(nextFrame, time + frameTime)
     }
@@ -166,7 +160,7 @@ class SVGADrawable(
             //无音频直接播放
 
             isAnimation = true
-            onStart?.invoke()
+            options.parameters.svgaAnimationStartCallback()?.invoke()
             callbacks.forEach { it.onAnimationStart(this) }
         } else {
             //有音频需要等待音频加载完毕在执行
@@ -183,7 +177,7 @@ class SVGADrawable(
         isAnimation = false
         callbacks.forEach { it.onAnimationEnd(this) }
         unscheduleSelf(nextFrame)
-        onEnd?.invoke()
+        options.parameters.svgaAnimationEndCallback()?.invoke()
 
         videoItem.audioList.forEach {
             it.loadId?.let {

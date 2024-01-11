@@ -6,16 +6,16 @@ import android.os.Bundle
 import android.text.TextPaint
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
+import com.example.ponycui_home.svgaplayer.databinding.ActivityAddJavaBinding
 import com.opensource.svgaplayer.SVGADynamicEntity
 
 class AnimationFromBindingActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityAddJavaBinding
 
-//    private val svg by lazy { SVGAImageView(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(svg)
-//        svg.background = ColorDrawable(Color.BLACK)
-//
+        binding = ActivityAddJavaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 //
 //        val dynamic = SVGADynamicEntity()
 //        val tp = TextPaint()

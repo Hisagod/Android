@@ -32,3 +32,9 @@ fun ImageRequest.Builder.onSvgaAnimationFrame(callback: ((frame: Int) -> Unit)?)
 
 fun Parameters.svgaAnimationFrameCallback(): ((frame: Int) -> Unit)? =
     value(SVGADecoder.ANIMATION_FRAME_CALLBACK_KEY)
+
+fun Parameters.svgaFlip(): Boolean? = value(SVGADecoder.FLIP_KEY)
+
+fun ImageRequest.Builder.svgaFlip(value: Boolean): ImageRequest.Builder {
+    return setParameter(SVGADecoder.FLIP_KEY, value)
+}
