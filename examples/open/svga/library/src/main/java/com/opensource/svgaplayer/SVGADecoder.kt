@@ -6,15 +6,8 @@ import coil.decode.Decoder
 import coil.fetch.SourceResult
 import coil.request.Options
 import com.opensource.svgaplayer.proto.MovieEntity
-import com.opensource.svgaplayer.utils.getLifecycle
 import com.opensource.svgaplayer.utils.convertSVGA
 import com.opensource.svgaplayer.utils.log.LogUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
-import okio.BufferedSource
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 class SVGADecoder(
     private val array: ByteArray,
@@ -27,20 +20,21 @@ class SVGADecoder(
         val hashCode = array.contentHashCode().toString()
         LogUtils.error(TAG, "byteArray的hashCode：${hashCode}")
 
+//        val movieEntity = MovieEntityFactory.getMovieEntity(hashCode, array)
+
         val movieEntity = MovieEntity.ADAPTER.decode(array)
-        val entity = suspendCancellableCoroutine { cb ->
-            try {
-                SVGAVideoEntity(hashCode, imageLoader, movieEntity) {
-                    cb.resume(it)
-                }
-            } catch (e: Exception) {
-                cb.resumeWithException(e)
-            }
-        }
-        val drawable = SVGADrawable(entity, options, imageLoader)
+        val entity = SVGAVideoEntity(hashCode, imageLoader, movieEntity)
+        val drawable = SVGADrawable(hashCode, entity, options, imageLoader)
+
 //        withContext(Dispatchers.Main) {
 //            val lifecycle = options.context.getLifecycle() ?: SVGALifecycle
-//            lifecycle.addObserver(drawable)
+//            lifecycle.addObserver(SVGAAudioManager)
+//        }
+
+//        withContext(Dispatchers.Main) {
+//            val lifecycle = options.context.getLifecycle() ?: SVGALifecycle
+//            lifecycle.addObserver(SVGAAudioManager)
+//            lifecycle.addObserver(MovieEntityFactory)
 //        }
         return DecodeResult(drawable, false)
     }

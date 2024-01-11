@@ -32,12 +32,4 @@ internal class SVGAVideoSpriteEntity {
             return@map frameItem
         }?.toMutableList() ?: mutableListOf()
     }
-
-    fun clear() {
-        frames.forEach {
-            it.clear()
-        }
-        frames.clear()
-        frames= mutableListOf()
-    }
 }

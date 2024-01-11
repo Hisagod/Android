@@ -28,6 +28,7 @@ class App : Application(), ImageLoaderFactory {
                     add(GifDecoder.Factory())
                 }
                 add(SVGADecoder.Factory())
+                add(CustomInterceptor())
             }
             .logger(DebugLogger())
             .build()

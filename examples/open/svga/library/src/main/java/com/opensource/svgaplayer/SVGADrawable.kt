@@ -4,23 +4,29 @@ import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.SoundPool
+import android.os.Build
 import android.os.SystemClock
 import android.widget.ImageView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import coil.ImageLoader
 import coil.request.Options
 import com.opensource.svgaplayer.drawer.SVGACanvasDrawer
 import com.opensource.svgaplayer.utils.log.LogUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class SVGADrawable(
+    private val key: String,
     private val videoItem: SVGAVideoEntity,
     private val options: Options,
     private val imageLoader: ImageLoader
-) : Drawable(), Animatable2Compat/*, LifecycleObserver */ {
+) : Drawable(), Animatable2Compat {
     private val TAG = javaClass.simpleName
 
     private val callbacks = mutableListOf<Animatable2Compat.AnimationCallback>()
@@ -34,11 +40,6 @@ class SVGADrawable(
     private var flip = false
 
     private var drawer = SVGACanvasDrawer(videoItem)
-
-    private var onCancel: (() -> Unit)? = null
-    private var onRepeat: (() -> Unit)? = null
-    private var onPause: (() -> Unit)? = null
-    private var onResume: (() -> Unit)? = null
 
     private var onFrame = options.parameters.svgaAnimationFrameCallback()
 
@@ -57,6 +58,8 @@ class SVGADrawable(
 
     @Volatile
     private var isAnimation = false
+
+    private val soundPool by lazy { getSoundPool(20) }
 
     private val nextFrame = {
 //        LogUtils.error(TAG, "nextFrame")
@@ -82,10 +85,31 @@ class SVGADrawable(
     }
 
     init {
+        LogUtils.error(TAG, "初始化Drawable")
         val frame = videoItem.frames.toFloat()
         val fps = videoItem.FPS.toFloat()
         val duration = frame.div(fps) * 1000
         frameTime = (duration / frame).toLong()
+
+        soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
+            isAnimation = true
+            onStart?.invoke()
+            callbacks.forEach { it.onAnimationStart(this) }
+
+            invalidateSelf()
+        }
+
+//        SVGAAudioManager.onFinish {
+//            LogUtils.error(TAG, "准备播放音视频动画")
+//            val contain = SVGAAudioManager.pool.contains(it)
+//            if (contain) {
+//                isAnimation = true
+//                onStart?.invoke()
+//                callbacks.forEach { it.onAnimationStart(this) }
+//
+//                invalidateSelf()
+//            }
+//        }
     }
 
     override fun draw(canvas: Canvas) {
@@ -95,6 +119,7 @@ class SVGADrawable(
         }
         val time = SystemClock.uptimeMillis()
         drawer.drawFrame(canvas, currentFrame, scaleType, flip)
+        playAudio(currentFrame)
 //        LogUtils.error(TAG, currentFrame.toString())
         onFrame?.invoke(currentFrame)
 
@@ -118,35 +143,39 @@ class SVGADrawable(
         drawer.updateSVGADynamicEntity(de)
     }
 
-    private fun resumeAudio() {
+    private fun playAudio(frameIndex: Int) {
         videoItem.audioList.forEach { audio ->
-            audio.playID?.let {
-                SVGASoundManager.resume(it)
+            if (audio.startFrame == frameIndex) {
+                audio.loadId?.let {
+                    audio.playID = soundPool.play(it, 1f, 1f, 1, 0, 1f)
+                }
             }
-        }
-    }
-
-    private fun pauseAudio() {
-        videoItem.audioList.forEach { audio ->
-            audio.playID?.let {
-                SVGASoundManager.pause(it)
-            }
-        }
-    }
-
-    private fun stopAudio() {
-        videoItem.audioList.forEach { audio ->
-            audio.playID?.let {
-                SVGASoundManager.stop(it)
-            }
+//            if (audio.endFrame <= frameIndex) {
+//                audio.playID?.let {
+////                    SVGAAudioManager.stop(it)
+//                    SVGAAudioManager.pause(it)
+//                }
+////                audio.playID = null
+//            }
         }
     }
 
     override fun start() {
         LogUtils.error(TAG, "动画start")
-        isAnimation = true
-        onStart?.invoke()
-        callbacks.forEach { it.onAnimationStart(this) }
+        if (videoItem.entity.audios.isEmpty()) {
+            //无音频直接播放
+
+            isAnimation = true
+            onStart?.invoke()
+            callbacks.forEach { it.onAnimationStart(this) }
+        } else {
+            //有音频需要等待音频加载完毕在执行
+            videoItem.parseAudio(soundPool, videoItem.entity)
+        }
+
+//        isAnimation = true
+//        onStart?.invoke()
+//        callbacks.forEach { it.onAnimationStart(this) }
     }
 
     override fun stop() {
@@ -155,6 +184,13 @@ class SVGADrawable(
         callbacks.forEach { it.onAnimationEnd(this) }
         unscheduleSelf(nextFrame)
         onEnd?.invoke()
+
+        videoItem.audioList.forEach {
+            it.loadId?.let {
+                soundPool.stop(it)
+                soundPool.unload(it)
+            }
+        }
     }
 
     override fun isRunning(): Boolean {
@@ -181,19 +217,15 @@ class SVGADrawable(
         callbacks.clear()
     }
 
-//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-//    private fun onResume(owner: LifecycleOwner) {
-//        resumeAudio()
-//    }
-//
-//    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-//    private fun onStop(owner: LifecycleOwner) {
-//        pauseAudio()
-//    }
-//
-//    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-//    private fun onDestroy(owner: LifecycleOwner) {
-//        stopAudio()
-//        SVGASoundManager.release()
-//    }
+    private fun getSoundPool(maxStreams: Int) = if (Build.VERSION.SDK_INT >= 21) {
+        val attributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_MEDIA)
+            .build()
+        SoundPool.Builder().setAudioAttributes(attributes)
+            .setMaxStreams(maxStreams)
+            .build()
+    } else {
+        SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0)
+    }
+
 }

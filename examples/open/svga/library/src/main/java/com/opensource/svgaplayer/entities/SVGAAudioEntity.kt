@@ -9,8 +9,9 @@ internal class SVGAAudioEntity {
     val endFrame: Int
     val startTime: Int
     val totalTime: Int
-    var soundID: Int? = null
+    var loadId: Int? = null
     var playID: Int? = null
+    var isPlay: Boolean = false
 
     constructor(audioItem: AudioEntity) {
         this.audioKey = audioItem.audioKey

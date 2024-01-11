@@ -16,8 +16,11 @@ class LoadSourceFromActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //asserts文件夹加载
-        binding.iv1.load("file:///android_asset/test7.svga")
+//        binding.iv1.load("file:///android_asset/test7.svga")
+        binding.iv1.load("file:///android_asset/test.svga"){
+
+        }
         //网络加载
-        binding.iv2.load("https://github.com/yyued/SVGA-Samples/blob/master/posche.svga?raw=true")
+//        binding.iv2.load("https://github.com/yyued/SVGA-Samples/blob/master/posche.svga?raw=true")
     }
 }

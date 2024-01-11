@@ -2,6 +2,7 @@ package com.opensource.svgaplayer
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.SoundPool
 import androidx.collection.ArrayMap
 import coil.ImageLoader
 import coil.memory.MemoryCache
@@ -11,8 +12,6 @@ import com.opensource.svgaplayer.entities.SVGAVideoSpriteEntity
 import com.opensource.svgaplayer.proto.AudioEntity
 import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.PathUtils
-import com.opensource.svgaplayer.utils.log.LogUtils
-import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -23,8 +22,7 @@ import java.io.FileOutputStream
 class SVGAVideoEntity(
     private val hashCode: String,
     private val imageLoader: ImageLoader,
-    private val entity: MovieEntity,
-    private val onComplete: (entity: SVGAVideoEntity) -> Unit
+    val entity: MovieEntity
 ) {
 
     private val TAG = "SVGAVideoEntity"
@@ -32,13 +30,10 @@ class SVGAVideoEntity(
     var antiAlias = true
 
     var videoSize = SVGARect(0.0, 0.0)
-        private set
 
     var FPS = 15
-        private set
 
     var frames: Int = 0
-        private set
 
     internal var spriteList: MutableList<SVGAVideoSpriteEntity> = mutableListOf()
 
@@ -51,11 +46,11 @@ class SVGAVideoEntity(
     init {
         setupByMovie(entity)
         parserImages(entity)
-        parseAudio(entity)
         resetSprites(entity)
+//        parseAudio(entity)
     }
 
-    private fun setupByMovie(entity: MovieEntity) {
+    fun setupByMovie(entity: MovieEntity) {
         val movieParams = entity.params
 
         //画布宽度
@@ -71,7 +66,7 @@ class SVGAVideoEntity(
         frames = movieParams.frames ?: 0
     }
 
-    private fun parserImages(obj: MovieEntity) {
+    fun parserImages(obj: MovieEntity) {
         obj.images?.entries?.forEach { entry ->
             val byteArray = entry.value.toByteArray()
             if (byteArray.count() < 4) {
@@ -105,24 +100,21 @@ class SVGAVideoEntity(
     /**
      * 解析音频数据
      */
-    private fun parseAudio(entity: MovieEntity) {
+    fun parseAudio(soundPool: SoundPool, entity: MovieEntity) {
         val audiosFileMap = generateAudioFileMap(entity)
-        if (audiosFileMap.isEmpty()) {
-            onComplete.invoke(this)
-            return
-        }
         audioList = entity.audios.map { audio ->
-            createSvgaAudioEntity(audio, audiosFileMap)
+            createSvgaAudioEntity(soundPool, audio, audiosFileMap)
         }.toMutableList()
     }
 
-    private fun resetSprites(entity: MovieEntity) {
+    fun resetSprites(entity: MovieEntity) {
         spriteList = entity.sprites.map {
             SVGAVideoSpriteEntity(it)
         }.toMutableList()
     }
 
     private fun createSvgaAudioEntity(
+        soundPool: SoundPool,
         audio: AudioEntity,
         audiosFileMap: ArrayMap<String, File>
     ): SVGAAudioEntity {
@@ -137,17 +129,7 @@ class SVGAVideoEntity(
             FileInputStream(file).use {
                 val length = it.available().toDouble()
                 val offset = ((startTime / totalTime) * length).toLong()
-                item.soundID = SVGASoundManager.load(
-                    object : SVGASoundManager.SVGASoundCallBack {
-                        override fun onVolumeChange(value: Float) {
-                            SVGASoundManager.setVolume(value, this@SVGAVideoEntity)
-                        }
-
-                        override fun onComplete() {
-                            LogUtils.error(TAG, "音频加载完成")
-                            onComplete.invoke(this@SVGAVideoEntity)
-                        }
-                    },
+                item.loadId = soundPool.load(
                     it.fd,
                     offset,
                     length.toLong(),

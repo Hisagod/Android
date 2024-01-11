@@ -15,7 +15,6 @@ import android.widget.ImageView
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
 import com.opensource.svgaplayer.SVGADynamicEntity
-import com.opensource.svgaplayer.SVGASoundManager
 import com.opensource.svgaplayer.SVGAVideoEntity
 import com.opensource.svgaplayer.ext.contentFormat
 import com.opensource.svgaplayer.utils.ViewUtils
@@ -44,7 +43,6 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
         flip: Boolean
     ) {
         super.drawFrame(canvas, frameIndex, scaleType, flip)
-        playAudio(frameIndex)
         this.flip = flip
         this.pathCache.onSizeChanged(canvas)
         val sprites = requestFrameSprites(frameIndex)
@@ -187,22 +185,6 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
             endIndexList = boolArray
         }
         return endIndexList?.get(spriteIndex) ?: false
-    }
-
-    private fun playAudio(frameIndex: Int) {
-        videoItem.audioList.forEach { audio ->
-            if (audio.startFrame == frameIndex) {
-                audio.soundID?.let { soundID ->
-                    audio.playID = SVGASoundManager.play(soundID)
-                }
-            }
-            if (audio.endFrame <= frameIndex) {
-                audio.playID?.let {
-                    SVGASoundManager.stop(it)
-                }
-                audio.playID = null
-            }
-        }
     }
 
     private fun shareFrameMatrix(transform: Matrix): Matrix {
