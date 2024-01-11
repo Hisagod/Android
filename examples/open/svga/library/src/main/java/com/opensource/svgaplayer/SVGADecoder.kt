@@ -7,7 +7,7 @@ import coil.fetch.SourceResult
 import coil.request.Options
 import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.getLifecycle
-import com.opensource.svgaplayer.utils.inflate
+import com.opensource.svgaplayer.utils.convertSVGA
 import com.opensource.svgaplayer.utils.log.LogUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,17 +21,8 @@ class SVGADecoder(
     private val TAG = javaClass.simpleName
 
     override suspend fun decode(): DecodeResult {
-        LogUtils.error("SVGADecoder", "SVGA解析成功")
-
         val hashCode = array.contentHashCode().toString()
         LogUtils.error(TAG, "byteArray的hashCode：${hashCode}")
-
-//        val cacheEntity = MovieEntityFactory.get(hashCode)
-//        val movieEntity = cacheEntity?.let {
-//            it
-//        } ?: run {
-//            MovieEntity.ADAPTER.decode(array)
-//        }
 
         val movieEntity = MovieEntity.ADAPTER.decode(array)
         val entity = SVGAVideoEntity(hashCode, imageLoader, movieEntity)
@@ -49,13 +40,10 @@ class SVGADecoder(
             options: Options,
             imageLoader: ImageLoader
         ): Decoder? {
-            LogUtils.error("SVGADecoder", "SVGA解码器解析文件类型：" + result.mimeType.toString())
-            val source = result.source.source()
-            return if (isSVGA(source)) {
-                val byteArray = source.readByteArray()
-                val inflate = byteArray.inflate()
-                SVGADecoder(inflate, options, imageLoader)
-            } else {
+            return try {
+                val convertByte = result.source.source().readByteArray().convertSVGA()
+                SVGADecoder(convertByte, options, imageLoader)
+            } catch (e: Exception) {
                 null
             }
         }

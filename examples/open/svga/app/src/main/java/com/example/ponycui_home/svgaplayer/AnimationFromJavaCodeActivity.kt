@@ -29,7 +29,8 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
 //        de.setDynamicText("测试文本", TextPaint().apply {
 //            color = Color.BLACK
 //        }, "text")
-        svg.load("file:///android_asset/test.svga") {
+        svg.load("file:///android_asset/heartbeat.svga") {
+//        svg.load("file:///android_asset/750x80.svga") {
 //            svgaRepeatCount(1)
             onSvgaAnimationStart {
                 LogUtils.e("开始动画")

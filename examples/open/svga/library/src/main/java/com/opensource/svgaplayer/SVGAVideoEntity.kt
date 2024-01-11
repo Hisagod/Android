@@ -194,27 +194,5 @@ class SVGAVideoEntity(
     fun onLoadAudioComplete(onLoadAudioComplete: (() -> Unit)?) {
         this.onLoadAudioComplete = onLoadAudioComplete
     }
-
-    fun clear() {
-        audioList.forEach {
-            it.soundID?.let { id -> SVGASoundManager.unload(id) }
-        }
-        SVGASoundManager.release()
-
-        audioList.clear()
-        audioList = mutableListOf()
-
-        spriteList.forEach {
-            it.clear()
-        }
-        spriteList.clear()
-        spriteList = mutableListOf()
-
-        imageMap.forEach {
-            it.value.recycle()
-        }
-        imageMap.clear()
-        imageMap = arrayMapOf()
-    }
 }
 

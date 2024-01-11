@@ -190,7 +190,7 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
     }
 
     private fun playAudio(frameIndex: Int) {
-        this.videoItem.audioList.forEach { audio ->
+        videoItem.audioList.forEach { audio ->
             if (audio.startFrame == frameIndex) {
                 audio.soundID?.let { soundID ->
                     audio.playID = SVGASoundManager.play(soundID)

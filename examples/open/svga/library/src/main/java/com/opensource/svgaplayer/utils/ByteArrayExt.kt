@@ -1,9 +1,10 @@
 package com.opensource.svgaplayer.utils
 
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.util.zip.Inflater
 
-fun ByteArray.inflate(): ByteArray {
+fun ByteArray.convertSVGA(): ByteArray {
     val inflater = Inflater()
     inflater.setInput(this, 0, this.size)
     val inflatedBytes = ByteArray(2048)

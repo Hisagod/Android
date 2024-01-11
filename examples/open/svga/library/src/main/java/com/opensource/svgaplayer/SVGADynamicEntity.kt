@@ -118,23 +118,4 @@ class SVGADynamicEntity {
     ) {
         this.dynamicDrawerSized.put(forKey, drawer)
     }
-
-    fun clearDynamicObjects() {
-        this.isTextDirty = true
-        this.dynamicHidden.clear()
-
-//        this.dynamicImage.forEach {
-//            it.value.recycle()
-//        }
-        this.dynamicImage.clear()
-
-        this.dynamicText.clear()
-        this.dynamicTextPaint.clear()
-        this.dynamicStaticLayoutText.clear()
-        this.dynamicBoringLayoutText.clear()
-        this.dynamicDrawer.clear()
-        this.dynamicIClickArea.clear()
-        this.mClickMap.clear()
-        this.dynamicDrawerSized.clear()
-    }
 }

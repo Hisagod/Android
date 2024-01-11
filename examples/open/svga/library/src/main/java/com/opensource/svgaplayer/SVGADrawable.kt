@@ -142,21 +142,6 @@ class SVGADrawable(
         }
     }
 
-//    fun clear() {
-//        videoItem.audioList.forEach { audio ->
-//            audio.playID?.let {
-//                SVGASoundManager.stop(it)
-//            }
-//            audio.playID = null
-//        }
-//
-//        drawer?.onClear()
-//
-//        getDynamicItem().clearDynamicObjects()
-//
-//        videoItem.clear()
-//    }
-
     override fun start() {
         LogUtils.error(TAG, "动画start")
         videoItem.onLoadAudioComplete {
@@ -214,5 +199,6 @@ class SVGADrawable(
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun onDestroy(owner: LifecycleOwner) {
         stopAudio()
+        SVGASoundManager.release()
     }
 }
