@@ -37,7 +37,7 @@ class SVGADrawable(
     private val scaleType: ImageView.ScaleType = ImageView.ScaleType.FIT_CENTER
 
     //控制阿语环境，动画水平反转
-    private var flip = options.parameters.svgaFlip() ?: false
+    private var flip = options.parameters.svgaFlip() ?: true
 
     private var drawer = SVGACanvasDrawer(videoItem)
 
