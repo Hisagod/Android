@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import coil.load
 import com.example.ponycui_home.svgaplayer.databinding.ActivityLoadSourceFromBinding
+import com.opensource.svgaplayer.svgaRepeatCount
 
 /**
  * 展示加载源文件方式
@@ -17,10 +18,10 @@ class LoadSourceFromActivity : AppCompatActivity() {
 
         //asserts文件夹加载
 //        binding.iv1.load("file:///android_asset/test7.svga")
-        binding.iv1.load("file:///android_asset/test.svga"){
-
+        binding.iv1.load("file:///android_asset/test.svga") {
+            svgaRepeatCount(1)
         }
         //网络加载
-//        binding.iv2.load("https://github.com/yyued/SVGA-Samples/blob/master/posche.svga?raw=true")
+        binding.iv2.load("https://res.naadi.microparty.com/user/1684826637456.svga")
     }
 }

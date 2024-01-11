@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    fun test(view: View) {
+        startActivity(Intent(this, TestActivity::class.java))
+    }
+
     fun loadSourceFrom(view: View) {
         startActivity(Intent(this, LoadSourceFromActivity::class.java))
     }

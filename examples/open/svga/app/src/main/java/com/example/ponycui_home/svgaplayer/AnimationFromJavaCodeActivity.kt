@@ -3,13 +3,10 @@ package com.example.ponycui_home.svgaplayer
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.TextPaint
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import coil.load
 import com.blankj.utilcode.util.LogUtils
-import com.opensource.svgaplayer.SVGADynamicEntity
-import com.opensource.svgaplayer.SVGATarget
 import com.opensource.svgaplayer.onSvgaAnimationEnd
 import com.opensource.svgaplayer.onSvgaAnimationFrame
 import com.opensource.svgaplayer.onSvgaAnimationStart

@@ -31,6 +31,7 @@ class SVGADrawable(
 
     private val callbacks = mutableListOf<Animatable2Compat.AnimationCallback>()
 
+    @Volatile
     private var currentFrame = 0
 
     //控制动画的位置
@@ -137,6 +138,12 @@ class SVGADrawable(
         drawer.updateSVGADynamicEntity(de)
     }
 
+    fun stepToFrame(frame: Int) {
+        if (frame < 0) return
+        if (frame > videoItem.frames) return
+        currentFrame = frame
+    }
+
     private fun playAudio(frameIndex: Int) {
         videoItem.audioList.forEach { audio ->
             if (audio.startFrame == frameIndex) {
@@ -185,6 +192,8 @@ class SVGADrawable(
                 soundPool.unload(it)
             }
         }
+
+        LogUtils.error(TAG, Thread.currentThread().name)
     }
 
     override fun isRunning(): Boolean {

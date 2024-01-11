@@ -38,3 +38,9 @@ fun Parameters.svgaFlip(): Boolean? = value(SVGADecoder.FLIP_KEY)
 fun ImageRequest.Builder.svgaFlip(value: Boolean): ImageRequest.Builder {
     return setParameter(SVGADecoder.FLIP_KEY, value)
 }
+
+//fun Parameters.svgaResume(): ((value: Int) -> Unit)? = value(SVGADecoder.RESUME_KEY)
+//
+//fun ImageRequest.Builder.svgaResume(value: (frame: Int) -> Unit): ImageRequest.Builder {
+//    return setParameter(SVGADecoder.FLIP_KEY, value)
+//}

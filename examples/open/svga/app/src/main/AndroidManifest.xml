@@ -30,7 +30,7 @@
         <activity
             android:name=".AnimationFromJavaCodeActivity"
             android:exported="true" />
-        <activity android:name=".AnimationFromNetworkActivity" />
+        <activity android:name=".TestActivity" />
         <activity android:name=".AnimationWithDynamicImageActivity" />
         <activity android:name=".AnimationFromLayoutActivity" />
         <activity android:name=".AnimationFromClickActivity" />
