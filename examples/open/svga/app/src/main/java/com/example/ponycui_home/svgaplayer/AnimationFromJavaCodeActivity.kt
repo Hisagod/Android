@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import coil.load
 import com.blankj.utilcode.util.LogUtils
-import com.opensource.svgaplayer.utils.onSvgaAnimationFrame
 import com.opensource.svgaplayer.utils.svgaAnimationEnd
+import com.opensource.svgaplayer.utils.svgaAnimationFrame
 import com.opensource.svgaplayer.utils.svgaAnimationStart
 
 class AnimationFromJavaCodeActivity : AppCompatActivity() {
@@ -35,7 +35,7 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
             svgaAnimationEnd {
                 LogUtils.e("停止动画")
             }
-            onSvgaAnimationFrame {
+            svgaAnimationFrame {
 //                LogUtils.e("当前帧数：${it}")
             }
 //            target(SVGATarget(svg, de))

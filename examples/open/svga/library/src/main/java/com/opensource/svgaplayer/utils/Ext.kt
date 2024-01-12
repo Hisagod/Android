@@ -65,7 +65,7 @@ fun ImageRequest.Builder.svgaAnimationEnd(callback: (() -> Unit)?): ImageRequest
 fun Parameters.svgaAnimationEndCallback(): (() -> Unit)? =
     value(SVGADecoder.ANIMATION_END_CALLBACK_KEY)
 
-fun ImageRequest.Builder.onSvgaAnimationFrame(callback: ((frame: Int) -> Unit)?): ImageRequest.Builder {
+fun ImageRequest.Builder.svgaAnimationFrame(callback: ((frame: Int) -> Unit)?): ImageRequest.Builder {
     return setParameter(SVGADecoder.ANIMATION_FRAME_CALLBACK_KEY, callback)
 }
 
