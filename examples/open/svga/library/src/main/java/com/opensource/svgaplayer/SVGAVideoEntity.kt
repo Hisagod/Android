@@ -6,12 +6,13 @@ import android.media.SoundPool
 import androidx.collection.ArrayMap
 import coil.ImageLoader
 import coil.memory.MemoryCache
+import coil.request.Options
 import com.opensource.svgaplayer.entities.SVGAAudioEntity
 import com.opensource.svgaplayer.entities.SVGARect
 import com.opensource.svgaplayer.entities.SVGAVideoSpriteEntity
 import com.opensource.svgaplayer.proto.AudioEntity
 import com.opensource.svgaplayer.proto.MovieEntity
-import com.opensource.svgaplayer.utils.PathUtils
+import com.opensource.svgaplayer.utils.log.LogUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -21,6 +22,7 @@ import java.io.FileOutputStream
  */
 class SVGAVideoEntity(
     private val hashCode: String,
+    private val options: Options,
     private val imageLoader: ImageLoader,
     val entity: MovieEntity
 ) {
@@ -144,6 +146,7 @@ class SVGAVideoEntity(
     }
 
     private fun generateAudioFile(audioCache: File, value: ByteArray): File {
+        LogUtils.error(TAG, "创建新音频文件")
         audioCache.createNewFile()
         FileOutputStream(audioCache).write(value)
         return audioCache
@@ -168,7 +171,13 @@ class SVGAVideoEntity(
                 }
 
             if (canSave) {
-                val audioCache = PathUtils.getAudioFile(imageKey)
+                val rootPath = "${options.context.cacheDir.absolutePath}/svga"
+                val rootFile = File(rootPath)
+                if (!rootFile.exists()) {
+                    rootFile.mkdir()
+                }
+                val audioPath = "${rootPath}/${hashCode}_${imageKey}.mp3"
+                val audioCache = File(audioPath)
                 audiosFileMap[imageKey] =
                     audioCache.takeIf { file -> file.exists() } ?: generateAudioFile(
                         audioCache,

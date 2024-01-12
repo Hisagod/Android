@@ -205,8 +205,6 @@ class SVGADrawable(
                 soundPool.unload(it)
             }
         }
-
-        LogUtils.error(TAG, Thread.currentThread().name)
     }
 
     override fun isRunning(): Boolean {

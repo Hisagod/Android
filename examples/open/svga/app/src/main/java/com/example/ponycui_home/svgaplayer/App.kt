@@ -14,8 +14,7 @@ import com.opensource.svgaplayer.SVGADecoder
 class App : Application(), ImageLoaderFactory {
     override fun onCreate() {
         super.onCreate()
-        SVGA.init(this)
-            .enableLog(true)
+        SVGA.enableLog(true)
     }
 
     override fun newImageLoader(): ImageLoader {

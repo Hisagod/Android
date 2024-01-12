@@ -19,11 +19,10 @@ class SVGADecoder(
     override suspend fun decode(): DecodeResult {
         val hashCode = array.contentHashCode().toString()
         LogUtils.error(TAG, "byteArray的hashCode：${hashCode}")
-
 //        val movieEntity = MovieEntityFactory.getMovieEntity(hashCode, array)
 
         val movieEntity = MovieEntity.ADAPTER.decode(array)
-        val entity = SVGAVideoEntity(hashCode, imageLoader, movieEntity)
+        val entity = SVGAVideoEntity(hashCode, options, imageLoader, movieEntity)
         val drawable = SVGADrawable(hashCode, entity, options, imageLoader)
 
 //        withContext(Dispatchers.Main) {

@@ -20,19 +20,20 @@ class TestActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 //        binding.iv.load("https://res.naadi.microparty.com/user/1684826637456.svga")
-//        binding.iv.load("file:///android_asset/test7.svga")
+        binding.iv.load("file:///android_asset/test.svga") {
+//        binding.iv.load("file:///android_asset/test7.svga") {
 //        binding.iv.scaleX = -1f
-        val de = SVGADynamicEntity()
+//        val de = SVGADynamicEntity()
 //        de.setDynamicText("مرحبا 123؟", TextPaint().apply {
 //            textSize = 25f
 //        }, "text")
 
-        de.setDynamicText("123456", TextPaint().apply {
-            textSize = 25f
-        }, "text")
-        binding.iv.load("file:///android_asset/test2_text_user.svga") {
-            svgaRtl(SVGARtlEntity(binding.iv))
-            svgaDynamicEntity(de)
+//        de.setDynamicText("123456", TextPaint().apply {
+//            textSize = 25f
+//        }, "text")
+//        binding.iv.load("file:///android_asset/test2_text_user.svga") {
+//            svgaRtl(SVGARtlEntity(binding.iv))
+//            svgaDynamicEntity(de)
         }
     }
 
