@@ -56,7 +56,7 @@ fun ImageRequest.Builder.svgaAnimationStart(callback: (() -> Unit)?): ImageReque
 }
 
 fun Parameters.svgaAnimationStartCallback(): (() -> Unit)? =
-    value(SVGADecoder.ANIMATION_END_CALLBACK_KEY)
+    value(SVGADecoder.ANIMATION_START_CALLBACK_KEY)
 
 fun ImageRequest.Builder.svgaAnimationEnd(callback: (() -> Unit)?): ImageRequest.Builder {
     return setParameter(SVGADecoder.ANIMATION_END_CALLBACK_KEY, callback)
