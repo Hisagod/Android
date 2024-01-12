@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import coil.load
 import com.example.ponycui_home.svgaplayer.databinding.ActivityLoadSourceFromBinding
-import com.opensource.svgaplayer.svgaRepeatCount
+import com.opensource.svgaplayer.utils.svgaRepeatCount
 
 /**
  * 展示加载源文件方式

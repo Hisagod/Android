@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import coil.load
 import com.blankj.utilcode.util.LogUtils
-import com.opensource.svgaplayer.onSvgaAnimationEnd
-import com.opensource.svgaplayer.onSvgaAnimationFrame
-import com.opensource.svgaplayer.onSvgaAnimationStart
+import com.opensource.svgaplayer.utils.onSvgaAnimationEnd
+import com.opensource.svgaplayer.utils.onSvgaAnimationFrame
+import com.opensource.svgaplayer.utils.onSvgaAnimationStart
 
 class AnimationFromJavaCodeActivity : AppCompatActivity() {
 

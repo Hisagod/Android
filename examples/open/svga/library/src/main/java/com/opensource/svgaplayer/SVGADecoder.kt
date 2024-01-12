@@ -60,8 +60,8 @@ class SVGADecoder(
 
     companion object {
         const val REPEAT_COUNT_KEY = "svga#repeatCount"
-        const val FLIP_KEY = "svga#flip"
-        const val RESUME_KEY = "svga#resume"
+        const val SVGA_RTL = "svga#rtl"
+        const val SVGA_DYNAMIC = "svga#dynamic"
         const val ANIMATION_START_CALLBACK_KEY = "svga#animation_start_callback"
         const val ANIMATION_END_CALLBACK_KEY = "svga#animation_end_callback"
         const val ANIMATION_FRAME_CALLBACK_KEY = "svga#animation_frame_callback"

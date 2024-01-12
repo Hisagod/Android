@@ -25,7 +25,10 @@ class SVGAVideoEntity(
     val entity: MovieEntity
 ) {
 
-    private val TAG = "SVGAVideoEntity"
+    private val TAG = javaClass.simpleName
+
+    //文本是否翻转，根据RTL布局进行设值
+    var textFlip = false
 
     var antiAlias = true
 

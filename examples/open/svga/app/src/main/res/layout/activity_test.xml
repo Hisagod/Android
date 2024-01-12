@@ -11,6 +11,12 @@
         android:onClick="resume"
         android:text="续播" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="flip"
+        android:text="镜像" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv"
         android:layout_width="match_parent"

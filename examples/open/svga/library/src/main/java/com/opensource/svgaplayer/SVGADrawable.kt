@@ -14,12 +14,14 @@ import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import coil.ImageLoader
 import coil.request.Options
 import com.opensource.svgaplayer.drawer.SVGACanvasDrawer
+import com.opensource.svgaplayer.utils.isLayoutRtl
 import com.opensource.svgaplayer.utils.log.LogUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import com.opensource.svgaplayer.utils.svgaAnimationEndCallback
+import com.opensource.svgaplayer.utils.svgaAnimationFrameCallback
+import com.opensource.svgaplayer.utils.svgaAnimationStartCallback
+import com.opensource.svgaplayer.utils.svgaDynamicEntity
+import com.opensource.svgaplayer.utils.svgaRepeatCount
+import com.opensource.svgaplayer.utils.svgaRtl
 
 class SVGADrawable(
     private val key: String,
@@ -37,9 +39,6 @@ class SVGADrawable(
     //控制动画的位置
     private val scaleType: ImageView.ScaleType = ImageView.ScaleType.FIT_CENTER
 
-    //控制阿语环境，动画水平反转
-    private var flip = options.parameters.svgaFlip() ?: true
-
     private var drawer = SVGACanvasDrawer(videoItem)
 
     //每帧时长
@@ -55,6 +54,9 @@ class SVGADrawable(
     private var isAnimation = false
 
     private val soundPool by lazy { getSoundPool(20) }
+
+    private val svgaRtlEntity by lazy { options.parameters.svgaRtl() }
+    private val svgaDynamicEntity by lazy { options.parameters.svgaDynamicEntity() }
 
     private val nextFrame = {
 //        LogUtils.error(TAG, "nextFrame")
@@ -86,6 +88,15 @@ class SVGADrawable(
         val duration = frame.div(fps) * 1000
         frameTime = (duration / frame).toLong()
 
+        svgaRtlEntity?.let {
+            if (it.viewRtl.isLayoutRtl()) {
+                it.viewRtl.scaleX = -1f
+                videoItem.textFlip = true
+            }
+        }
+
+        drawer.updateSVGADynamicEntity(svgaDynamicEntity)
+
         soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
             isAnimation = true
             options.parameters.svgaAnimationStartCallback()?.invoke()
@@ -113,7 +124,7 @@ class SVGADrawable(
             return
         }
         val time = SystemClock.uptimeMillis()
-        drawer.drawFrame(canvas, currentFrame, scaleType, flip)
+        drawer.drawFrame(canvas, currentFrame, scaleType)
         playAudio(currentFrame)
 //        LogUtils.error(TAG, currentFrame.toString())
         options.parameters.svgaAnimationFrameCallback()?.invoke(currentFrame)
@@ -134,9 +145,11 @@ class SVGADrawable(
 
     }
 
+    //修改元素
     fun updateSVGADynamicEntity(de: SVGADynamicEntity) {
         drawer.updateSVGADynamicEntity(de)
     }
+
 
     fun stepToFrame(frame: Int) {
         if (frame < 0) return

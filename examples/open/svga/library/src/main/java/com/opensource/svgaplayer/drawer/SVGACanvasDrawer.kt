@@ -16,8 +16,7 @@ import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
 import com.opensource.svgaplayer.SVGADynamicEntity
 import com.opensource.svgaplayer.SVGAVideoEntity
-import com.opensource.svgaplayer.ext.contentFormat
-import com.opensource.svgaplayer.utils.ViewUtils
+import com.opensource.svgaplayer.utils.contentFormat
 
 /**
  * Created by cuiminghui on 2017/3/29.
@@ -32,18 +31,15 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
 
     private var beginIndexList: Array<Boolean>? = null
     private var endIndexList: Array<Boolean>? = null
-    private var flip = false
 
     private var _dynamicItem: SVGADynamicEntity? = null
 
     override fun drawFrame(
         canvas: Canvas,
         frameIndex: Int,
-        scaleType: ImageView.ScaleType,
-        flip: Boolean
+        scaleType: ImageView.ScaleType
     ) {
-        super.drawFrame(canvas, frameIndex, scaleType, flip)
-        this.flip = flip
+        super.drawFrame(canvas, frameIndex, scaleType)
         this.pathCache.onSizeChanged(canvas)
         val sprites = requestFrameSprites(frameIndex)
         // Filter null sprites
@@ -395,7 +391,7 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
                 canvas.restore()
             } else {
                 paint.isFilterBitmap = videoItem.antiAlias
-                if (ViewUtils.isLayoutRtl() && flip) {
+                if (videoItem.textFlip) {
                     val matrix = Matrix()
                     matrix.postScale(-1f, 1f)
                     val mirrorBitmap =
