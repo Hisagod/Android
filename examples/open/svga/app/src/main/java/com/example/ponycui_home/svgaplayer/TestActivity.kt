@@ -5,12 +5,11 @@ import android.text.TextPaint
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
+import com.blankj.utilcode.util.LogUtils
 import com.example.ponycui_home.svgaplayer.databinding.ActivityTestBinding
 import com.opensource.svgaplayer.SVGADynamicEntity
-import com.opensource.svgaplayer.entities.SVGARtlEntity
 import com.opensource.svgaplayer.utils.getSVGADrawable
-import com.opensource.svgaplayer.utils.svgaDynamicEntity
-import com.opensource.svgaplayer.utils.svgaRtl
+import com.opensource.svgaplayer.utils.svgaAnimationFrame
 
 class TestActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTestBinding
@@ -31,25 +30,16 @@ class TestActivity : AppCompatActivity() {
 //        de.setDynamicText("123456", TextPaint().apply {
 //            textSize = 25f
 //        }, "text")
-        binding.iv.load("file:///android_asset/test2_text_user.svga") {
-//            svgaRtl(SVGARtlEntity(binding.iv))
-//            svgaDynamicEntity(de)
+        binding.iv.load("file:///android_asset/ic_enter_room_loading.svga") {
+            svgaAnimationFrame {
+                LogUtils.e(it)
+            }
         }
     }
 
+
     fun resume(view: View) {
-        binding.iv.getSVGADrawable()?.stepToFrame(30)
-        val de = SVGADynamicEntity()
-//        de.setDynamicText("مرحبا 123؟", TextPaint().apply {
-//            textSize = 25f
-//        }, "text")
-
-        de.setDynamicText("更换了元素", TextPaint().apply {
-            textSize = 25f
-        }, "text")
-
-//        de.setDynamicText("hahahaha", TextPaint(), "user")
-        binding.iv.getSVGADrawable()?.updateSVGADynamicEntity(de)
+        binding.iv.getSVGADrawable()?.test()
     }
 
     fun flip(view: View) {

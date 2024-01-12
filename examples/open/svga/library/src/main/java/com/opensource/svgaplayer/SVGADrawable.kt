@@ -68,7 +68,7 @@ class SVGADrawable(
 
         //取出下一帧位
         currentFrame += 1
-        if (currentFrame > videoItem.frames) {
+        if (currentFrame >= videoItem.frames) {
             currentFrame = 0
             loopCount += 1
 
@@ -145,12 +145,13 @@ class SVGADrawable(
 
     }
 
-    override fun getOpacity(): Int {
-        return PixelFormat.UNKNOWN
-    }
 
     override fun setColorFilter(colorFilter: ColorFilter?) {
 
+    }
+
+    override fun getOpacity(): Int {
+        return PixelFormat.TRANSLUCENT
     }
 
     //修改元素
@@ -158,10 +159,9 @@ class SVGADrawable(
         drawer.updateSVGADynamicEntity(de)
     }
 
-
     fun stepToFrame(frame: Int) {
         if (frame < 0) return
-        if (frame > videoItem.frames) return
+        if (frame >= videoItem.frames) return
         currentFrame = frame
     }
 
