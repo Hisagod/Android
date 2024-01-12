@@ -51,14 +51,14 @@ fun ImageRequest.Builder.svgaRepeatCount(repeatCount: Int): ImageRequest.Builder
     return setParameter(SVGADecoder.REPEAT_COUNT_KEY, repeatCount)
 }
 
-fun ImageRequest.Builder.onSvgaAnimationStart(callback: (() -> Unit)?): ImageRequest.Builder {
+fun ImageRequest.Builder.svgaAnimationStart(callback: (() -> Unit)?): ImageRequest.Builder {
     return setParameter(SVGADecoder.ANIMATION_START_CALLBACK_KEY, callback)
 }
 
 fun Parameters.svgaAnimationStartCallback(): (() -> Unit)? =
     value(SVGADecoder.ANIMATION_END_CALLBACK_KEY)
 
-fun ImageRequest.Builder.onSvgaAnimationEnd(callback: (() -> Unit)?): ImageRequest.Builder {
+fun ImageRequest.Builder.svgaAnimationEnd(callback: (() -> Unit)?): ImageRequest.Builder {
     return setParameter(SVGADecoder.ANIMATION_END_CALLBACK_KEY, callback)
 }
 

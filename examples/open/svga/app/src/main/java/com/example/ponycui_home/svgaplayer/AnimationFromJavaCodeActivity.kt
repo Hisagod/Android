@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import coil.load
 import com.blankj.utilcode.util.LogUtils
-import com.opensource.svgaplayer.utils.onSvgaAnimationEnd
 import com.opensource.svgaplayer.utils.onSvgaAnimationFrame
-import com.opensource.svgaplayer.utils.onSvgaAnimationStart
+import com.opensource.svgaplayer.utils.svgaAnimationEnd
+import com.opensource.svgaplayer.utils.svgaAnimationStart
 
 class AnimationFromJavaCodeActivity : AppCompatActivity() {
 
@@ -29,10 +29,10 @@ class AnimationFromJavaCodeActivity : AppCompatActivity() {
         svg.load("file:///android_asset/heartbeat.svga") {
 //        svg.load("file:///android_asset/750x80.zip") {
 //            svgaRepeatCount(1)
-            onSvgaAnimationStart {
+            svgaAnimationStart {
                 LogUtils.e("开始动画")
             }
-            onSvgaAnimationEnd {
+            svgaAnimationEnd {
                 LogUtils.e("停止动画")
             }
             onSvgaAnimationFrame {
