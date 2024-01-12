@@ -8,6 +8,7 @@ import coil.request.Options
 import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.convertSVGA
 import com.opensource.svgaplayer.utils.log.LogUtils
+import okio.BufferedSource
 
 class SVGADecoder(
     private val array: ByteArray,
@@ -44,6 +45,10 @@ class SVGADecoder(
             options: Options,
             imageLoader: ImageLoader
         ): Decoder? {
+            //不加判断，导致普通图片加载失败
+            if (!isSVGA(result.source.source())) {
+                return null
+            }
             return try {
                 val convertByte = result.source.source().readByteArray().convertSVGA()
                 SVGADecoder(convertByte, options, imageLoader)
@@ -55,6 +60,10 @@ class SVGADecoder(
         override fun equals(other: Any?) = other is Factory
 
         override fun hashCode() = javaClass.hashCode()
+
+        private fun isSVGA(source: BufferedSource): Boolean {
+            return source.buffer[0].toInt() == 120 && source.buffer[1].toInt() == -100
+        }
     }
 
     companion object {
