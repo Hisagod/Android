@@ -1,7 +1,9 @@
 package com.opensource.svgaplayer
 
+import android.graphics.Camera
 import android.graphics.Canvas
 import android.graphics.ColorFilter
+import android.graphics.Matrix
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.media.AudioAttributes
@@ -9,6 +11,8 @@ import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Build
 import android.os.SystemClock
+import android.util.LayoutDirection
+import android.view.View
 import android.widget.ImageView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import coil.ImageLoader
@@ -18,6 +22,7 @@ import com.opensource.svgaplayer.utils.isLayoutRtl
 import com.opensource.svgaplayer.utils.log.LogUtils
 import com.opensource.svgaplayer.utils.svgaAnimationEndCallback
 import com.opensource.svgaplayer.utils.svgaAnimationFrameCallback
+import com.opensource.svgaplayer.utils.svgaAnimationRepeatCallback
 import com.opensource.svgaplayer.utils.svgaAnimationStartCallback
 import com.opensource.svgaplayer.utils.svgaDynamicEntity
 import com.opensource.svgaplayer.utils.svgaRepeatCount
@@ -66,6 +71,9 @@ class SVGADrawable(
         if (currentFrame > videoItem.frames) {
             currentFrame = 0
             loopCount += 1
+
+            //重复执行回调
+            options.parameters.svgaAnimationRepeatCallback()?.invoke()
         }
 
         if (loop != 0) {
@@ -123,12 +131,12 @@ class SVGADrawable(
         if (!isAnimation) {
             return
         }
+
         val time = SystemClock.uptimeMillis()
         drawer.drawFrame(canvas, currentFrame, scaleType)
         playAudio(currentFrame)
 //        LogUtils.error(TAG, currentFrame.toString())
         options.parameters.svgaAnimationFrameCallback()?.invoke(currentFrame)
-
         scheduleSelf(nextFrame, time + frameTime)
     }
 
@@ -138,7 +146,7 @@ class SVGADrawable(
     }
 
     override fun getOpacity(): Int {
-        return PixelFormat.TRANSPARENT
+        return PixelFormat.UNKNOWN
     }
 
     override fun setColorFilter(colorFilter: ColorFilter?) {

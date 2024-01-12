@@ -64,5 +64,6 @@ class SVGADecoder(
         const val ANIMATION_START_CALLBACK_KEY = "svga#animation_start_callback"
         const val ANIMATION_END_CALLBACK_KEY = "svga#animation_end_callback"
         const val ANIMATION_FRAME_CALLBACK_KEY = "svga#animation_frame_callback"
+        const val ANIMATION_REPEAT_CALLBACK_KEY = "svga#animation_repeat_callback"
     }
 }

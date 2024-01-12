@@ -72,6 +72,13 @@ fun ImageRequest.Builder.svgaAnimationFrame(callback: ((frame: Int) -> Unit)?): 
 fun Parameters.svgaAnimationFrameCallback(): ((frame: Int) -> Unit)? =
     value(SVGADecoder.ANIMATION_FRAME_CALLBACK_KEY)
 
+fun ImageRequest.Builder.svgaAnimationRepeat(callback: (() -> Unit)?): ImageRequest.Builder {
+    return setParameter(SVGADecoder.ANIMATION_REPEAT_CALLBACK_KEY, callback)
+}
+
+fun Parameters.svgaAnimationRepeatCallback(): (() -> Unit)? =
+    value(SVGADecoder.ANIMATION_REPEAT_CALLBACK_KEY)
+
 fun Parameters.svgaRtl(): SVGARtlEntity? = value(SVGADecoder.SVGA_RTL)
 
 fun ImageRequest.Builder.svgaRtl(entity: SVGARtlEntity): ImageRequest.Builder {
