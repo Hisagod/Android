@@ -132,6 +132,7 @@ class SVGADrawable(
             return
         }
 
+//        LogUtils.error(TAG, "canvas--frame:${currentFrame}")
         val time = SystemClock.uptimeMillis()
         drawer.drawFrame(canvas, currentFrame, scaleType)
         playAudio(currentFrame)
@@ -190,6 +191,8 @@ class SVGADrawable(
             isAnimation = true
             options.parameters.svgaAnimationStartCallback()?.invoke()
             callbacks.forEach { it.onAnimationStart(this) }
+
+            invalidateSelf()
         } else {
             //有音频需要等待音频加载完毕在执行
             videoItem.parseAudio(soundPool, videoItem.entity)

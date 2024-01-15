@@ -31,15 +31,12 @@ class TestActivity : AppCompatActivity() {
 //            textSize = 25f
 //        }, "text")
         binding.iv.load("file:///android_asset/ic_enter_room_loading.svga") {
-            svgaAnimationFrame {
-                LogUtils.e(it)
-            }
         }
     }
 
 
     fun resume(view: View) {
-        binding.iv.getSVGADrawable()?.test()
+
     }
 
     fun flip(view: View) {
