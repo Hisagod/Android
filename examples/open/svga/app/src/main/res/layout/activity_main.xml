@@ -27,5 +27,11 @@
             android:layout_height="wrap_content"
             android:onClick="useInList"
             android:text="列表使用SVGA" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="queue"
+            android:text="队列使用SVGA" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

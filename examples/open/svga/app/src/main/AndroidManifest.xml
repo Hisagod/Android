@@ -43,7 +43,7 @@
             android:name=".add.AddJavaActivity"
             android:exported="true"></activity>
         <activity
-            android:name=".use.UseQueueActivity"
+            android:name=".UseQueueActivity"
             android:exported="true"></activity>
     </application>
 

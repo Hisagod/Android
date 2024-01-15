@@ -44,6 +44,10 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this, RecyclerViewActivity::class.java))
     }
 
+    fun queue(view: View) {
+        startActivity(Intent(this, UseQueueActivity::class.java))
+    }
+
 //    private fun setupData() {
 //        items.add(
 //            SampleItem(

@@ -1,10 +1,11 @@
-package com.example.ponycui_home.svgaplayer.use
+package com.example.ponycui_home.svgaplayer
 
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.iterator
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +13,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.blankj.utilcode.util.LogUtils
 import com.example.ponycui_home.svgaplayer.databinding.ActivityUseQueueBinding
+import com.opensource.svgaplayer.utils.svgaAnimationEnd
+import com.opensource.svgaplayer.utils.svgaRepeatCount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -77,30 +80,25 @@ class UseQueueActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     suspendCancellableCoroutine<Unit> {
-//                        val svga = SVGAImageView(this@UseQueueActivity)
-//                        svga.loops = 1
-//                        svga.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-//                        svga.onAnimEnd {
-//                            runOnUiThread {
-//                                val iterator = binding.ll.iterator()
-//                                while (iterator.hasNext()) {
-//                                    val next = iterator.next()
-//                                    if (next is SVGAImageView) {
-//                                        iterator.remove()
-//                                    }
-//                                }
-//
-//                                if (it.isActive) {
-//                                    it.resume(Unit)
-//                                }
-//                            }
-//                        }
-//                        svga.load("file:///android_asset/test7.svga") {
-//                            target(SVGATarget(svga) {
-//                                it.startAnimation()
-//                            })
-//                        }
-//                        binding.ll.addView(svga)
+                        val svga = AppCompatImageView(this@UseQueueActivity)
+                        svga.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                        svga.load("file:///android_asset/tomato.svga") {
+                            svgaRepeatCount(1)
+                            svgaAnimationEnd {
+                                val iterator = binding.ll.iterator()
+                                while (iterator.hasNext()) {
+                                    val next = iterator.next()
+                                    if (next is AppCompatImageView) {
+                                        iterator.remove()
+                                    }
+                                }
+
+                                if (it.isActive) {
+                                    it.resume(Unit)
+                                }
+                            }
+                        }
+                        binding.ll.addView(svga)
                     }
                 }
             }
