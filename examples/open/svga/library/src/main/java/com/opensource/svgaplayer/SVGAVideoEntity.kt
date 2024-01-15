@@ -134,7 +134,7 @@ class SVGAVideoEntity(
             FileInputStream(file).use {
                 val length = it.available().toDouble()
                 val offset = ((startTime / totalTime) * length).toLong()
-                item.loadId = soundPool.load(
+                item.sampleId = soundPool.load(
                     it.fd,
                     offset,
                     length.toLong(),

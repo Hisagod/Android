@@ -1,9 +1,7 @@
 package com.opensource.svgaplayer
 
-import android.graphics.Camera
 import android.graphics.Canvas
 import android.graphics.ColorFilter
-import android.graphics.Matrix
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.media.AudioAttributes
@@ -11,8 +9,6 @@ import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Build
 import android.os.SystemClock
-import android.util.LayoutDirection
-import android.view.View
 import android.widget.ImageView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import coil.ImageLoader
@@ -95,6 +91,7 @@ class SVGADrawable(
         val fps = videoItem.FPS.toFloat()
         val duration = frame.div(fps) * 1000
         frameTime = (duration / frame).toLong()
+//        frameTime = 500
 
         svgaRtlEntity?.let {
             if (it.viewRtl.isLayoutRtl()) {
@@ -104,6 +101,30 @@ class SVGADrawable(
         }
 
         drawer.updateSVGADynamicEntity(svgaDynamicEntity)
+
+        soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
+            LogUtils.error(TAG, "音频${sampleId}加载完成")
+
+            videoItem.audioList.forEach {
+                if (it.sampleId == sampleId) {
+                    it.isLoadComplete = true
+                }
+            }
+
+            val complete = videoItem.audioList.map { it.isLoadComplete }
+            if (complete.contains(false)) {
+                return@setOnLoadCompleteListener
+            }
+
+            if (status == 0) {
+                isAnimation = true
+                options.parameters.svgaAnimationStartCallback()?.invoke()
+                callbacks.forEach { it.onAnimationStart(this) }
+
+                invalidateSelf()
+            }
+        }
+
 
 //        SVGAAudioManager.onFinish {
 //            LogUtils.error(TAG, "准备播放音视频动画")
@@ -161,10 +182,11 @@ class SVGADrawable(
     private fun playAudio(frameIndex: Int) {
         videoItem.audioList.forEach { audio ->
             if (audio.startFrame == frameIndex) {
-                audio.loadId?.let {
+                audio.sampleId?.let {
                     audio.playID = soundPool.play(it, 1f, 1f, 1, 0, 1f)
                 }
             }
+
 //            if (audio.endFrame <= frameIndex) {
 //                audio.playID?.let {
 ////                    SVGAAudioManager.stop(it)
@@ -177,14 +199,6 @@ class SVGADrawable(
 
     override fun start() {
         LogUtils.error(TAG, "动画start")
-        soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
-            isAnimation = true
-            options.parameters.svgaAnimationStartCallback()?.invoke()
-            callbacks.forEach { it.onAnimationStart(this) }
-
-            invalidateSelf()
-        }
-
         if (videoItem.entity.audios.isEmpty()) {
             //无音频直接播放
 
@@ -211,7 +225,7 @@ class SVGADrawable(
         options.parameters.svgaAnimationEndCallback()?.invoke()
 
         videoItem.audioList.forEach {
-            it.loadId?.let {
+            it.sampleId?.let {
                 soundPool.stop(it)
                 soundPool.unload(it)
             }
