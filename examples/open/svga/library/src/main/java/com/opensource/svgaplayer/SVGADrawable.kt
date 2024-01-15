@@ -105,14 +105,6 @@ class SVGADrawable(
 
         drawer.updateSVGADynamicEntity(svgaDynamicEntity)
 
-        soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
-            isAnimation = true
-            options.parameters.svgaAnimationStartCallback()?.invoke()
-            callbacks.forEach { it.onAnimationStart(this) }
-
-            invalidateSelf()
-        }
-
 //        SVGAAudioManager.onFinish {
 //            LogUtils.error(TAG, "准备播放音视频动画")
 //            val contain = SVGAAudioManager.pool.contains(it)
@@ -185,6 +177,14 @@ class SVGADrawable(
 
     override fun start() {
         LogUtils.error(TAG, "动画start")
+        soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
+            isAnimation = true
+            options.parameters.svgaAnimationStartCallback()?.invoke()
+            callbacks.forEach { it.onAnimationStart(this) }
+
+            invalidateSelf()
+        }
+
         if (videoItem.entity.audios.isEmpty()) {
             //无音频直接播放
 
