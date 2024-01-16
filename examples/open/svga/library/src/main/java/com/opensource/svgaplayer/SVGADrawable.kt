@@ -198,7 +198,7 @@ class SVGADrawable(
     }
 
     override fun start() {
-        LogUtils.error(TAG, "动画start")
+        LogUtils.error(TAG, "${key}动画start")
         if (videoItem.entity.audios.isEmpty()) {
             //无音频直接播放
 
@@ -218,7 +218,7 @@ class SVGADrawable(
     }
 
     override fun stop() {
-        LogUtils.error(TAG, "动画stop")
+        LogUtils.error(TAG, "${key}动画stop")
         isAnimation = false
         callbacks.forEach { it.onAnimationEnd(this) }
         unscheduleSelf(nextFrame)
