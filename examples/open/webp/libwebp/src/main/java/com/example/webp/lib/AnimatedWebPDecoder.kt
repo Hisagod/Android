@@ -1,5 +1,6 @@
 package com.example.webp.lib
 
+import androidx.core.graphics.scale
 import coil.ImageLoader
 import coil.decode.DecodeResult
 import coil.decode.Decoder
@@ -15,6 +16,9 @@ class AnimatedWebPDecoder(
     private val TAG = javaClass.simpleName
 
     override suspend fun decode(): DecodeResult? {
+//        Logger.e(TAG, "宽" + options.size.width.toString())
+//        Logger.e(TAG, "高" + options.size.height.toString())
+
         val bytes = result.source.source().readByteArray()
         val key = bytes.contentHashCode().toString()
         if (key.isNullOrEmpty()) {
@@ -23,18 +27,20 @@ class AnimatedWebPDecoder(
         val byteBuffer = ByteBuffer.allocateDirect(bytes.size).put(bytes)
         val decoder = LibWebPAnimatedDecoder.create(key, byteBuffer, options.premultipliedAlpha)
         val image = mutableListOf<LibWebPAnimatedDecoder.DecodeFrameResult>()
+
+        val scaleWidth = (decoder.width * 0.6f).toInt()
+        val scaleHeight = (decoder.height * 0.6f).toInt()
+
         for (index in 0 until decoder.frameCount) {
-            val result = decoder.decodeNextFrame(index, key, imageLoader)
+            val result = decoder.decodeNextFrame(index, key, scaleWidth, scaleHeight, imageLoader)
             result?.let {
                 image.add(it)
             }
         }
-        val width = decoder.width
-        val height = decoder.height
         val loopCount = decoder.loopCount
         val frameCount = decoder.frameCount
         return DecodeResult(
-            AnimatedWebPDrawable(width, height, image, loopCount, frameCount),
+            AnimatedWebPDrawable(scaleWidth, scaleHeight, image, loopCount, frameCount),
             false
         )
     }

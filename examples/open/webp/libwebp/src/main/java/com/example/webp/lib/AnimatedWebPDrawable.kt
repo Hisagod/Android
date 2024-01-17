@@ -6,8 +6,8 @@ import android.os.SystemClock
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 
 class AnimatedWebPDrawable(
-    private val width: Int,
-    private val height: Int,
+    private val viewWidth: Int,
+    private val viewHeight: Int,
     private val image: MutableList<LibWebPAnimatedDecoder.DecodeFrameResult>,
     private val loop: Int,
     private val frameCount: Int
@@ -61,12 +61,14 @@ class AnimatedWebPDrawable(
         return PixelFormat.TRANSLUCENT
     }
 
+    //传入绘制bitmap宽
     override fun getIntrinsicWidth(): Int {
-        return width
+        return viewWidth
     }
 
+    //传入绘制bitmap高
     override fun getIntrinsicHeight(): Int {
-        return height
+        return viewHeight
     }
 
     override fun start() {

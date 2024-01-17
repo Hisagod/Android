@@ -2,6 +2,7 @@ package com.example.webp.lib
 
 import android.graphics.Bitmap
 import android.os.Build
+import androidx.core.graphics.scale
 import coil.ImageLoader
 import coil.memory.MemoryCache
 import java.nio.ByteBuffer
@@ -13,6 +14,8 @@ class LibWebPAnimatedDecoder private constructor(
     private val decoder: Long,
     private val premultipliedAlpha: Boolean
 ) {
+    private val TAG = javaClass.simpleName
+
     val width get() = metadata.width
     val height get() = metadata.height
     val loopCount get() = metadata.loopCount
@@ -23,11 +26,13 @@ class LibWebPAnimatedDecoder private constructor(
     //imageLoader是coil框架加载器，可拿到内存缓存对象和本地缓存对象
     fun decodeNextFrame(
         index: Int,
-        name: String,
+        hashId: String,
+        scaleWidth: Int,
+        scaleHeight: Int,
         imageLoader: ImageLoader
     ): DecodeFrameResult? {
         //生成key
-        val key = name + index
+        val key = hashId + index
         //从缓存拿
         val value = imageLoader.memoryCache?.get(MemoryCache.Key(key))
         val cacheBitmap = value?.bitmap
@@ -41,23 +46,31 @@ class LibWebPAnimatedDecoder private constructor(
         }
 
         //创建新bitmap
-        val outBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val originalBitmap =
+            Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (outBitmap.isPremultiplied != premultipliedAlpha) {
-                outBitmap.isPremultiplied = premultipliedAlpha
+            if (originalBitmap.isPremultiplied != premultipliedAlpha) {
+                originalBitmap.isPremultiplied = premultipliedAlpha
             }
         }
         //读取下一帧数据到新bitmap
-        val duration = decodeNextFrame(decoder, outBitmap)
+        val duration = decodeNextFrame(decoder, originalBitmap)
+
+        //缩放处理
+        val scaleBitmap = originalBitmap.scale(scaleWidth, scaleHeight)
+
+        //回收原始数据
+        originalBitmap.recycle()
+
         return if (duration >= 0) {
             //存入内存缓存
             imageLoader.memoryCache?.set(
                 MemoryCache.Key(key), MemoryCache.Value(
-                    outBitmap,
+                    scaleBitmap,
                     mapOf(("duration" to duration))
                 )
             )
-            DecodeFrameResult(outBitmap, duration)
+            DecodeFrameResult(scaleBitmap, duration)
         } else {
             null
         }
