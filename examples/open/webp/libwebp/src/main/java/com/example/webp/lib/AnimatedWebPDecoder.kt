@@ -1,12 +1,10 @@
 package com.example.webp.lib
 
-import android.util.Log
 import coil.ImageLoader
 import coil.decode.DecodeResult
 import coil.decode.Decoder
 import coil.fetch.SourceResult
 import coil.request.Options
-import kotlinx.coroutines.isActive
 import java.nio.ByteBuffer
 
 class AnimatedWebPDecoder(
@@ -22,12 +20,23 @@ class AnimatedWebPDecoder(
         if (key.isNullOrEmpty()) {
             throw Exception("缓存Key获取失败")
         }
-//        Log.e("HLP", key)
         val byteBuffer = ByteBuffer.allocateDirect(bytes.size).put(bytes)
         val decoder = LibWebPAnimatedDecoder.create(key, byteBuffer, options.premultipliedAlpha)
-        Logger.e(TAG, "解码器协程isActive状态：${imageLoader.defaults.decoderDispatcher.isActive}")
-        val drawable = AnimatedWebPDrawable(decoder, key, imageLoader)
-        return DecodeResult(drawable, false)
+        val image = mutableListOf<LibWebPAnimatedDecoder.DecodeFrameResult>()
+        for (index in 0 until decoder.frameCount) {
+            val result = decoder.decodeNextFrame(index, key, imageLoader)
+            result?.let {
+                image.add(it)
+            }
+        }
+        val width = decoder.width
+        val height = decoder.height
+        val loopCount = decoder.loopCount
+        val frameCount = decoder.frameCount
+        return DecodeResult(
+            AnimatedWebPDrawable(width, height, image, loopCount, frameCount),
+            false
+        )
     }
 
     class Factory : Decoder.Factory {

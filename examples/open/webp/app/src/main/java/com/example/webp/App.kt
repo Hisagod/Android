@@ -11,7 +11,7 @@ import com.example.webp.lib.AnimatedWebPDecoder
 class App : Application(), ImageLoaderFactory {
     override fun newImageLoader(): ImageLoader {
         return ImageLoader.Builder(this)
-            .crossfade(true)
+            .crossfade(false)
             .components {
                 if (Build.VERSION.SDK_INT >= 28) {
                     add(ImageDecoderDecoder.Factory())
