@@ -90,3 +90,9 @@ fun Parameters.svgaDynamicEntity(): SVGADynamicEntity? = value(SVGADecoder.SVGA_
 fun ImageRequest.Builder.svgaDynamicEntity(entity: SVGADynamicEntity): ImageRequest.Builder {
     return setParameter(SVGADecoder.SVGA_DYNAMIC, entity)
 }
+
+fun Parameters.svgaScale(): Float? = value(SVGADecoder.SVGA_SCALE)
+
+fun ImageRequest.Builder.svgaScale(scale: Float): ImageRequest.Builder {
+    return setParameter(SVGADecoder.SVGA_SCALE, scale)
+}

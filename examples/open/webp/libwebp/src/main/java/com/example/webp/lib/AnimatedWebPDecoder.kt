@@ -28,8 +28,8 @@ class AnimatedWebPDecoder(
         val decoder = LibWebPAnimatedDecoder.create(key, byteBuffer, options.premultipliedAlpha)
         val image = mutableListOf<LibWebPAnimatedDecoder.DecodeFrameResult>()
 
-        val scaleWidth = (decoder.width * 0.6f).toInt()
-        val scaleHeight = (decoder.height * 0.6f).toInt()
+        val scaleWidth = (decoder.width * 0.5f).toInt()
+        val scaleHeight = (decoder.height * 0.5f).toInt()
 
         for (index in 0 until decoder.frameCount) {
             val result = decoder.decodeNextFrame(index, key, scaleWidth, scaleHeight, imageLoader)

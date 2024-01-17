@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.SoundPool
 import androidx.collection.ArrayMap
+import androidx.core.graphics.scale
 import coil.ImageLoader
 import coil.memory.MemoryCache
 import coil.request.Options
@@ -13,6 +14,7 @@ import com.opensource.svgaplayer.entities.SVGAVideoSpriteEntity
 import com.opensource.svgaplayer.proto.AudioEntity
 import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.log.LogUtils
+import com.opensource.svgaplayer.utils.svgaScale
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -47,6 +49,8 @@ class SVGAVideoEntity(
 
     //图片列表数据
     internal var imageMap = ArrayMap<String, Bitmap>()
+
+    private val scale by lazy { options.parameters.svgaScale() ?: 0.5f }
 
     init {
         setupByMovie(entity)
@@ -93,11 +97,18 @@ class SVGAVideoEntity(
                 return@forEach
             }
 
-            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-            imageMap[key] = bitmap
+            val originalBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+            val scaleWidth = (originalBitmap.width * scale).toInt()
+            val scaleHeight = (originalBitmap.height * scale).toInt()
+            val scaleBitmap = originalBitmap.scale(scaleWidth, scaleHeight)
+            scaleBitmap.config = Bitmap.Config.ARGB_4444
+
+            //回收原始bitmap
+            originalBitmap.recycle()
+            imageMap[key] = scaleBitmap
             //存入内存缓存
             imageLoader.memoryCache?.set(
-                MemoryCache.Key(memoryKey), MemoryCache.Value(bitmap)
+                MemoryCache.Key(memoryKey), MemoryCache.Value(scaleBitmap)
             )
         }
     }
