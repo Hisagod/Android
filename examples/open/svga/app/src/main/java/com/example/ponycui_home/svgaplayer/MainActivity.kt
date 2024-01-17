@@ -17,9 +17,6 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.recyclerview.widget.RecyclerView.inflate
-import com.example.ponycui_home.svgaplayer.add.AddJavaActivity
-import com.example.ponycui_home.svgaplayer.bean.SampleItem
-import com.example.ponycui_home.svgaplayer.databinding.ActivityAddJavaBinding
 import com.example.ponycui_home.svgaplayer.databinding.ActivityMainBinding
 import com.example.ponycui_home.svgaplayer.load.LoadFromAssetsActivity
 
@@ -46,6 +43,10 @@ class MainActivity : AppCompatActivity() {
 
     fun queue(view: View) {
         startActivity(Intent(this, UseQueueActivity::class.java))
+    }
+
+    fun vp(view: View) {
+        startActivity(Intent(this, AnimationFromFragmentActivity::class.java))
     }
 
 //    private fun setupData() {

@@ -103,7 +103,7 @@ class SVGADrawable(
         drawer.updateSVGADynamicEntity(svgaDynamicEntity)
 
         soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
-            LogUtils.error(TAG, "音频${sampleId}加载完成")
+//            LogUtils.error(TAG, "音频${sampleId}加载完成")
 
             videoItem.audioList.forEach {
                 if (it.sampleId == sampleId) {
@@ -198,7 +198,7 @@ class SVGADrawable(
     }
 
     override fun start() {
-        LogUtils.error(TAG, "${key}动画start")
+        LogUtils.error(TAG, "${key}-start")
         if (videoItem.entity.audios.isEmpty()) {
             //无音频直接播放
 
@@ -218,7 +218,7 @@ class SVGADrawable(
     }
 
     override fun stop() {
-        LogUtils.error(TAG, "${key}动画stop")
+        LogUtils.error(TAG, "${key}-stop")
         isAnimation = false
         callbacks.forEach { it.onAnimationEnd(this) }
         unscheduleSelf(nextFrame)

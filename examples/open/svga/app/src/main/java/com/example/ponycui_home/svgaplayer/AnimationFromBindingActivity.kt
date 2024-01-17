@@ -1,21 +1,12 @@
 package com.example.ponycui_home.svgaplayer
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.TextPaint
 import androidx.appcompat.app.AppCompatActivity
-import coil.load
-import com.example.ponycui_home.svgaplayer.databinding.ActivityAddJavaBinding
-import com.opensource.svgaplayer.SVGADynamicEntity
 
 class AnimationFromBindingActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAddJavaBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddJavaBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 //
 //        val dynamic = SVGADynamicEntity()
 //        val tp = TextPaint()

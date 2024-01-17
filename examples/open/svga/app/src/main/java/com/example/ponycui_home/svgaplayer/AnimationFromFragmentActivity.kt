@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import coil.load
@@ -37,13 +38,9 @@ class AnimationFromFragmentActivity : AppCompatActivity() {
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-//            val binding = FragmentABinding.inflate(requireActivity().layoutInflater)
-//            val svg = view.findViewById<SVGAImageView>(R.id.svg)
-//            svg.load("file:///android_asset/angel.zip") {
-////                target(SVGATarget(svg) {
-////                    it.startAnimation()
-////                })
-//            }
+            val binding = FragmentABinding.inflate(requireActivity().layoutInflater)
+            val svg = view.findViewById<AppCompatImageView>(R.id.svg)
+            svg.load("file:///android_asset/test.svga")
         }
     }
 }

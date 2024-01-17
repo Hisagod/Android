@@ -62,7 +62,13 @@ class RemoteService : LifecycleService() {
 
     override fun onBind(p0: Intent): IBinder {
         super.onBind(p0)
+        LogUtils.e(javaClass.simpleName + ":onBind")
         return iService
+    }
+
+    override fun onRebind(intent: Intent?) {
+        super.onRebind(intent)
+        LogUtils.e(javaClass.simpleName + ":onRebind")
     }
 
     override fun onCreate() {
