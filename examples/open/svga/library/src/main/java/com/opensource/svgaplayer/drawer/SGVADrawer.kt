@@ -2,6 +2,7 @@ package com.opensource.svgaplayer.drawer
 
 import android.graphics.Canvas
 import android.widget.ImageView
+import coil.size.Scale
 import com.opensource.svgaplayer.SVGAVideoEntity
 import com.opensource.svgaplayer.utils.Pools
 import kotlin.math.max
@@ -41,7 +42,7 @@ open internal class SGVADrawer(val videoItem: SVGAVideoEntity) {
     open fun drawFrame(
         canvas: Canvas,
         frameIndex: Int,
-        scaleType: ImageView.ScaleType
+        scaleType: Scale
     ) {
         scaleInfo.performScaleType(
             canvas.width.toFloat(),

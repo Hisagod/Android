@@ -1,15 +1,20 @@
 package com.example.ponycui_home.svgaplayer
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.TextPaint
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.graphics.Paint
 import coil.load
+import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
 import com.example.ponycui_home.svgaplayer.databinding.ActivityTestBinding
 import com.opensource.svgaplayer.SVGADynamicEntity
 import com.opensource.svgaplayer.utils.getSVGADrawable
 import com.opensource.svgaplayer.utils.svgaAnimationFrame
+import com.opensource.svgaplayer.utils.svgaDynamicEntity
+import com.opensource.svgaplayer.utils.svgaScale
 
 class TestActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTestBinding
@@ -30,8 +35,20 @@ class TestActivity : AppCompatActivity() {
 //        de.setDynamicText("123456", TextPaint().apply {
 //            textSize = 25f
 //        }, "text")
-        binding.iv.load("file:///android_asset/ic_enter_room_loading.svga") {
-        }
+
+//        val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+//        val dynamic = SVGADynamicEntity()
+//        dynamic.setDynamicText("ABCDEFGHIJKLMN", TextPaint().apply {
+//            textSize = 9f
+//        }, "text")
+//        dynamic.setDynamicImage(bitmap, "user")
+//        binding.iv.load("file:///android_asset/test2_text_user.svga") {
+//            svgaDynamicEntity(dynamic)
+//            svgaScale(0.5f)
+//        }
+
+        ImageViewBinding.loadImg(binding.iv,R.drawable.test1)
+
     }
 
 

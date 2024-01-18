@@ -47,7 +47,7 @@ class LibWebPAnimatedDecoder private constructor(
 
         //创建新bitmap
         val originalBitmap =
-            Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444)
+            Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (originalBitmap.isPremultiplied != premultipliedAlpha) {
                 originalBitmap.isPremultiplied = premultipliedAlpha
@@ -57,8 +57,8 @@ class LibWebPAnimatedDecoder private constructor(
         val duration = decodeNextFrame(decoder, originalBitmap)
 
         //缩放处理
-        val scaleBitmap = originalBitmap.scale(scaleWidth, scaleHeight)
-        scaleBitmap.config = Bitmap.Config.ARGB_4444
+        val scaleBitmap =
+            originalBitmap.scale(scaleWidth, scaleHeight).copy(Bitmap.Config.ARGB_8888, true)
 
         //回收原始数据
         originalBitmap.recycle()

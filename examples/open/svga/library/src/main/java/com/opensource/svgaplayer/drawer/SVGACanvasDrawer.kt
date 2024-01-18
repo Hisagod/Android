@@ -3,6 +3,7 @@ package com.opensource.svgaplayer.drawer
 import android.graphics.Bitmap
 import android.graphics.BitmapShader
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Matrix
 import android.graphics.Paint
@@ -14,6 +15,7 @@ import android.text.TextUtils
 import android.widget.ImageView
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
+import coil.size.Scale
 import com.opensource.svgaplayer.SVGADynamicEntity
 import com.opensource.svgaplayer.SVGAVideoEntity
 import com.opensource.svgaplayer.utils.contentFormat
@@ -34,10 +36,12 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
 
     private var _dynamicItem: SVGADynamicEntity? = null
 
+    private val scaleSize by lazy { videoItem.scaleSize }
+
     override fun drawFrame(
         canvas: Canvas,
         frameIndex: Int,
-        scaleType: ImageView.ScaleType
+        scaleType: Scale
     ) {
         super.drawFrame(canvas, frameIndex, scaleType)
         this.pathCache.onSizeChanged(canvas)

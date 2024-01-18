@@ -18,6 +18,7 @@ import com.opensource.svgaplayer.utils.svgaScale
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import kotlin.math.roundToInt
 
 /**
  * Created by PonyCui on 16/6/18.
@@ -50,13 +51,15 @@ class SVGAVideoEntity(
     //图片列表数据
     internal var imageMap = ArrayMap<String, Bitmap>()
 
-    private val scale by lazy { options.parameters.svgaScale() ?: 0.5f }
+    internal val scaleSize by lazy { options.parameters.svgaScale() ?: 0.5f }
 
     init {
         setupByMovie(entity)
         parserImages(entity)
         resetSprites(entity)
 //        parseAudio(entity)
+
+        LogUtils.error(TAG, scaleSize.toString())
     }
 
     fun setupByMovie(entity: MovieEntity) {
@@ -98,13 +101,15 @@ class SVGAVideoEntity(
             }
 
             val originalBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-            val scaleWidth = (originalBitmap.width * scale).toInt()
-            val scaleHeight = (originalBitmap.height * scale).toInt()
-            val scaleBitmap = originalBitmap.scale(scaleWidth, scaleHeight)
-            scaleBitmap.config = Bitmap.Config.ARGB_4444
+                .copy(Bitmap.Config.ARGB_8888, true)
+            val scaleWidth = (originalBitmap.width.toFloat() * scaleSize).roundToInt()
+            val scaleHeight = (originalBitmap.height.toFloat() * scaleSize).roundToInt()
+            val scaleBitmap =
+                originalBitmap.scale(scaleWidth, scaleHeight).copy(Bitmap.Config.ARGB_8888, true)
 
             //回收原始bitmap
             originalBitmap.recycle()
+
             imageMap[key] = scaleBitmap
             //存入内存缓存
             imageLoader.memoryCache?.set(

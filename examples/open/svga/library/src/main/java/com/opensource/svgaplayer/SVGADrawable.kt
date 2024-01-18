@@ -13,6 +13,7 @@ import android.widget.ImageView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import coil.ImageLoader
 import coil.request.Options
+import coil.size.Scale
 import com.opensource.svgaplayer.drawer.SVGACanvasDrawer
 import com.opensource.svgaplayer.utils.isLayoutRtl
 import com.opensource.svgaplayer.utils.log.LogUtils
@@ -38,7 +39,7 @@ class SVGADrawable(
     private var currentFrame = 0
 
     //控制动画的位置
-    private val scaleType: ImageView.ScaleType = ImageView.ScaleType.FIT_CENTER
+    private val scaleType: Scale = options.scale
 
     private var drawer = SVGACanvasDrawer(videoItem)
 
