@@ -27,6 +27,7 @@ object RemoteServiceBinder {
 
     private val deathRecipient = object : IBinder.DeathRecipient {
         override fun binderDied() {
+            LogUtils.e("Service：binderDied")
             try {
                 //解除Binder死亡监听
                 iSender?.asBinder()?.unlinkToDeath(this, 0)

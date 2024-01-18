@@ -26,6 +26,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.system.exitProcess
 
 
 class RemoteService : LifecycleService() {
@@ -66,6 +67,14 @@ class RemoteService : LifecycleService() {
         return iService
     }
 
+    override fun onUnbind(intent: Intent?): Boolean {
+        LogUtils.e(javaClass.simpleName + ":onUnbind")
+//        return super.onUnbind(intent)
+        //如果返回true且Service没有销毁，再次bindService，会走onRebind，否则走onBind
+        stopSelf()
+        return true
+    }
+
     override fun onRebind(intent: Intent?) {
         super.onRebind(intent)
         LogUtils.e(javaClass.simpleName + ":onRebind")
@@ -73,6 +82,7 @@ class RemoteService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
+        LogUtils.e(javaClass.simpleName + ":onCreate")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -93,13 +103,14 @@ class RemoteService : LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
+        LogUtils.e(this.javaClass.simpleName + ":onDestroy")
         //销毁资源
         mCallBacks.kill()
 
         //关闭服务
         finishService()
 
-        LogUtils.e(this.javaClass.simpleName + ":onDestroy")
+//        exitProcess(0)
     }
 
     private fun createNotification() {
