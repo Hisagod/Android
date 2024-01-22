@@ -12,7 +12,7 @@ class AnimActivity : AppCompatActivity() {
         binding = ActivityAnimBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.iv.load(R.raw.test6)
+        binding.iv.load(R.drawable.pic_home_activity)
 //        binding.iv.load(R.raw.play_one)
     }
 }

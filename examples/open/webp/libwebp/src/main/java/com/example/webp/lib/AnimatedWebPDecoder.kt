@@ -54,12 +54,20 @@ class AnimatedWebPDecoder(
             options: Options,
             imageLoader: ImageLoader
         ): Decoder? {
-            Logger.e(TAG, "创建低版本Webp解码器")
-            //如果不是webp动图就返回null
-            if (!DecodeUtils.isAnimatedWebP(result.source.source())) {
-                return null
+            val headerBytes =
+                result.source.source().peek().readByteArray(WebPSupportStatus.HEADER_SIZE)
+            val isWebpAnim = (WebPSupportStatus.isWebpHeader(
+                headerBytes,
+                0,
+                headerBytes.size
+            ) && WebPSupportStatus.isAnimatedWebpHeader(headerBytes, 0))
+
+            if (isWebpAnim) {
+                Logger.e(TAG, "创建低版本Webp解码器")
+                return AnimatedWebPDecoder(result, options, imageLoader)
             }
-            return AnimatedWebPDecoder(result, options, imageLoader)
+
+            return null
         }
 
         override fun equals(other: Any?) = other is Factory
