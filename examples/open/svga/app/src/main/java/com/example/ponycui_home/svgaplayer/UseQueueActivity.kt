@@ -18,6 +18,12 @@ import com.opensource.svgaplayer.utils.svgaRepeatCount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.channels.toList
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -29,8 +35,10 @@ import kotlin.coroutines.resume
  */
 class UseQueueActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUseQueueBinding
-    private val queue = LinkedBlockingQueue<Int>()
     private var job: Job? = null
+
+    private var channel = Channel<Int>(capacity = Channel.BUFFERED)
+    private var count = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,69 +46,74 @@ class UseQueueActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    fun add(view: View) {
-        lifecycleScope.launch(Dispatchers.Default) {
-            repeatOnLifecycle(Lifecycle.State.CREATED) {
-                if (job == null || job?.isActive == false) {
-                    suspendCancellableCoroutine<Unit> {
-                        runQueue()
+    override fun onDestroy() {
+        super.onDestroy()
+        channel.close()
+    }
 
-                        if (job != null) {
-                            if (it.isActive) {
-                                it.resume(Unit)
-                            }
-                        }
-                    }
+    fun start(view: View) {
+        lifecycleScope.launch(Dispatchers.Default) {
+            try {
+                if (job == null || job?.isActive == false) {
+                    runQueue()
                 }
 
-                queue.put(1)
+                count = count.inc()
+                channel.send(count)
+                LogUtils.e("添加数据")
+            } catch (e: Exception) {
+                LogUtils.e(e.message)
             }
+        }
+    }
+
+    fun pause(view: View) {
+        lifecycleScope.launch(Dispatchers.Default) {
+            job?.cancelAndJoin()
         }
     }
 
     fun stop(view: View) {
         lifecycleScope.launch(Dispatchers.Default) {
-            repeatOnLifecycle(Lifecycle.State.CREATED) {
-                queue.put(0)
-            }
+            channel.close()
         }
     }
 
     private fun runQueue() {
         job = lifecycleScope.launch(Dispatchers.Default) {
-            while (true) {
-                val num = withContext(Dispatchers.IO) {
-                    queue.take()
-                }
-
-                if (num == 0) {
-                    LogUtils.e("取消")
-                    cancel()
-                }
-
-                withContext(Dispatchers.Main) {
-                    suspendCancellableCoroutine<Unit> {
-                        val svga = AppCompatImageView(this@UseQueueActivity)
-                        svga.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                        svga.load("file:///android_asset/tomato.svga") {
-                            svgaRepeatCount(1)
-                            svgaAnimationEnd {
-                                val iterator = binding.ll.iterator()
-                                while (iterator.hasNext()) {
-                                    val next = iterator.next()
-                                    if (next is AppCompatImageView) {
-                                        iterator.remove()
+            try {
+                while (this.isActive) {
+                    val receive = channel.receive()
+                    LogUtils.e("取出:${receive}-channel:${channel}")
+                    withContext(Dispatchers.Main) {
+                        suspendCancellableCoroutine<Unit> {
+                            binding.iv.load("file:///android_asset/tomato.svga") {
+                                svgaRepeatCount(1)
+                                svgaAnimationEnd {
+                                    if (it.isActive) {
+                                        it.resume(Unit)
                                     }
-                                }
-
-                                if (it.isActive) {
-                                    it.resume(Unit)
                                 }
                             }
                         }
-                        binding.ll.addView(svga)
                     }
                 }
+//                channel.consumeEach {
+//                    withContext(Dispatchers.Main) {
+//                        suspendCancellableCoroutine<Unit> {
+//                            binding.iv.load("file:///android_asset/tomato.svga") {
+//                                svgaRepeatCount(1)
+//                                svgaAnimationEnd {
+//                                    if (it.isActive) {
+//                                        it.resume(Unit)
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+            } catch (e: Exception) {
+                LogUtils.e(e.message)
             }
         }
     }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.blankj.utilcode.util.LogUtils
 
 abstract class BaseLazyFragment<D : ViewDataBinding> : Fragment() {
 
@@ -22,6 +23,7 @@ abstract class BaseLazyFragment<D : ViewDataBinding> : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
         binding.lifecycleOwner = this
+        LogUtils.e("onCreateView")
         return binding.root
     }
 
@@ -30,6 +32,8 @@ abstract class BaseLazyFragment<D : ViewDataBinding> : Fragment() {
         if (!isLoad) {
             isLoad = true
             initData()
+
+            LogUtils.e("懒加载")
         }
     }
 

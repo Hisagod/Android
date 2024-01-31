@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.recyclerview.widget.RecyclerView.inflate
 import com.example.ponycui_home.svgaplayer.databinding.ActivityMainBinding
-import com.example.ponycui_home.svgaplayer.load.LoadFromAssetsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -37,6 +36,10 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this, LoadSourceFromActivity::class.java))
     }
 
+    fun svgaClick(view: View) {
+        startActivity(Intent(this, ClickActivity::class.java))
+    }
+
     fun useInList(view: View) {
         startActivity(Intent(this, RecyclerViewActivity::class.java))
     }
@@ -46,67 +49,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun vp(view: View) {
-        startActivity(Intent(this, AnimationFromFragmentActivity::class.java))
+//        startActivity(Intent(this, AnimationFromFragmentActivity::class.java))
+        startActivity(Intent(this, AnimationFromLazyFragmentActivity::class.java))
     }
 
-//    private fun setupData() {
-//        items.add(
-//            SampleItem(
-//                "Animation From Java Code",
-//                Intent(this, AnimationFromJavaCodeActivity::class.java)
-//            )
-//        )
-//        items.add(
-//            SampleItem(
-//                "Animation From Assets",
-//                Intent(this, LoadFromAssetsActivity::class.java)
-//            )
-//        )
-//        items.add(
-//            SampleItem(
-//                "Animation From Network",
-//                Intent(this, AnimationFromNetworkActivity::class.java)
-//            )
-//        )
-//        items.add(
-//            SampleItem(
-//                "Animation With Dynamic Image",
-//                Intent(this, AnimationWithDynamicImageActivity::class.java)
-//            )
-//        )
-//        items.add(
-//            SampleItem(
-//                "Animation With Dynamic Click",
-//                Intent(this, AnimationFromClickActivity::class.java)
-//            )
-//        )
-//        items.add(
-//            SampleItem(
-//                "Animation From RecyclerView",
-//                Intent(this, AnimationFromRecyclerViewActivity::class.java)
-//            )
-//        )
-//        items.add(
-//            SampleItem(
-//                "Animation From Fragment",
-//                Intent(this, AnimationFromFragmentActivity::class.java)
-//            )
-//        )
-//        items.add(
-//            SampleItem(
-//                "Animation From Lazy Fragment",
-//                Intent(this, AnimationFromLazyFragmentActivity::class.java)
-//            )
-//        )
-//        items.add(SampleItem("Animation Gif", Intent(this, AnimationGifActivity::class.java)))
-//        items.add(SampleItem("Png", Intent(this, PngActivity::class.java)))
-//
-//        //添加方式
-//        items.add(
-//            SampleItem(
-//                "Add Java Activity",
-//                Intent(this, AddJavaActivity::class.java)
-//            )
-//        )
-//    }
+    fun gif(view: View) {
+        startActivity(Intent(this, GifActivity::class.java))
+    }
 }

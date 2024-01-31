@@ -18,9 +18,9 @@ class AnimationFromLazyFragmentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        binding.vp.offscreenPageLimit = 4
+//        binding.vp.offscreenPageLimit = 4
         binding.vp.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 4
+            override fun getItemCount(): Int = 6
 
             override fun createFragment(position: Int): Fragment = when (position) {
                 0 -> {
@@ -40,7 +40,7 @@ class AnimationFromLazyFragmentActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    AFragment()
+                    DFragment()
                 }
             }
         }

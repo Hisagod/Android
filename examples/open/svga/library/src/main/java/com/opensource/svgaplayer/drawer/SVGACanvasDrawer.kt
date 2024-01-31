@@ -3,7 +3,6 @@ package com.opensource.svgaplayer.drawer
 import android.graphics.Bitmap
 import android.graphics.BitmapShader
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Matrix
 import android.graphics.Paint
@@ -12,7 +11,6 @@ import android.graphics.Shader
 import android.os.Build
 import android.text.StaticLayout
 import android.text.TextUtils
-import android.widget.ImageView
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
 import coil.size.Scale
@@ -565,18 +563,9 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
         }
     }
 
-    fun updateSVGADynamicEntity(de: SVGADynamicEntity?) {
+    fun setSVGADynamicEntity(de: SVGADynamicEntity?) {
         this._dynamicItem = de
     }
 
-    fun onClear() {
-        sharedValues.onClear()
-
-        drawTextCache.onEach {
-            it.value.recycle()
-        }.clear()
-
-        beginIndexList = null
-        endIndexList = null
-    }
+    fun getSVGADynamicEntity() = _dynamicItem
 }

@@ -26,25 +26,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".load.LoadFromAssetsActivity" />
-        <activity
-            android:name=".AnimationFromJavaCodeActivity"
-            android:exported="true" />
         <activity android:name=".TestActivity" />
+        <activity android:name=".load.LoadFromAssetsActivity" />
         <activity android:name=".AnimationWithDynamicImageActivity" />
-        <activity android:name=".AnimationFromLayoutActivity" />
-        <activity android:name=".AnimationFromClickActivity" />
+        <activity android:name=".ClickActivity" />
         <activity android:name=".RecyclerViewActivity" />
         <activity android:name=".AnimationFromFragmentActivity" />
         <activity android:name=".AnimationFromLazyFragmentActivity" />
-        <activity android:name=".AnimationGifActivity" />
+        <activity android:name=".GifActivity" />
         <activity android:name=".PngActivity" />
-        <activity
-            android:name=".add.AddJavaActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name=".UseQueueActivity"
-            android:exported="true"></activity>
+        <activity android:name=".UseQueueActivity" />
     </application>
 
 </manifest>

@@ -9,7 +9,6 @@ import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Build
 import android.os.SystemClock
-import android.widget.ImageView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import coil.ImageLoader
 import coil.request.Options
@@ -101,7 +100,7 @@ class SVGADrawable(
             }
         }
 
-        drawer.updateSVGADynamicEntity(svgaDynamicEntity)
+        drawer.setSVGADynamicEntity(svgaDynamicEntity)
 
         soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
 //            LogUtils.error(TAG, "音频${sampleId}加载完成")
@@ -170,8 +169,12 @@ class SVGADrawable(
     }
 
     //修改元素
-    fun updateSVGADynamicEntity(de: SVGADynamicEntity) {
-        drawer.updateSVGADynamicEntity(de)
+    fun setSVGADynamicEntity(de: SVGADynamicEntity) {
+        drawer.setSVGADynamicEntity(de)
+    }
+
+    fun getSVGADynamicEntity(): SVGADynamicEntity? {
+        return drawer.getSVGADynamicEntity()
     }
 
     fun stepToFrame(frame: Int) {

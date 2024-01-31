@@ -9,8 +9,10 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import coil.load
+import com.blankj.utilcode.util.LogUtils
 import com.example.ponycui_home.svgaplayer.databinding.ActivityFromFragmentBinding
 import com.example.ponycui_home.svgaplayer.databinding.FragmentABinding
+import com.opensource.svgaplayer.utils.svgaAnimationFrame
 
 class AnimationFromFragmentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFromFragmentBinding
@@ -38,7 +40,6 @@ class AnimationFromFragmentActivity : AppCompatActivity() {
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-            val binding = FragmentABinding.inflate(requireActivity().layoutInflater)
             val svg = view.findViewById<AppCompatImageView>(R.id.svg)
             svg.load("file:///android_asset/test.svga")
         }

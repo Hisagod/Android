@@ -3,12 +3,9 @@ package com.example.ponycui_home.svgaplayer
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
 import coil.load
 
-class AnimationGifActivity : AppCompatActivity() {
+class GifActivity : AppCompatActivity() {
 
     private val iv by lazy { AppCompatImageView(this) }
 
@@ -16,9 +13,6 @@ class AnimationGifActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(iv)
 
-        iv.load("file:///android_asset/test4.gif") {
-            lifecycle(this@AnimationGifActivity)
-//            target(ImageTarget(iv))
-        }
+        iv.load("file:///android_asset/test4.gif")
     }
 }
