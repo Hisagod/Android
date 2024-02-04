@@ -18,7 +18,7 @@ class LoadSourceFromActivity : AppCompatActivity() {
 
         //asserts文件夹加载
 //        binding.iv1.load("file:///android_asset/test7.svga")
-        binding.iv1.load("file:///android_asset/test.svga")
+        binding.iv1.load("file:///android_asset/copter.svga")
         //网络加载
         binding.iv2.load("https://res.naadi.microparty.com/user/1684826637456.svga")
     }

@@ -5,7 +5,12 @@ import android.graphics.Canvas
 import android.text.BoringLayout
 import android.text.StaticLayout
 import android.text.TextPaint
+import androidx.annotation.DrawableRes
 import androidx.collection.ArrayMap
+import androidx.core.graphics.drawable.toBitmapOrNull
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.request.Options
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,18 +21,11 @@ import kotlinx.coroutines.withContext
  * Created by cuiminghui on 2017/3/30.
  */
 class SVGADynamicEntity {
-
     internal var dynamicHidden: ArrayMap<String, Boolean> = ArrayMap()
 
     internal var dynamicImage: ArrayMap<String, Bitmap> = ArrayMap()
 
-    internal var dynamicText: ArrayMap<String, String> = ArrayMap()
-
-    internal var dynamicTextPaint: ArrayMap<String, TextPaint> = ArrayMap()
-
     internal var dynamicStaticLayoutText: ArrayMap<String, StaticLayout> = ArrayMap()
-
-    internal var dynamicBoringLayoutText: ArrayMap<String, BoringLayout> = ArrayMap()
 
     internal var dynamicDrawer: ArrayMap<String, (canvas: Canvas, frameIndex: Int) -> Boolean> =
         ArrayMap()
@@ -40,8 +38,6 @@ class SVGADynamicEntity {
         ArrayMap()
 
 
-    internal var isTextDirty = false
-
     fun setHidden(value: Boolean, forKey: String) {
         this.dynamicHidden.put(forKey, value)
     }
@@ -50,22 +46,8 @@ class SVGADynamicEntity {
         this.dynamicImage.put(forKey, bitmap)
     }
 
-    fun setDynamicText(text: String, textPaint: TextPaint, forKey: String) {
-        this.isTextDirty = true
-        this.dynamicText.put(forKey, text)
-        this.dynamicTextPaint.put(forKey, textPaint)
-    }
-
     fun setDynamicText(layoutText: StaticLayout, forKey: String) {
-        this.isTextDirty = true
         this.dynamicStaticLayoutText.put(forKey, layoutText)
-    }
-
-    fun setDynamicText(layoutText: BoringLayout, forKey: String) {
-        this.isTextDirty = true
-        BoringLayout.isBoring(layoutText.text, layoutText.paint)?.let {
-            this.dynamicBoringLayoutText.put(forKey, layoutText)
-        }
     }
 
     fun setDynamicDrawer(drawer: (canvas: Canvas, frameIndex: Int) -> Boolean, forKey: String) {

@@ -3,16 +3,21 @@ package com.opensource.svgaplayer.drawer
 import android.graphics.Bitmap
 import android.graphics.BitmapShader
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Shader
 import android.os.Build
+import android.text.Layout
 import android.text.StaticLayout
+import android.text.TextPaint
 import android.text.TextUtils
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
+import coil.ImageLoader
+import coil.request.Options
 import coil.size.Scale
 import com.opensource.svgaplayer.SVGADynamicEntity
 import com.opensource.svgaplayer.SVGAVideoEntity
@@ -24,17 +29,12 @@ import com.opensource.svgaplayer.utils.contentFormat
 
 internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
     SGVADrawer(videoItem) {
-
     private val sharedValues = ShareValues()
     private val drawTextCache: ArrayMap<String, Bitmap> = arrayMapOf()
     private val pathCache = PathCache()
-
     private var beginIndexList: Array<Boolean>? = null
     private var endIndexList: Array<Boolean>? = null
-
     private var _dynamicItem: SVGADynamicEntity? = null
-
-    private val scaleSize by lazy { videoItem.scaleSize }
 
     override fun drawFrame(
         canvas: Canvas,
@@ -263,105 +263,23 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
         sprite: SVGADrawerSprite,
         frameMatrix: Matrix
     ) {
-        _dynamicItem?.let {
-            if (it.isTextDirty) {
-                this.drawTextCache.onEach {
-                    it.value.recycle()
-                }.clear()
-                it.isTextDirty = false
-            }
-        }
         val imageKey = sprite.imageKey ?: return
         var textBitmap: Bitmap? = null
-        _dynamicItem?.dynamicText?.get(imageKey)?.let { drawingText ->
-            _dynamicItem?.dynamicTextPaint?.get(imageKey)?.let { drawingTextPaint ->
-                drawTextCache[imageKey]?.let {
-                    textBitmap = it
-                } ?: kotlin.run {
-                    textBitmap = Bitmap.createBitmap(
-                        drawingBitmap.width,
-                        drawingBitmap.height,
-                        Bitmap.Config.ARGB_8888
-                    )
-                    textBitmap?.let {
-                        val drawRect = Rect(0, 0, drawingBitmap.width, drawingBitmap.height)
-                        val textCanvas = Canvas(it)
-                        drawingTextPaint.isAntiAlias = true
-                        val fontMetrics = drawingTextPaint.fontMetrics
-                        val top = fontMetrics.top
-                        val bottom = fontMetrics.bottom
-                        val baseLineY = drawRect.centerY() - top / 2 - bottom / 2
-                        textCanvas.drawText(
-                            drawingText,
-                            drawRect.centerX().toFloat(),
-                            baseLineY,
-                            drawingTextPaint
-                        )
-                        drawTextCache.put(imageKey, textBitmap as Bitmap)
-                    }
-                }
-            }
-        }
-
-        _dynamicItem?.dynamicBoringLayoutText?.get(imageKey)?.let {
-            drawTextCache[imageKey]?.let {
-                textBitmap = it
-            } ?: kotlin.run {
-                it.paint.isAntiAlias = true
-
-                textBitmap = Bitmap.createBitmap(
-                    drawingBitmap.width,
-                    drawingBitmap.height,
-                    Bitmap.Config.ARGB_8888
-                )
-                textBitmap?.let { b ->
-                    val textCanvas = Canvas(b)
-                    textCanvas.translate(0f, ((drawingBitmap.height - it.height) / 2).toFloat())
-                    it.draw(textCanvas)
-                }
-                drawTextCache.put(imageKey, textBitmap as Bitmap)
-            }
-        }
-
         _dynamicItem?.dynamicStaticLayoutText?.get(imageKey)?.let {
             drawTextCache[imageKey]?.let {
                 textBitmap = it
             } ?: kotlin.run {
                 it.paint.isAntiAlias = true
-                var layout = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    var lineMax = try {
-                        val field =
-                            StaticLayout::class.java.getDeclaredField("mMaximumVisibleLineCount")
-                        field.isAccessible = true
-                        field.getInt(it)
-                    } catch (e: Exception) {
-                        Int.MAX_VALUE
-                    }
-                    StaticLayout.Builder
-                        .obtain(
-                            it.text.contentFormat(),
-                            0,
-                            it.text.length,
-                            it.paint,
-                            drawingBitmap.width
-                        )
-                        .setAlignment(it.alignment)
-                        .setMaxLines(lineMax)
-                        .setEllipsize(TextUtils.TruncateAt.END)
-                        .build()
-                } else {
-                    StaticLayout(
+                val staticLayout = StaticLayout.Builder
+                    .obtain(
                         it.text.contentFormat(),
                         0,
                         it.text.length,
                         it.paint,
-                        drawingBitmap.width,
-                        it.alignment,
-                        it.spacingMultiplier,
-                        it.spacingAdd,
-                        false
+                        drawingBitmap.width
                     )
-                }
+                    .setAlignment(it.alignment)
+                    .build()
                 textBitmap = Bitmap.createBitmap(
                     drawingBitmap.width,
                     drawingBitmap.height,
@@ -369,8 +287,11 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
                 )
                 textBitmap?.let { b ->
                     val textCanvas = Canvas(b)
-                    textCanvas.translate(0f, ((drawingBitmap.height - layout.height) / 2).toFloat())
-                    layout.draw(textCanvas)
+                    textCanvas.translate(
+                        0f,
+                        ((drawingBitmap.height - staticLayout.height) / 2).toFloat()
+                    )
+                    staticLayout.draw(textCanvas)
                 }
                 drawTextCache.put(imageKey, textBitmap as Bitmap)
             }

@@ -100,7 +100,7 @@ class SVGADrawable(
             }
         }
 
-        drawer.setSVGADynamicEntity(svgaDynamicEntity)
+        setSVGADynamicEntity(svgaDynamicEntity)
 
         soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
 //            LogUtils.error(TAG, "音频${sampleId}加载完成")
@@ -169,7 +169,7 @@ class SVGADrawable(
     }
 
     //修改元素
-    fun setSVGADynamicEntity(de: SVGADynamicEntity) {
+    fun setSVGADynamicEntity(de: SVGADynamicEntity?) {
         drawer.setSVGADynamicEntity(de)
     }
 

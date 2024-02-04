@@ -11,7 +11,7 @@ class CFragment : BaseLazyFragment<FragmentCBinding>() {
     override fun getLayoutId(): Int = R.layout.fragment_c
 
     override fun initData() {
-        binding.svg.load("file:///android_asset/test.svga"){
+        binding.svg.load("file:///android_asset/copter.svga"){
             svgaAnimationFrame {
 //                LogUtils.e("C")
             }

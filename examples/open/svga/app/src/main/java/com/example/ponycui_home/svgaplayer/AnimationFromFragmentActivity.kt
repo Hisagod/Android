@@ -41,7 +41,7 @@ class AnimationFromFragmentActivity : AppCompatActivity() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             val svg = view.findViewById<AppCompatImageView>(R.id.svg)
-            svg.load("file:///android_asset/test.svga")
+            svg.load("file:///android_asset/copter.svga")
         }
     }
 }
