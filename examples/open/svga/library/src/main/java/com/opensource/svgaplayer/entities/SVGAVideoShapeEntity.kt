@@ -239,10 +239,4 @@ class SVGAVideoShapeEntity {
         this.shapePath = Path()
         this.shapePath?.set(sharedPath)
     }
-
-
-    fun clear() {
-        args?.clear()
-        args = null
-    }
 }

@@ -48,12 +48,4 @@ class SVGAVideoSpriteFrameEntity {
             return@map SVGAVideoShapeEntity(it)
         }.toMutableList()
     }
-
-    fun clear() {
-        shapes.forEach {
-            it.clear()
-        }
-        shapes.clear()
-        shapes= mutableListOf()
-    }
 }
