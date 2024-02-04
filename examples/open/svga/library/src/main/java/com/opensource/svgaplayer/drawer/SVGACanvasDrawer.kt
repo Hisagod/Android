@@ -16,6 +16,7 @@ import android.text.TextPaint
 import android.text.TextUtils
 import androidx.collection.ArrayMap
 import androidx.collection.arrayMapOf
+import androidx.core.graphics.scale
 import coil.ImageLoader
 import coil.request.Options
 import coil.size.Scale
@@ -209,6 +210,18 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
             0,
             imageKey.length - 6
         ) else imageKey
+//        val drawingBitmap = if (_dynamicItem?.dynamicImage?.keys?.contains(imageKey) == true) {
+//            val image = videoItem.imageMap[bitmapKey]
+//            image?.let {
+//                val imageBitmap =
+//                    _dynamicItem?.dynamicImage?.get(bitmapKey)
+//                val scaleBitmap = imageBitmap?.scale(it.width, it.height, true)
+//                imageBitmap?.recycle()
+//                scaleBitmap
+//            }
+//        } else {
+//            videoItem.imageMap[bitmapKey]
+//        } ?: return
         val drawingBitmap =
             (_dynamicItem?.dynamicImage?.get(bitmapKey) ?: videoItem.imageMap[bitmapKey])
                 ?: return
