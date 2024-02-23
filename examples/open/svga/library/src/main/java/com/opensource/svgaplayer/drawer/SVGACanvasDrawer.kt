@@ -37,7 +37,7 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
     private var endIndexList: Array<Boolean>? = null
     private var _dynamicItem: SVGADynamicEntity? = null
     private var scaleSize = 1f
-    private var textSize = 0f
+    private val paint by lazy { TextPaint() }
 
     override fun drawFrame(
         canvas: Canvas,
@@ -284,11 +284,10 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
             drawTextCache[imageKey]?.let {
                 textBitmap = it
             } ?: kotlin.run {
-                it.paint.isAntiAlias = true
-                if (it.paint.textSize != textSize) {
-                    textSize = it.paint.textSize * scaleSize
-                    it.paint.textSize = textSize
-                }
+                paint.isAntiAlias = true
+                paint.textSize = it.paint.textSize * scaleSize
+                paint.color = it.paint.color
+                paint.typeface = it.paint.typeface
 
                 val staticLayout = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     var lineMax = try {
@@ -304,7 +303,7 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
                             it.text.contentFormat(),
                             0,
                             it.text.length,
-                            it.paint,
+                            paint,
                             drawingBitmap.width
                         )
                         .setAlignment(it.alignment)
@@ -316,7 +315,7 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
                         it.text.contentFormat(),
                         0,
                         it.text.length,
-                        it.paint,
+                        paint,
                         drawingBitmap.width,
                         it.alignment,
                         it.spacingMultiplier,
