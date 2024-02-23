@@ -101,6 +101,7 @@ class SVGADrawable(
         }
 
         setSVGADynamicEntity(svgaDynamicEntity)
+        drawer.setScaleSize(videoItem.scaleSize)
 
         soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
 //            LogUtils.error(TAG, "音频${sampleId}加载完成")

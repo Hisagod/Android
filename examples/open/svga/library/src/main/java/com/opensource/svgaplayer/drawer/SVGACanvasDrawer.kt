@@ -36,6 +36,8 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
     private var beginIndexList: Array<Boolean>? = null
     private var endIndexList: Array<Boolean>? = null
     private var _dynamicItem: SVGADynamicEntity? = null
+    private var scaleSize = 1f
+    private var textSize = 0f
 
     override fun drawFrame(
         canvas: Canvas,
@@ -283,16 +285,46 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
                 textBitmap = it
             } ?: kotlin.run {
                 it.paint.isAntiAlias = true
-                val staticLayout = StaticLayout.Builder
-                    .obtain(
+                if (it.paint.textSize != textSize) {
+                    textSize = it.paint.textSize * scaleSize
+                    it.paint.textSize = textSize
+                }
+
+                val staticLayout = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    var lineMax = try {
+                        val field =
+                            StaticLayout::class.java.getDeclaredField("mMaximumVisibleLineCount")
+                        field.isAccessible = true
+                        field.getInt(it)
+                    } catch (e: Exception) {
+                        Int.MAX_VALUE
+                    }
+                    StaticLayout.Builder
+                        .obtain(
+                            it.text.contentFormat(),
+                            0,
+                            it.text.length,
+                            it.paint,
+                            drawingBitmap.width
+                        )
+                        .setAlignment(it.alignment)
+                        .setMaxLines(lineMax)
+                        .setEllipsize(TextUtils.TruncateAt.END)
+                        .build()
+                } else {
+                    StaticLayout(
                         it.text.contentFormat(),
                         0,
                         it.text.length,
                         it.paint,
-                        drawingBitmap.width
+                        drawingBitmap.width,
+                        it.alignment,
+                        it.spacingMultiplier,
+                        it.spacingAdd,
+                        false
                     )
-                    .setAlignment(it.alignment)
-                    .build()
+                }
+
                 textBitmap = Bitmap.createBitmap(
                     drawingBitmap.width,
                     drawingBitmap.height,
@@ -502,4 +534,8 @@ internal class SVGACanvasDrawer(videoItem: SVGAVideoEntity) :
     }
 
     fun getSVGADynamicEntity() = _dynamicItem
+
+    fun setScaleSize(scaleSize: Float) {
+        this.scaleSize = scaleSize
+    }
 }

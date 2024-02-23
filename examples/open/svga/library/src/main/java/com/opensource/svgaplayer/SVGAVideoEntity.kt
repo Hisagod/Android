@@ -59,7 +59,7 @@ class SVGAVideoEntity(
         resetSprites(entity)
 //        parseAudio(entity)
 
-        LogUtils.error(TAG, scaleSize.toString())
+//        LogUtils.error(TAG, scaleSize.toString())
     }
 
     fun setupByMovie(entity: MovieEntity) {

@@ -36,7 +36,7 @@ class TestActivity : AppCompatActivity() {
         entity.setDynamicImage(BitmapFactory.decodeResource(resources, R.drawable.test1), "user")
         val text = "12345678910"
         val pain = TextPaint()
-        pain.textSize = 18f
+        pain.textSize = ConvertUtils.sp2px(11f).toFloat()
         val staticLayout = StaticLayout.Builder
             .obtain(text, 0, text.length, pain, 350)
             .setAlignment(Layout.Alignment.ALIGN_CENTER)
