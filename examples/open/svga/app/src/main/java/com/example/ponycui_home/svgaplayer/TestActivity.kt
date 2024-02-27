@@ -9,6 +9,7 @@ import android.view.View
 import android.view.animation.ScaleAnimation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.graphics.Paint
+import androidx.lifecycle.Lifecycle
 import coil.load
 import coil.request.animatedTransformation
 import coil.transform.Transformation
@@ -32,19 +33,20 @@ class TestActivity : AppCompatActivity() {
         binding = ActivityTestBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val entity = SVGADynamicEntity()
-        entity.setDynamicImage(BitmapFactory.decodeResource(resources, R.drawable.test1), "user")
-        val text = "12345678910"
-        val pain = TextPaint()
-        pain.textSize = ConvertUtils.sp2px(11f).toFloat()
-        val staticLayout = StaticLayout.Builder
-            .obtain(text, 0, text.length, pain, 350)
-            .setAlignment(Layout.Alignment.ALIGN_CENTER)
-            .build()
-        entity.setDynamicText(staticLayout, "text")
+//        val entity = SVGADynamicEntity()
+//        entity.setDynamicImage(BitmapFactory.decodeResource(resources, R.drawable.test1), "user")
+//        val text = "12345678910"
+//        val pain = TextPaint()
+//        pain.textSize = ConvertUtils.sp2px(11f).toFloat()
+//        val staticLayout = StaticLayout.Builder
+//            .obtain(text, 0, text.length, pain, 350)
+//            .setAlignment(Layout.Alignment.ALIGN_CENTER)
+//            .build()
+//        entity.setDynamicText(staticLayout, "text")
 //        entity.setDynamicText(text, "text")
-        binding.iv.load("file:///android_asset/test2_text_user.svga") {
-            svgaDynamicEntity(entity)
+        binding.iv.load("file:///android_asset/tomato.svga"){
+            svgaScale(0.2f)
         }
+//        binding.iv.load("file:///android_asset/test4.gif")
     }
 }

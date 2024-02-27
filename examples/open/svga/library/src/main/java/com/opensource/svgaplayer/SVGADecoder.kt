@@ -5,9 +5,17 @@ import coil.decode.DecodeResult
 import coil.decode.Decoder
 import coil.fetch.SourceResult
 import coil.request.Options
+import coil.request.repeatCount
 import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.convertSVGA
 import com.opensource.svgaplayer.utils.log.LogUtils
+import com.opensource.svgaplayer.utils.svgaAnimationEndCallback
+import com.opensource.svgaplayer.utils.svgaAnimationFrameCallback
+import com.opensource.svgaplayer.utils.svgaAnimationRepeatCallback
+import com.opensource.svgaplayer.utils.svgaAnimationStartCallback
+import com.opensource.svgaplayer.utils.svgaDynamicEntity
+import com.opensource.svgaplayer.utils.svgaRtl
+import com.opensource.svgaplayer.utils.svgaScale
 import okio.BufferedSource
 
 class SVGADecoder(
@@ -23,8 +31,26 @@ class SVGADecoder(
 //        val movieEntity = MovieEntityFactory.getMovieEntity(hashCode, array)
 
         val movieEntity = MovieEntity.ADAPTER.decode(array)
-        val entity = SVGAVideoEntity(hashCode, options, imageLoader, movieEntity)
-        val drawable = SVGADrawable(hashCode, entity, options, imageLoader)
+        val entity = SVGAVideoEntity(
+            hashCode,
+            options.parameters.svgaScale(),
+            options.context.cacheDir.absolutePath,
+            imageLoader,
+            movieEntity
+        )
+        val drawable =
+            SVGADrawable(
+                key = hashCode,
+                videoItem = entity,
+                scaleType = options.scale,
+                loop = options.parameters.repeatCount(),
+                svgaRtlEntity = options.parameters.svgaRtl(),
+                svgaDynamicEntity = options.parameters.svgaDynamicEntity(),
+                onRepeat = options.parameters.svgaAnimationRepeatCallback(),
+                onStart = options.parameters.svgaAnimationStartCallback(),
+                onEnd = options.parameters.svgaAnimationEndCallback(),
+                onFrame = options.parameters.svgaAnimationFrameCallback()
+            )
 
 //        withContext(Dispatchers.Main) {
 //            val lifecycle = options.context.getLifecycle() ?: SVGALifecycle

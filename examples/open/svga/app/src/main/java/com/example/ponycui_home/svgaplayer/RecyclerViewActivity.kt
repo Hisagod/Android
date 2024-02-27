@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.request.Disposable
 import com.example.ponycui_home.svgaplayer.databinding.ActivityRecyclerviewBinding
+import com.opensource.svgaplayer.SVGAImageView
 
 class RecyclerViewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecyclerviewBinding
@@ -89,11 +90,11 @@ class RecyclerViewActivity : AppCompatActivity() {
         override fun getItemCount(): Int = 10
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            val svg = holder.itemView.findViewById<AppCompatImageView>(R.id.svg)
+            val svg = holder.itemView.findViewById<SVGAImageView>(R.id.svg)
 //            svg.load(fileData[position])
-            val svg1 = holder.itemView.findViewById<AppCompatImageView>(R.id.svg1)
+            val svg1 = holder.itemView.findViewById<SVGAImageView>(R.id.svg1)
 //            svg1.load(fileData1[position])
-            val svg2 = holder.itemView.findViewById<AppCompatImageView>(R.id.svg2)
+            val svg2 = holder.itemView.findViewById<SVGAImageView>(R.id.svg2)
             svg2.load(fileData2[position])
         }
     }

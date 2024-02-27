@@ -25,7 +25,8 @@ import kotlin.math.roundToInt
  */
 class SVGAVideoEntity(
     private val hashCode: String,
-    private val options: Options,
+    private val svgaScale: Float?,
+    private val audioPath: String,
     private val imageLoader: ImageLoader,
     val entity: MovieEntity
 ) {
@@ -51,7 +52,7 @@ class SVGAVideoEntity(
     //图片列表数据
     internal var imageMap = ArrayMap<String, Bitmap>()
 
-    internal val scaleSize by lazy { options.parameters.svgaScale() ?: 0.5f }
+    internal val scaleSize by lazy { svgaScale ?: 0.5f }
 
     init {
         setupByMovie(entity)
@@ -187,7 +188,7 @@ class SVGAVideoEntity(
                 }
 
             if (canSave) {
-                val rootPath = "${options.context.cacheDir.absolutePath}/svga"
+                val rootPath = "${audioPath}/svga"
                 val rootFile = File(rootPath)
                 if (!rootFile.exists()) {
                     rootFile.mkdir()

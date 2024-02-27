@@ -13,11 +13,11 @@ class App : Application(), ImageLoaderFactory {
         return ImageLoader.Builder(this)
             .crossfade(false)
             .components {
-                if (Build.VERSION.SDK_INT >= 28) {
-                    add(ImageDecoderDecoder.Factory())
-                } else {
-                    add(GifDecoder.Factory())
-                }
+//                if (Build.VERSION.SDK_INT >= 28) {
+//                    add(ImageDecoderDecoder.Factory())
+//                } else {
+//                    add(GifDecoder.Factory())
+//                }
                 add(AnimatedWebPDecoder.Factory())
             }
             .build()

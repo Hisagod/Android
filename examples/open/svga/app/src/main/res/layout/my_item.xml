@@ -4,17 +4,17 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.opensource.svgaplayer.SVGAImageView
         android:id="@+id/svg"
         android:layout_width="80dp"
         android:layout_height="80dp" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.opensource.svgaplayer.SVGAImageView
         android:id="@+id/svg1"
         android:layout_width="70dp"
         android:layout_height="70dp" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.opensource.svgaplayer.SVGAImageView
         android:id="@+id/svg2"
         android:layout_width="60dp"
         android:layout_height="60dp" />

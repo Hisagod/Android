@@ -10,25 +10,25 @@ import android.media.SoundPool
 import android.os.Build
 import android.os.SystemClock
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
-import coil.ImageLoader
-import coil.request.Options
 import coil.size.Scale
 import com.opensource.svgaplayer.drawer.SVGACanvasDrawer
+import com.opensource.svgaplayer.entities.SVGARtlEntity
 import com.opensource.svgaplayer.utils.isLayoutRtl
 import com.opensource.svgaplayer.utils.log.LogUtils
-import com.opensource.svgaplayer.utils.svgaAnimationEndCallback
-import com.opensource.svgaplayer.utils.svgaAnimationFrameCallback
-import com.opensource.svgaplayer.utils.svgaAnimationRepeatCallback
-import com.opensource.svgaplayer.utils.svgaAnimationStartCallback
-import com.opensource.svgaplayer.utils.svgaDynamicEntity
-import com.opensource.svgaplayer.utils.svgaRepeatCount
-import com.opensource.svgaplayer.utils.svgaRtl
 
 class SVGADrawable(
     private val key: String,
     private val videoItem: SVGAVideoEntity,
-    private val options: Options,
-    private val imageLoader: ImageLoader
+    //控制动画的位置
+    private val scaleType: Scale,
+    //记录需要播放次数 0无限次 1播放单次
+    private val loop: Int?,
+    private val svgaRtlEntity: SVGARtlEntity?,
+    private val svgaDynamicEntity: SVGADynamicEntity?,
+    private val onRepeat: (() -> Unit)?,
+    private val onStart: (() -> Unit)?,
+    private val onEnd: (() -> Unit)?,
+    private val onFrame: ((frame: Int) -> Unit)?,
 ) : Drawable(), Animatable2Compat {
     private val TAG = javaClass.simpleName
 
@@ -37,16 +37,10 @@ class SVGADrawable(
     @Volatile
     private var currentFrame = 0
 
-    //控制动画的位置
-    private val scaleType: Scale = options.scale
-
     private var drawer = SVGACanvasDrawer(videoItem)
 
     //每帧时长
     private var frameTime: Long = 0
-
-    //记录需要播放次数 0无限次 1播放单次
-    private var loop = options.parameters.svgaRepeatCount()
 
     //记录播放几次
     private var loopCount = 0
@@ -56,12 +50,7 @@ class SVGADrawable(
 
     private val soundPool by lazy { getSoundPool(20) }
 
-    private val svgaRtlEntity by lazy { options.parameters.svgaRtl() }
-    private val svgaDynamicEntity by lazy { options.parameters.svgaDynamicEntity() }
-
     private val nextFrame = {
-//        LogUtils.error(TAG, "nextFrame")
-
         //取出下一帧位
         currentFrame += 1
         if (currentFrame >= videoItem.frames) {
@@ -69,7 +58,7 @@ class SVGADrawable(
             loopCount += 1
 
             //重复执行回调
-            options.parameters.svgaAnimationRepeatCallback()?.invoke()
+            onRepeat?.invoke()
         }
 
         if (loop != 0) {
@@ -91,7 +80,6 @@ class SVGADrawable(
         val fps = videoItem.FPS.toFloat()
         val duration = frame.div(fps) * 1000
         frameTime = (duration / frame).toLong()
-//        frameTime = 500
 
         svgaRtlEntity?.let {
             if (it.viewRtl.isLayoutRtl()) {
@@ -104,8 +92,6 @@ class SVGADrawable(
         drawer.setScaleSize(videoItem.scaleSize)
 
         soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
-//            LogUtils.error(TAG, "音频${sampleId}加载完成")
-
             videoItem.audioList.forEach {
                 if (it.sampleId == sampleId) {
                     it.isLoadComplete = true
@@ -119,7 +105,7 @@ class SVGADrawable(
 
             if (status == 0) {
                 isAnimation = true
-                options.parameters.svgaAnimationStartCallback()?.invoke()
+                onStart?.invoke()
                 callbacks.forEach { it.onAnimationStart(this) }
 
                 invalidateSelf()
@@ -141,17 +127,14 @@ class SVGADrawable(
     }
 
     override fun draw(canvas: Canvas) {
-//        LogUtils.error(TAG, "canvas")
         if (!isAnimation) {
             return
         }
 
-//        LogUtils.error(TAG, "canvas--frame:${currentFrame}")
         val time = SystemClock.uptimeMillis()
         drawer.drawFrame(canvas, currentFrame, scaleType)
         playAudio(currentFrame)
-//        LogUtils.error(TAG, currentFrame.toString())
-        options.parameters.svgaAnimationFrameCallback()?.invoke(currentFrame)
+        onFrame?.invoke(currentFrame)
         scheduleSelf(nextFrame, time + frameTime)
     }
 
@@ -208,7 +191,7 @@ class SVGADrawable(
             //无音频直接播放
 
             isAnimation = true
-            options.parameters.svgaAnimationStartCallback()?.invoke()
+            onStart?.invoke()
             callbacks.forEach { it.onAnimationStart(this) }
 
             invalidateSelf()
@@ -227,10 +210,11 @@ class SVGADrawable(
         isAnimation = false
         callbacks.forEach { it.onAnimationEnd(this) }
         unscheduleSelf(nextFrame)
-        options.parameters.svgaAnimationEndCallback()?.invoke()
+        onEnd?.invoke()
 
         videoItem.audioList.forEach {
             it.sampleId?.let {
+                soundPool.setOnLoadCompleteListener(null)
                 soundPool.stop(it)
                 soundPool.unload(it)
             }
