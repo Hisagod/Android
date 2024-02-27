@@ -14,6 +14,7 @@ import com.opensource.svgaplayer.utils.svgaAnimationFrameCallback
 import com.opensource.svgaplayer.utils.svgaAnimationRepeatCallback
 import com.opensource.svgaplayer.utils.svgaAnimationStartCallback
 import com.opensource.svgaplayer.utils.svgaDynamicEntity
+import com.opensource.svgaplayer.utils.svgaRepeatCount
 import com.opensource.svgaplayer.utils.svgaRtl
 import com.opensource.svgaplayer.utils.svgaScale
 import okio.BufferedSource
@@ -43,7 +44,7 @@ class SVGADecoder(
                 key = hashCode,
                 videoItem = entity,
                 scaleType = options.scale,
-                loop = options.parameters.repeatCount(),
+                loop = options.parameters.svgaRepeatCount(),
                 svgaRtlEntity = options.parameters.svgaRtl(),
                 svgaDynamicEntity = options.parameters.svgaDynamicEntity(),
                 onRepeat = options.parameters.svgaAnimationRepeatCallback(),
