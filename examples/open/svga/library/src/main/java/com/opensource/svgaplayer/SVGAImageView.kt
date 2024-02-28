@@ -7,7 +7,8 @@ import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatImageView
 
 /**
- * 相对于AppCompatImageView，新增元素点击事件
+ * 1.新增元素点击事件
+ * 2.针对音频动画，控件移除，音频资源释放
  */
 open class SVGAImageView @JvmOverloads constructor(
     context: Context,
@@ -40,5 +41,10 @@ open class SVGAImageView @JvmOverloads constructor(
 
     fun onItemClick(click: (clickKey: String) -> Unit) {
         this.click = click
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        getSVGADrawable()?.stop()
     }
 }

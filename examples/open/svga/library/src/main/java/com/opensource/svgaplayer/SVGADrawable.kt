@@ -91,24 +91,26 @@ class SVGADrawable(
         setSVGADynamicEntity(svgaDynamicEntity)
         drawer.setScaleSize(videoItem.scaleSize)
 
-        soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
-            videoItem.audioList.forEach {
-                if (it.sampleId == sampleId) {
-                    it.isLoadComplete = true
+        if (videoItem.audioList.isNotEmpty()) {
+            soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
+                videoItem.audioList.forEach {
+                    if (it.sampleId == sampleId) {
+                        it.isLoadComplete = true
+                    }
                 }
-            }
 
-            val complete = videoItem.audioList.map { it.isLoadComplete }
-            if (complete.contains(false)) {
-                return@setOnLoadCompleteListener
-            }
+                val complete = videoItem.audioList.map { it.isLoadComplete }
+                if (complete.contains(false)) {
+                    return@setOnLoadCompleteListener
+                }
 
-            if (status == 0) {
-                isAnimation = true
-                onStart?.invoke()
-                callbacks.forEach { it.onAnimationStart(this) }
+                if (status == 0) {
+                    isAnimation = true
+                    onStart?.invoke()
+                    callbacks.forEach { it.onAnimationStart(this) }
 
-                invalidateSelf()
+                    invalidateSelf()
+                }
             }
         }
 

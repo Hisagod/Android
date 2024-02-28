@@ -23,6 +23,7 @@ import com.example.ponycui_home.svgaplayer.transformation.ScaleTransform
 import com.opensource.svgaplayer.SVGADynamicEntity
 import com.opensource.svgaplayer.utils.getSVGADrawable
 import com.opensource.svgaplayer.utils.svgaAnimationFrame
+import com.opensource.svgaplayer.utils.svgaAnimationStart
 import com.opensource.svgaplayer.utils.svgaDynamicEntity
 import com.opensource.svgaplayer.utils.svgaScale
 
@@ -44,9 +45,7 @@ class TestActivity : AppCompatActivity() {
 //            .build()
 //        entity.setDynamicText(staticLayout, "text")
 //        entity.setDynamicText(text, "text")
-        binding.iv.load("file:///android_asset/tomato.svga"){
-            svgaScale(0.2f)
-        }
+        binding.iv.load("file:///android_asset/test2_text_user.svga")
 //        binding.iv.load("file:///android_asset/test4.gif")
     }
 }
