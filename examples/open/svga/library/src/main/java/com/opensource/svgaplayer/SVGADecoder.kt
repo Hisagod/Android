@@ -8,6 +8,7 @@ import coil.request.Options
 import coil.request.repeatCount
 import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.convertSVGA
+import com.opensource.svgaplayer.utils.getLifecycle
 import com.opensource.svgaplayer.utils.log.LogUtils
 import com.opensource.svgaplayer.utils.svgaAnimationEndCallback
 import com.opensource.svgaplayer.utils.svgaAnimationFrameCallback
@@ -17,6 +18,8 @@ import com.opensource.svgaplayer.utils.svgaDynamicEntity
 import com.opensource.svgaplayer.utils.svgaRepeatCount
 import com.opensource.svgaplayer.utils.svgaRtl
 import com.opensource.svgaplayer.utils.svgaScale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okio.BufferedSource
 
 class SVGADecoder(
@@ -52,16 +55,10 @@ class SVGADecoder(
                 onEnd = options.parameters.svgaAnimationEndCallback(),
                 onFrame = options.parameters.svgaAnimationFrameCallback()
             )
-
 //        withContext(Dispatchers.Main) {
 //            val lifecycle = options.context.getLifecycle() ?: SVGALifecycle
 //            lifecycle.addObserver(SVGAAudioManager)
-//        }
-
-//        withContext(Dispatchers.Main) {
-//            val lifecycle = options.context.getLifecycle() ?: SVGALifecycle
-//            lifecycle.addObserver(SVGAAudioManager)
-//            lifecycle.addObserver(MovieEntityFactory)
+//            lifecycle.addObserver(drawable)
 //        }
         return DecodeResult(drawable, false)
     }

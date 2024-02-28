@@ -61,5 +61,4 @@ android {
 
 dependencies {
     implementation 'com.squareup.wire:wire-runtime:4.8.0'
-    compileOnly 'com.github.bumptech.glide:glide:4.15.1'
 }
