@@ -18,7 +18,7 @@ class ClickActivity : AppCompatActivity() {
 
         val dynamicEntity = SVGADynamicEntity()
         dynamicEntity.setClickArea("img_10")
-        binding.iv.load("file:///android_asset/MerryChristmas.svga") {
+        binding.iv.load("file:///android_asset/merry_christmas.svga") {
             svgaDynamicEntity(dynamicEntity)
         }
         binding.iv.onItemClick {

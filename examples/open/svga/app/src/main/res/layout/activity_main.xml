@@ -19,6 +19,12 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="resourceList"
+            android:text="资源列表" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:onClick="loadSourceFrom"
             android:text="加载SVGA来源" />
 

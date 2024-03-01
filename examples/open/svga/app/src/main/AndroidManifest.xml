@@ -28,7 +28,7 @@
         </activity>
         <activity android:name=".TestActivity" />
         <activity android:name=".load.LoadFromAssetsActivity" />
-        <activity android:name=".AnimationWithDynamicImageActivity" />
+        <activity android:name="com.aib.activity.resource.ResourceListActivity" />
         <activity android:name=".ClickActivity" />
         <activity android:name=".RecyclerViewActivity" />
         <activity android:name=".AnimationFromFragmentActivity" />

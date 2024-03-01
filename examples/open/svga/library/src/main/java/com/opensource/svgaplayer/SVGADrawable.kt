@@ -91,30 +91,6 @@ class SVGADrawable(
         setSVGADynamicEntity(svgaDynamicEntity)
         drawer.setScaleSize(videoItem.scaleSize)
 
-        if (videoItem.audioList.isNotEmpty()) {
-            soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
-                videoItem.audioList.forEach {
-                    if (it.sampleId == sampleId) {
-                        it.isLoadComplete = true
-                    }
-                }
-
-                val complete = videoItem.audioList.map { it.isLoadComplete }
-                if (complete.contains(false)) {
-                    return@setOnLoadCompleteListener
-                }
-
-                if (status == 0) {
-                    isAnimation = true
-                    onStart?.invoke()
-                    callbacks.forEach { it.onAnimationStart(this) }
-
-                    invalidateSelf()
-                }
-            }
-        }
-
-
 //        SVGAAudioManager.onFinish {
 //            LogUtils.error(TAG, "准备播放音视频动画")
 //            val contain = SVGAAudioManager.pool.contains(it)
@@ -200,6 +176,28 @@ class SVGADrawable(
         } else {
             //有音频需要等待音频加载完毕在执行
             videoItem.parseAudio(soundPool, videoItem.entity)
+            if (videoItem.audioList.isNotEmpty()) {
+                soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
+                    videoItem.audioList.forEach {
+                        if (it.sampleId == sampleId) {
+                            it.isLoadComplete = true
+                        }
+                    }
+
+                    val complete = videoItem.audioList.map { it.isLoadComplete }
+                    if (complete.contains(false)) {
+                        return@setOnLoadCompleteListener
+                    }
+
+                    if (status == 0) {
+                        isAnimation = true
+                        onStart?.invoke()
+                        callbacks.forEach { it.onAnimationStart(this) }
+
+                        invalidateSelf()
+                    }
+                }
+            }
         }
 
 //        isAnimation = true

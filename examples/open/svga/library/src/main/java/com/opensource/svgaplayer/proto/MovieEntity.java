@@ -19,10 +19,6 @@ import okio.ByteString;
 public final class MovieEntity extends Message<MovieEntity, MovieEntity.Builder> {
     public static final ProtoAdapter<MovieEntity> ADAPTER = new ProtoAdapter_MovieEntity();
 
-    private static final long serialVersionUID = 0L;
-
-    public static final String DEFAULT_VERSION = "";
-
     /**
      * SVGA 格式版本号
      */
@@ -39,7 +35,7 @@ public final class MovieEntity extends Message<MovieEntity, MovieEntity.Builder>
             tag = 2,
             adapter = "com.opensource.svgaplayer.proto.MovieParams#ADAPTER"
     )
-    public final MovieParams params;
+    public final MovieParamsEntity params;
 
     /**
      * Key 是位图键名，Value 是位图文件名或二进制 PNG 数据。
@@ -71,11 +67,11 @@ public final class MovieEntity extends Message<MovieEntity, MovieEntity.Builder>
     )
     public final List<AudioEntity> audios;
 
-    public MovieEntity(String version, MovieParams params, Map<String, ByteString> images, List<SpriteEntity> sprites, List<AudioEntity> audios) {
+    public MovieEntity(String version, MovieParamsEntity params, Map<String, ByteString> images, List<SpriteEntity> sprites, List<AudioEntity> audios) {
         this(version, params, images, sprites, audios, ByteString.EMPTY);
     }
 
-    public MovieEntity(String version, MovieParams params, Map<String, ByteString> images, List<SpriteEntity> sprites, List<AudioEntity> audios, ByteString unknownFields) {
+    public MovieEntity(String version, MovieParamsEntity params, Map<String, ByteString> images, List<SpriteEntity> sprites, List<AudioEntity> audios, ByteString unknownFields) {
         super(ADAPTER, unknownFields);
         this.version = version;
         this.params = params;
@@ -138,7 +134,7 @@ public final class MovieEntity extends Message<MovieEntity, MovieEntity.Builder>
     public static final class Builder extends Message.Builder<MovieEntity, Builder> {
         public String version;
 
-        public MovieParams params;
+        public MovieParamsEntity params;
 
         private Map<String, ByteString> images;
 
@@ -163,7 +159,7 @@ public final class MovieEntity extends Message<MovieEntity, MovieEntity.Builder>
         /**
          * 动画参数
          */
-        public Builder params(MovieParams params) {
+        public Builder params(MovieParamsEntity params) {
             this.params = params;
             return this;
         }
@@ -212,7 +208,7 @@ public final class MovieEntity extends Message<MovieEntity, MovieEntity.Builder>
         @Override
         public int encodedSize(MovieEntity value) {
             return (value.version != null ? ProtoAdapter.STRING.encodedSizeWithTag(1, value.version) : 0)
-                    + (value.params != null ? MovieParams.ADAPTER.encodedSizeWithTag(2, value.params) : 0)
+                    + (value.params != null ? MovieParamsEntity.ADAPTER.encodedSizeWithTag(2, value.params) : 0)
                     + images.encodedSizeWithTag(3, value.images)
                     + SpriteEntity.ADAPTER.asRepeated().encodedSizeWithTag(4, value.sprites)
                     + AudioEntity.ADAPTER.asRepeated().encodedSizeWithTag(5, value.audios)
@@ -222,7 +218,7 @@ public final class MovieEntity extends Message<MovieEntity, MovieEntity.Builder>
         @Override
         public void encode(ProtoWriter writer, MovieEntity value) throws IOException {
             if (value.version != null) ProtoAdapter.STRING.encodeWithTag(writer, 1, value.version);
-            if (value.params != null) MovieParams.ADAPTER.encodeWithTag(writer, 2, value.params);
+            if (value.params != null) MovieParamsEntity.ADAPTER.encodeWithTag(writer, 2, value.params);
             images.encodeWithTag(writer, 3, value.images);
             SpriteEntity.ADAPTER.asRepeated().encodeWithTag(writer, 4, value.sprites);
             AudioEntity.ADAPTER.asRepeated().encodeWithTag(writer, 5, value.audios);
@@ -239,7 +235,7 @@ public final class MovieEntity extends Message<MovieEntity, MovieEntity.Builder>
                         builder.version(ProtoAdapter.STRING.decode(reader));
                         break;
                     case 2:
-                        builder.params(MovieParams.ADAPTER.decode(reader));
+                        builder.params(MovieParamsEntity.ADAPTER.decode(reader));
                         break;
                     case 3:
                         builder.images.putAll(images.decode(reader));
@@ -264,7 +260,7 @@ public final class MovieEntity extends Message<MovieEntity, MovieEntity.Builder>
         @Override
         public MovieEntity redact(MovieEntity value) {
             Builder builder = value.newBuilder();
-            if (builder.params != null) builder.params = MovieParams.ADAPTER.redact(builder.params);
+            if (builder.params != null) builder.params = MovieParamsEntity.ADAPTER.redact(builder.params);
             Internal.redactElements(builder.sprites, SpriteEntity.ADAPTER);
             Internal.redactElements(builder.audios, AudioEntity.ADAPTER);
             builder.clearUnknownFields();

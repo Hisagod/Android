@@ -17,6 +17,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.recyclerview.widget.RecyclerView.inflate
+import com.aib.activity.resource.ResourceListActivity
 import com.example.ponycui_home.svgaplayer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +31,10 @@ class MainActivity : AppCompatActivity() {
 
     fun test(view: View) {
         startActivity(Intent(this, TestActivity::class.java))
+    }
+
+    fun resourceList(view: View) {
+        startActivity(Intent(this, ResourceListActivity::class.java))
     }
 
     fun loadSourceFrom(view: View) {

@@ -45,7 +45,7 @@ class TestActivity : AppCompatActivity() {
 //            .build()
 //        entity.setDynamicText(staticLayout, "text")
 //        entity.setDynamicText(text, "text")
-//        binding.iv.load("file:///android_asset/test2_text_user.svga")
+        binding.iv.load(R.raw.tomato)
 //        binding.iv.load("file:///android_asset/test4.gif")
     }
 }
