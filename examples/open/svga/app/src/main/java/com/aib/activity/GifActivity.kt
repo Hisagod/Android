@@ -1,9 +1,10 @@
-package com.example.ponycui_home.svgaplayer
+package com.aib.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import coil.load
+import com.example.ponycui_home.svgaplayer.R
 
 class GifActivity : AppCompatActivity() {
 
@@ -13,6 +14,6 @@ class GifActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(iv)
 
-        iv.load("file:///android_asset/test4.gif")
+        iv.load(R.raw.test4)
     }
 }

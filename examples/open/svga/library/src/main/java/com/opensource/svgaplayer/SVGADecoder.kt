@@ -4,8 +4,9 @@ import coil.ImageLoader
 import coil.decode.DecodeResult
 import coil.decode.Decoder
 import coil.fetch.SourceResult
+import coil.memory.MemoryCache
 import coil.request.Options
-import coil.request.repeatCount
+import com.blankj.utilcode.util.ZipUtils
 import com.opensource.svgaplayer.proto.MovieEntity
 import com.opensource.svgaplayer.utils.convertSVGA
 import com.opensource.svgaplayer.utils.getLifecycle
@@ -21,6 +22,7 @@ import com.opensource.svgaplayer.utils.svgaScale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.BufferedSource
+import java.io.File
 
 class SVGADecoder(
     private val array: ByteArray,
@@ -30,13 +32,14 @@ class SVGADecoder(
     private val TAG = javaClass.simpleName
 
     override suspend fun decode(): DecodeResult {
-        val hashCode = array.contentHashCode().toString()
-        LogUtils.error(TAG, "解析HashCode：${hashCode}")
-//        val movieEntity = MovieEntityFactory.getMovieEntity(hashCode, array)
+        val fileKey = array.contentHashCode().toString()
+        LogUtils.error(TAG, "解析FileKey：${fileKey}")
 
         val movieEntity = MovieEntity.ADAPTER.decode(array)
+//        val movieEntity = MovieEntityFactory.fetch(fileKey, array)
+
         val entity = SVGAVideoEntity(
-            hashCode,
+            fileKey,
             options.parameters.svgaScale(),
             options.context.cacheDir.absolutePath,
             imageLoader,
@@ -44,7 +47,7 @@ class SVGADecoder(
         )
         val drawable =
             SVGADrawable(
-                key = hashCode,
+                key = fileKey,
                 videoItem = entity,
                 scaleType = options.scale,
                 loop = options.parameters.svgaRepeatCount(),
@@ -55,10 +58,12 @@ class SVGADecoder(
                 onEnd = options.parameters.svgaAnimationEndCallback(),
                 onFrame = options.parameters.svgaAnimationFrameCallback()
             )
+
 //        withContext(Dispatchers.Main) {
 //            val lifecycle = options.context.getLifecycle() ?: SVGALifecycle
 //            lifecycle.addObserver(SVGAAudioManager)
 //            lifecycle.addObserver(drawable)
+//            lifecycle.addObserver(MovieEntityFactory)
 //        }
         return DecodeResult(drawable, false)
     }

@@ -15,9 +15,6 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoadSourceFromActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -27,15 +24,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".TestActivity" />
-        <activity android:name=".load.LoadFromAssetsActivity" />
-        <activity android:name="com.aib.activity.resource.ResourceListActivity" />
-        <activity android:name=".ClickActivity" />
-        <activity android:name=".RecyclerViewActivity" />
-        <activity android:name=".AnimationFromFragmentActivity" />
-        <activity android:name=".AnimationFromLazyFragmentActivity" />
-        <activity android:name=".GifActivity" />
+        <activity android:name="com.aib.activity.ResourceListActivity" />
+        <activity android:name="com.aib.activity.ClickActivity" />
+        <activity android:name="com.aib.activity.ListActivity" />
+        <activity android:name="com.aib.activity.DynamicActivity" />
+        <activity android:name="com.aib.activity.FragmentActivity" />
+        <activity android:name="com.aib.activity.GifActivity" />
         <activity android:name=".PngActivity" />
-        <activity android:name=".UseQueueActivity" />
+        <activity android:name="com.aib.activity.UseQueueActivity" />
     </application>
 
 </manifest>

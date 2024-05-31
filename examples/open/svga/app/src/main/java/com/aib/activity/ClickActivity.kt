@@ -1,9 +1,10 @@
-package com.example.ponycui_home.svgaplayer
+package com.aib.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.blankj.utilcode.util.ToastUtils
+import com.example.ponycui_home.svgaplayer.R
 import com.example.ponycui_home.svgaplayer.databinding.ActivityClickBinding
 import com.opensource.svgaplayer.SVGADynamicEntity
 import com.opensource.svgaplayer.utils.svgaDynamicEntity
@@ -18,7 +19,7 @@ class ClickActivity : AppCompatActivity() {
 
         val dynamicEntity = SVGADynamicEntity()
         dynamicEntity.setClickArea("img_10")
-        binding.iv.load("file:///android_asset/merry_christmas.svga") {
+        binding.iv.load(R.raw.merry_christmas) {
             svgaDynamicEntity(dynamicEntity)
         }
         binding.iv.onItemClick {

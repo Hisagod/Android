@@ -1,4 +1,4 @@
-package com.example.ponycui_home.svgaplayer.fragment
+package com.aib.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

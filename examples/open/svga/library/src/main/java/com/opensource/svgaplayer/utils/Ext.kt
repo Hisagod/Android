@@ -87,7 +87,7 @@ fun ImageRequest.Builder.svgaRtl(entity: SVGARtlEntity): ImageRequest.Builder {
 
 fun Parameters.svgaDynamicEntity(): SVGADynamicEntity? = value(SVGADecoder.SVGA_DYNAMIC)
 
-fun ImageRequest.Builder.svgaDynamicEntity(entity: SVGADynamicEntity): ImageRequest.Builder {
+fun ImageRequest.Builder.svgaDynamicEntity(entity: SVGADynamicEntity?): ImageRequest.Builder {
     return setParameter(SVGADecoder.SVGA_DYNAMIC, entity)
 }
 

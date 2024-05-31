@@ -1,4 +1,4 @@
-package com.example.ponycui_home.svgaplayer.fragment
+package com.aib.fragment
 
 import androidx.databinding.ViewDataBinding
 import coil.load

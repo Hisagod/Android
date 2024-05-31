@@ -25,14 +25,15 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="loadSourceFrom"
-            android:text="加载SVGA来源" />
+            android:onClick="svgaClick"
+            android:text="SVGA点击事件" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="svgaClick"
-            android:text="SVGA点击事件" />
+            android:onClick="dynamic"
+            android:text="SVGA的Dynamic"
+            android:textAllCaps="false" />
 
         <Button
             android:layout_width="match_parent"

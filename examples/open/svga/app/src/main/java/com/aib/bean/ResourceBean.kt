@@ -1,4 +1,4 @@
-package com.aib.activity.resource
+package com.aib.bean
 
 import androidx.annotation.RawRes
 

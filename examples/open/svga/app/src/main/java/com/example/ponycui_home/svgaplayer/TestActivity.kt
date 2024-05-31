@@ -16,10 +16,6 @@ import coil.transform.Transformation
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.LogUtils
 import com.example.ponycui_home.svgaplayer.databinding.ActivityTestBinding
-import com.example.ponycui_home.svgaplayer.transformation.AnimatedCircleTransformation
-import com.example.ponycui_home.svgaplayer.transformation.MirrorTransform
-import com.example.ponycui_home.svgaplayer.transformation.RoundedCornersAnimatedTransformation
-import com.example.ponycui_home.svgaplayer.transformation.ScaleTransform
 import com.opensource.svgaplayer.SVGADynamicEntity
 import com.opensource.svgaplayer.utils.getSVGADrawable
 import com.opensource.svgaplayer.utils.svgaAnimationFrame
@@ -45,7 +41,7 @@ class TestActivity : AppCompatActivity() {
 //            .build()
 //        entity.setDynamicText(staticLayout, "text")
 //        entity.setDynamicText(text, "text")
+//        binding.iv.load("https://res.naadi.microparty.com/user/1678535055967.zip")
         binding.iv.load(R.raw.tomato)
-//        binding.iv.load("file:///android_asset/test4.gif")
     }
 }

@@ -1,23 +1,16 @@
 package com.example.ponycui_home.svgaplayer
 
 import android.content.Intent
-import android.database.DataSetObserver
-import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.ListAdapter
-import android.widget.ListView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import androidx.recyclerview.widget.RecyclerView.inflate
-import com.aib.activity.resource.ResourceListActivity
+import com.aib.activity.ClickActivity
+import com.aib.activity.DynamicActivity
+import com.aib.activity.FragmentActivity
+import com.aib.activity.GifActivity
+import com.aib.activity.ListActivity
+import com.aib.activity.ResourceListActivity
+import com.aib.activity.UseQueueActivity
 import com.example.ponycui_home.svgaplayer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -37,16 +30,16 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this, ResourceListActivity::class.java))
     }
 
-    fun loadSourceFrom(view: View) {
-        startActivity(Intent(this, LoadSourceFromActivity::class.java))
-    }
-
     fun svgaClick(view: View) {
         startActivity(Intent(this, ClickActivity::class.java))
     }
 
+    fun dynamic(view: View) {
+        startActivity(Intent(this, DynamicActivity::class.java))
+    }
+
     fun useInList(view: View) {
-        startActivity(Intent(this, RecyclerViewActivity::class.java))
+        startActivity(Intent(this, ListActivity::class.java))
     }
 
     fun queue(view: View) {
@@ -55,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     fun vp(view: View) {
 //        startActivity(Intent(this, AnimationFromFragmentActivity::class.java))
-        startActivity(Intent(this, AnimationFromLazyFragmentActivity::class.java))
+        startActivity(Intent(this, FragmentActivity::class.java))
     }
 
     fun gif(view: View) {

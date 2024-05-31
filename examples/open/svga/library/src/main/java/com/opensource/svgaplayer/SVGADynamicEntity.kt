@@ -42,7 +42,7 @@ class SVGADynamicEntity {
         this.dynamicHidden.put(forKey, value)
     }
 
-    fun setDynamicImage(bitmap: Bitmap, forKey: String) {
+    fun setDynamicImage(bitmap: Bitmap?, forKey: String) {
         this.dynamicImage.put(forKey, bitmap)
     }
 

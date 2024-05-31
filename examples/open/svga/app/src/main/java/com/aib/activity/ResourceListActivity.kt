@@ -1,4 +1,4 @@
-package com.aib.activity.resource
+package com.aib.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.aib.bean.ResourceBean
 import com.example.ponycui_home.svgaplayer.R
 import com.example.ponycui_home.svgaplayer.databinding.ActivityResourceListBinding
 import com.opensource.svgaplayer.SVGAImageView

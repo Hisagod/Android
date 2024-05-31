@@ -1,6 +1,7 @@
 package com.opensource.svgaplayer.entities
 
 import android.graphics.Matrix
+import com.opensource.svgaplayer.factory.SVGARectFactory
 import com.opensource.svgaplayer.proto.FrameEntity
 
 /**
@@ -17,10 +18,7 @@ class SVGAVideoSpriteFrameEntity {
     constructor(obj: FrameEntity) {
         this.alpha = (obj.alpha ?: 0.0f).toDouble()
         obj.layout?.let {
-            this.layout = SVGARect(
-                (it.width ?: 0.0f).toDouble(),
-                (it.height ?: 0.0f).toDouble()
-            )
+            this.layout = SVGARect(it.width.toDouble(), it.height.toDouble())
         }
         obj.transform?.let {
             val arr = FloatArray(9)
